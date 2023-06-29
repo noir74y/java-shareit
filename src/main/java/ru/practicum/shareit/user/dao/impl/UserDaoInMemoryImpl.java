@@ -9,7 +9,6 @@ import ru.practicum.shareit.user.model.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -18,15 +17,15 @@ public class UserDaoInMemoryImpl implements UserDao {
     private final UserMapper userMapper;
 
     @Override
-    public User create(UserEntity userEntity) {
-        userEntities.put(userEntity.getId(), userEntity);
-        return userMapper.entity2user(userMapper.user2entity(find(userEntity.getId())));
+    public User create(User user) {
+        userEntities.put(user.getId(), userMapper.user2entity(user));
+        return user;
     }
 
     @Override
-    public User update(UserEntity userEntity) {
-        userEntities.replace(userEntity.getId(), userEntity);
-        return userMapper.entity2user(userMapper.user2entity(find(userEntity.getId())));
+    public User update(User user) {
+        userEntities.replace(user.getId(), userMapper.user2entity(user));
+        return user;
     }
 
     @Override
@@ -40,7 +39,7 @@ public class UserDaoInMemoryImpl implements UserDao {
     }
 
     @Override
-    public List<User> findAll() {
-        return userMapper.bulkEntity2user(new ArrayList<>(userEntities.values()));
+    public ArrayList<User> findAll() {
+        return userMapper.bulkEntity2user(userEntities.values());
     }
 }

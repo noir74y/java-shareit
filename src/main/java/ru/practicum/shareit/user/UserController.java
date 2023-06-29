@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserDto;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.util.ArrayList;
 
 @RestController
 @RequestMapping(path = "/users")
@@ -16,12 +16,12 @@ public class UserController {
 
     @PostMapping
     public UserDto create(@Valid @RequestBody UserDto userDto) {
-        return userService.create(userMapper.dto2user(userDto));
+        return userMapper.user2dto(userService.create(userMapper.dto2user(userDto)));
     }
 
     @PatchMapping("/{id}")
     public UserDto update(@Valid @RequestBody UserDto userDto, @PathVariable int id) {
-        return userService.update(userMapper.dto2user(userDto), id);
+        return userMapper.user2dto(userService.update(userMapper.dto2user(userDto), id));
     }
 
     @DeleteMapping("/{id}")
@@ -31,11 +31,11 @@ public class UserController {
 
     @GetMapping("/{id}")
     public UserDto find(@PathVariable int id) {
-        return userService.find(id);
+        return userMapper.user2dto(userService.find(id));
     }
 
     @GetMapping
-    public List<UserDto> findAll() {
-        return userService.findAll();
+    public ArrayList<UserDto> findAll() {
+        return userMapper.bulkUser2dto(userService.findAll());
     }
 }

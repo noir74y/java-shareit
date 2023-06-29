@@ -1,14 +1,13 @@
 package ru.practicum.shareit.user.dao;
 
-import ru.practicum.shareit.user.entity.UserEntity;
 import ru.practicum.shareit.user.model.User;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public interface UserDao {
-    User create(UserEntity userEntity);
-    User update(UserEntity userEntity);
+    User create(User user);
+    User update(User user);
     void delete(int id);
     User find(int id);
-    List<User> findAll();
+    ArrayList<User> findAll();
 }

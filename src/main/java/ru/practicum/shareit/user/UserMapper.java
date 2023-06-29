@@ -7,7 +7,8 @@ import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.entity.UserEntity;
 import ru.practicum.shareit.user.model.User;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.stream.Collectors;
 
 @Component
@@ -31,11 +32,11 @@ public class UserMapper {
         return modelMapper.map(userEntity, User.class);
     }
 
-    public List<UserDto> bulkUser2dto(List<User> users) {
-        return users.stream().map(this::user2dto).collect(Collectors.toList());
+    public ArrayList<UserDto> bulkUser2dto(Collection<User> users) {
+        return users.stream().map(this::user2dto).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public List<User> bulkEntity2user(List<UserEntity> entities) {
-        return entities.stream().map(this::entity2user).collect(Collectors.toList());
+    public ArrayList<User> bulkEntity2user(Collection<UserEntity> entities) {
+        return entities.stream().map(this::entity2user).collect(Collectors.toCollection(ArrayList::new));
     }
 }
