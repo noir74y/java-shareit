@@ -23,10 +23,10 @@ public class UserService {
     public User update(User user, int id) {
         user.setId(id);
         checkEmailForDuplicate(user);
-        User userLocal = find(id);
-        Optional.ofNullable(user.getName()).ifPresent(userLocal::setName);
-        Optional.ofNullable(user.getEmail()).ifPresent(userLocal::setEmail);
-        return userDao.update(userLocal);
+        User obj = find(id);
+        Optional.ofNullable(user.getName()).ifPresent(obj::setName);
+        Optional.ofNullable(user.getEmail()).ifPresent(obj::setEmail);
+        return userDao.update(obj);
     }
 
     public void delete(int id) {
