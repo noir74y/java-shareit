@@ -3,9 +3,6 @@ package ru.practicum.shareit.user.dto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * TODO Sprint add-controllers.
- */
 @Data
 @NoArgsConstructor
 public class UserDto {

@@ -2,6 +2,7 @@ package ru.practicum.shareit.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.exception.DuplicateEmailException;
 import ru.practicum.shareit.user.dao.UserDao;
 import ru.practicum.shareit.user.model.User;
 
@@ -13,6 +14,9 @@ public class UserService {
     private final UserDao userDao;
 
     public User create(User user) {
+        if (findAll().stream().anyMatch(obj -> obj.getEmail().equals(user.getEmail())))
+            throw new DuplicateEmailException(user.getEmail());
+
         user.setId();
         return userDao.create(user);
     }
