@@ -1,14 +1,11 @@
-package ru.practicum.shareit.item.dto;
+package ru.practicum.shareit.item.model;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-/**
- * TODO Sprint add-controllers.
- */
 @Data
 @RequiredArgsConstructor
-public class ItemDto {
+public class ItemDtoResp {
     private final int id;
     private String name;
     private String description;

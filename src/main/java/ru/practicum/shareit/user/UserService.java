@@ -1,48 +1,17 @@
 package ru.practicum.shareit.user;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import ru.practicum.shareit.exception.DuplicateEmailException;
-import ru.practicum.shareit.user.dao.UserDao;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
-@Service
-@RequiredArgsConstructor
-public class UserService {
-    private final UserDao userDao;
+public interface UserService {
+    User create(User user);
 
-    public User create(User user) {
-        checkEmailForDuplicate(user);
-        user.setId();
-        return userDao.create(user);
-    }
+    User update(User user, int id);
 
-    public User update(User user, int id) {
-        user.setId(id);
-        checkEmailForDuplicate(user);
-        User obj = find(id);
-        Optional.ofNullable(user.getName()).ifPresent(obj::setName);
-        Optional.ofNullable(user.getEmail()).ifPresent(obj::setEmail);
-        return userDao.update(obj);
-    }
+    void delete(int id);
 
-    public void delete(int id) {
-        userDao.delete(id);
-    }
+    User find(int id);
 
-    public User find(int id) {
-        return userDao.find(id);
-    }
-
-    public ArrayList<User> findAll() {
-        return userDao.findAll();
-    }
-
-    private void checkEmailForDuplicate(User user) {
-        if (findAll().stream().anyMatch(obj -> obj.getId() != user.getId() && obj.getEmail().equals(user.getEmail())))
-            throw new DuplicateEmailException(user.getEmail());
-    }
+    ArrayList<User> findAll();
 }

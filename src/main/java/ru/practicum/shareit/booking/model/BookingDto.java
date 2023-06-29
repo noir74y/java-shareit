@@ -7,11 +7,11 @@ import java.time.LocalDate;
 
 @Data
 @RequiredArgsConstructor
-public class Booking {
+public class BookingDto {
     private final int id;
     private final LocalDate start;
     private final LocalDate end;
     private final int item;
     private final int booker;
-    private BookingStatus status;
+    private String status;
 }

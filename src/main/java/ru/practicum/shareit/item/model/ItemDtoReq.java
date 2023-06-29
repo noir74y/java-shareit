@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Data
 @RequiredArgsConstructor
-public class Item {
+public class ItemDtoReq {
     private final int id;
     private String name;
     private String description;
