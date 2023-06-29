@@ -1,12 +1,8 @@
-package ru.practicum.shareit.user;
+package ru.practicum.shareit.user.model;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
-import ru.practicum.shareit.user.model.UserDtoReq;
-import ru.practicum.shareit.user.model.UserDtoResp;
-import ru.practicum.shareit.user.model.UserEntity;
-import ru.practicum.shareit.user.model.User;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,12 +13,12 @@ import java.util.stream.Collectors;
 public class UserMapper {
     private final ModelMapper modelMapper;
 
-    public UserDtoResp user2dtoResp(User user) {
-        return modelMapper.map(user, UserDtoResp.class);
-    }
-
     public User dtoReq2user(UserDtoReq userDtoReq) {
         return modelMapper.map(userDtoReq, User.class);
+    }
+
+    public UserDtoResp user2dtoResp(User user) {
+        return modelMapper.map(user, UserDtoResp.class);
     }
 
     public UserEntity user2entity(User user) {

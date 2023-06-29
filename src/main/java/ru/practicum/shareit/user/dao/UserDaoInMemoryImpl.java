@@ -2,7 +2,7 @@ package ru.practicum.shareit.user.dao;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.practicum.shareit.user.UserMapper;
+import ru.practicum.shareit.user.model.UserMapper;
 import ru.practicum.shareit.user.model.UserEntity;
 import ru.practicum.shareit.user.model.User;
 

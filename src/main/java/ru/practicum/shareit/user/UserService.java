@@ -15,18 +15,18 @@ public class UserService {
     private final UserDao userDao;
 
     public User create(User user) {
-        checkEmailForDuplicate(user.getEmail());
+        checkEmailForDuplicate(user);
         user.setId();
         return userDao.create(user);
     }
 
     public User update(User user, int id) {
-        checkEmailForDuplicate(user.getEmail());
-        User userInStorage = find(id);
         user.setId(id);
-        Optional.ofNullable(user.getName()).ifPresent(userInStorage::setName);
-        Optional.ofNullable(user.getEmail()).ifPresent(userInStorage::setEmail);
-        return userInStorage;
+        checkEmailForDuplicate(user);
+        User userLocal = find(id);
+        Optional.ofNullable(user.getName()).ifPresent(userLocal::setName);
+        Optional.ofNullable(user.getEmail()).ifPresent(userLocal::setEmail);
+        return userDao.update(userLocal);
     }
 
     public void delete(int id) {
@@ -41,8 +41,8 @@ public class UserService {
         return userDao.findAll();
     }
 
-    private void checkEmailForDuplicate(String email) {
-        if (findAll().stream().anyMatch(obj -> obj.getEmail().equals(email)))
-            throw new DuplicateEmailException(email);
+    private void checkEmailForDuplicate(User user) {
+        if (findAll().stream().anyMatch(obj -> obj.getId() != user.getId() && obj.getEmail().equals(user.getEmail())))
+            throw new DuplicateEmailException(user.getEmail());
     }
 }
