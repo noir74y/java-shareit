@@ -2,7 +2,8 @@ package ru.practicum.shareit.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.model.UserDtoReq;
+import ru.practicum.shareit.user.model.UserDtoResp;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -15,13 +16,13 @@ public class UserController {
     private final UserMapper userMapper;
 
     @PostMapping
-    public UserDto create(@Valid @RequestBody UserDto userDto) {
-        return userMapper.user2dto(userService.create(userMapper.dto2user(userDto)));
+    public UserDtoResp create(@Valid @RequestBody UserDtoReq userDtoReq) {
+        return userMapper.user2dtoResp(userService.create(userMapper.dtoReq2user(userDtoReq)));
     }
 
     @PatchMapping("/{id}")
-    public UserDto update(@Valid @RequestBody UserDto userDto, @PathVariable int id) {
-        return userMapper.user2dto(userService.update(userMapper.dto2user(userDto), id));
+    public UserDtoResp update(@Valid @RequestBody UserDtoReq userDtoReq, @PathVariable int id) {
+        return userMapper.user2dtoResp(userService.update(userMapper.dtoReq2user(userDtoReq), id));
     }
 
     @DeleteMapping("/{id}")
@@ -30,12 +31,12 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public UserDto find(@PathVariable int id) {
-        return userMapper.user2dto(userService.find(id));
+    public UserDtoResp find(@PathVariable int id) {
+        return userMapper.user2dtoResp(userService.find(id));
     }
 
     @GetMapping
-    public ArrayList<UserDto> findAll() {
-        return userMapper.bulkUser2dto(userService.findAll());
+    public ArrayList<UserDtoResp> findAll() {
+        return userMapper.bulkUser2dtoResp(userService.findAll());
     }
 }

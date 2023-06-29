@@ -3,8 +3,9 @@ package ru.practicum.shareit.user;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
-import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.entity.UserEntity;
+import ru.practicum.shareit.user.model.UserDtoReq;
+import ru.practicum.shareit.user.model.UserDtoResp;
+import ru.practicum.shareit.user.model.UserEntity;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.ArrayList;
@@ -16,12 +17,12 @@ import java.util.stream.Collectors;
 public class UserMapper {
     private final ModelMapper modelMapper;
 
-    public UserDto user2dto(User user) {
-        return modelMapper.map(user, UserDto.class);
+    public UserDtoResp user2dtoResp(User user) {
+        return modelMapper.map(user, UserDtoResp.class);
     }
 
-    public User dto2user(UserDto userDto) {
-        return modelMapper.map(userDto, User.class);
+    public User dtoReq2user(UserDtoReq userDtoReq) {
+        return modelMapper.map(userDtoReq, User.class);
     }
 
     public UserEntity user2entity(User user) {
@@ -32,8 +33,8 @@ public class UserMapper {
         return modelMapper.map(userEntity, User.class);
     }
 
-    public ArrayList<UserDto> bulkUser2dto(Collection<User> users) {
-        return users.stream().map(this::user2dto).collect(Collectors.toCollection(ArrayList::new));
+    public ArrayList<UserDtoResp> bulkUser2dtoResp(Collection<User> users) {
+        return users.stream().map(this::user2dtoResp).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public ArrayList<User> bulkEntity2user(Collection<UserEntity> entities) {
