@@ -7,7 +7,6 @@ import ru.practicum.shareit.item.model.ItemDtoReq;
 import ru.practicum.shareit.item.model.ItemDtoResp;
 import ru.practicum.shareit.validation.OnCreate;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 
