@@ -7,9 +7,11 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.ItemDtoReq;
 import ru.practicum.shareit.item.model.ItemDtoResp;
 import ru.practicum.shareit.item.model.ItemEntity;
+import ru.practicum.shareit.user.model.User;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -18,19 +20,19 @@ public class ItemMapper {
     private final ModelMapper modelMapper;
 
     public Item dtoReq2item(ItemDtoReq itemDtoReq) {
-        return modelMapper.map(itemDtoReq, Item.class);
+        return Optional.ofNullable(itemDtoReq).map(obj -> modelMapper.map(obj, Item.class)).orElse(null);
     }
 
     public ItemDtoResp item2dtoResp(Item item) {
-        return modelMapper.map(item, ItemDtoResp.class);
+        return Optional.ofNullable(item).map(obj -> modelMapper.map(obj, ItemDtoResp.class)).orElse(null);
     }
 
     public ItemEntity item2entity(Item item) {
-        return modelMapper.map(item, ItemEntity.class);
+        return Optional.ofNullable(item).map(obj -> modelMapper.map(obj, ItemEntity.class)).orElse(null);
     }
 
     public Item entity2item(ItemEntity itemEntity) {
-        return modelMapper.map(itemEntity, Item.class);
+        return Optional.ofNullable(itemEntity).map(obj -> modelMapper.map(obj, Item.class)).orElse(null);
     }
 
     public ArrayList<ItemDtoResp> bulkItem2dtoResp(Collection<Item> items) {

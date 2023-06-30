@@ -19,19 +19,19 @@ public class UserMapper {
     private final ModelMapper modelMapper;
 
     public User dtoReq2user(UserDtoReq userDtoReq) {
-        return modelMapper.map(userDtoReq, User.class);
+        return Optional.ofNullable(userDtoReq).map(obj -> modelMapper.map(obj, User.class)).orElse(null);
     }
 
     public UserDtoResp user2dtoResp(User user) {
-        return modelMapper.map(user, UserDtoResp.class);
+        return Optional.ofNullable(user).map(obj -> modelMapper.map(obj, UserDtoResp.class)).orElse(null);
     }
 
     public UserEntity user2entity(User user) {
-        return modelMapper.map(user, UserEntity.class);
+        return Optional.ofNullable(user).map(obj -> modelMapper.map(obj, UserEntity.class)).orElse(null);
     }
 
     public User entity2user(UserEntity userEntity) {
-        return modelMapper.map(userEntity, User.class);
+        return Optional.ofNullable(userEntity).map(obj -> modelMapper.map(obj, User.class)).orElse(null);
     }
 
     public ArrayList<UserDtoResp> bulkUser2dtoResp(Collection<User> users) {
