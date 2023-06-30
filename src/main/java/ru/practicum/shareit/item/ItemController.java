@@ -40,8 +40,8 @@ public class ItemController {
         return itemMapper.bulkItem2dtoResp(itemService.findByOwner(ownerId));
     }
 
-//    @GetMapping("/{itemId}")
-//    public ArrayList<ItemDtoResp> findByText(String text) {
-//        return itemMapper.bulkItem2dtoResp(itemService.findByText(text));
-//    }
+    @GetMapping("/search")
+    public ArrayList<ItemDtoResp> findByText(@RequestParam(value = "text") String text) {
+        return itemMapper.bulkItem2dtoResp(itemService.findByText(text));
+    }
 }
