@@ -1,15 +1,21 @@
 package ru.practicum.shareit.item.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 @Data
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class ItemDtoReq {
-    private final int id;
+    @NotBlank
     private String name;
+    @NotNull
     private String description;
-    private boolean available;
-    private final int owner;
-    private int request;
+    @NotNull
+    private Boolean available;
 }

@@ -1,12 +1,11 @@
 package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import ru.practicum.shareit.item.model.Item;
+import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.model.ItemDtoReq;
 import ru.practicum.shareit.item.model.ItemDtoResp;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 
 /**
@@ -18,19 +17,23 @@ import java.util.ArrayList;
 public class ItemController {
     private final ItemService itemService;
     private final ItemMapper itemMapper;
-    public ItemDtoResp create(ItemDtoReq itemDtoReq) {
+
+    @PostMapping
+    public ItemDtoResp create(@RequestBody ItemDtoReq itemDtoReq, @RequestHeader("X-Sharer-User-Id") @NotNull int userId) {
+        return itemMapper.item2dtoResp(itemService.create(itemMapper.dtoReq2item(itemDtoReq), userId));
+    }
+
+    @PatchMapping("/{itemId}")
+    public ItemDtoResp update(@RequestBody ItemDtoReq itemDtoReq, @PathVariable int itemId) {
         return null;
     }
 
-    public ItemDtoResp update(ItemDtoReq itemDtoReq) {
+    @GetMapping("/{itemId}")
+    public ItemDtoResp findById(@PathVariable int itemId) {
         return null;
     }
 
-    public ItemDtoResp findById(int itemId) {
-        return null;
-    }
-
-    public ArrayList<ItemDtoResp> findByOwner(int userId) {
+    public ArrayList<ItemDtoResp> findByOwner(int ownerId) {
         return null;
     }
 

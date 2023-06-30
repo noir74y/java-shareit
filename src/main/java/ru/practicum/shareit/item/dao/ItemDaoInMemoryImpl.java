@@ -14,9 +14,11 @@ import java.util.HashMap;
 public class ItemDaoInMemoryImpl implements ItemDao {
     private final HashMap<Integer, ItemEntity> itemEntities;
     private final ItemMapper itemMapper;
+
     @Override
     public Item create(Item item) {
-        return null;
+        itemEntities.put(item.getId(), itemMapper.item2entity(item));
+        return item;
     }
 
     @Override
@@ -30,7 +32,7 @@ public class ItemDaoInMemoryImpl implements ItemDao {
     }
 
     @Override
-    public ArrayList<Item> findByOwner(int userId) {
+    public ArrayList<Item> findByOwner(int ownerId) {
         return null;
     }
 

@@ -6,10 +6,10 @@ import lombok.RequiredArgsConstructor;
 @Data
 @RequiredArgsConstructor
 public class ItemEntity {
-    private final int id;
+    private int id;
     private String name;
     private String description;
-    private boolean available;
-    private final int owner;
+    private Boolean available;
+    private int owner;
     private int request;
 }

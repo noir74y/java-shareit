@@ -1,15 +1,16 @@
 package ru.practicum.shareit.item.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @Data
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class ItemDtoResp {
-    private final int id;
+    private int id;
     private String name;
     private String description;
-    private boolean available;
-    private final int owner;
-    private int request;
+    private Boolean available;
 }

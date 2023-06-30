@@ -6,10 +6,15 @@ import lombok.RequiredArgsConstructor;
 @Data
 @RequiredArgsConstructor
 public class Item {
-    private final int id;
+    private static int itemId = 0;
+    private int id;
     private String name;
     private String description;
-    private boolean available;
-    private final int owner;
+    private Boolean available;
+    private int owner;
     private int request;
+
+    public void setId() {
+        this.id = ++itemId;
+    }
 }

@@ -11,7 +11,7 @@ public interface ItemDao {
 
     Item findById(int itemId);
 
-    ArrayList<Item> findByOwner(int userId);
+    ArrayList<Item> findByOwner(int ownerId);
 
     ArrayList<Item> findByText(String text);
 }
