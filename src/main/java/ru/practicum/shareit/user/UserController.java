@@ -3,11 +3,10 @@ package ru.practicum.shareit.user;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.user.model.intf.CreateCase;
-import ru.practicum.shareit.user.model.intf.UpdateCase;
 import ru.practicum.shareit.user.model.UserDtoReq;
 import ru.practicum.shareit.user.model.UserDtoResp;
-import ru.practicum.shareit.user.model.UserMapper;
+import ru.practicum.shareit.user.model.intf.OnCreate;
+import ru.practicum.shareit.user.model.intf.OnUpdate;
 
 import java.util.ArrayList;
 
@@ -19,23 +18,23 @@ public class UserController {
     private final UserMapper userMapper;
 
     @PostMapping
-    public UserDtoResp create(@Validated(CreateCase.class) @RequestBody UserDtoReq userDtoReq) {
+    public UserDtoResp create(@Validated(OnCreate.class) @RequestBody UserDtoReq userDtoReq) {
         return userMapper.user2dtoResp(userService.create(userMapper.dtoReq2user(userDtoReq)));
     }
 
-    @PatchMapping("/{id}")
-    public UserDtoResp update(@Validated(UpdateCase.class) @RequestBody UserDtoReq userDtoReq, @PathVariable int id) {
-        return userMapper.user2dtoResp(userService.update(userMapper.dtoReq2user(userDtoReq), id));
+    @PatchMapping("/{userId}")
+    public UserDtoResp update(@Validated(OnUpdate.class) @RequestBody UserDtoReq userDtoReq, @PathVariable int userId) {
+        return userMapper.user2dtoResp(userService.update(userMapper.dtoReq2user(userDtoReq), userId));
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable int id) {
-        userService.delete(id);
+    @DeleteMapping("/{userId}")
+    public void delete(@PathVariable int userId) {
+        userService.delete(userId);
     }
 
-    @GetMapping("/{id}")
-    public UserDtoResp find(@PathVariable int id) {
-        return userMapper.user2dtoResp(userService.find(id));
+    @GetMapping("/{userId}")
+    public UserDtoResp find(@PathVariable int userId) {
+        return userMapper.user2dtoResp(userService.findById(userId));
     }
 
     @GetMapping

@@ -2,9 +2,9 @@ package ru.practicum.shareit.user.dao;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.practicum.shareit.user.model.UserMapper;
-import ru.practicum.shareit.user.model.UserEntity;
 import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.model.UserEntity;
+import ru.practicum.shareit.user.UserMapper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,13 +28,13 @@ public class UserDaoInMemoryImpl implements UserDao {
     }
 
     @Override
-    public void delete(int id) {
-        userEntities.remove(id);
+    public void delete(int userId) {
+        userEntities.remove(userId);
     }
 
     @Override
-    public User find(int id) {
-        return userMapper.entity2user(userEntities.get(id));
+    public User findById(int userId) {
+        return userMapper.entity2user(userEntities.get(userId));
     }
 
     @Override

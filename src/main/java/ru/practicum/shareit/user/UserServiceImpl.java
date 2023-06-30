@@ -22,23 +22,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User update(User user, int id) {
-        user.setId(id);
+    public User update(User user, int userId) {
+        user.setId(userId);
         checkEmailForDuplicate(user);
-        User obj = find(id);
+        User obj = findById(userId);
         Optional.ofNullable(user.getName()).ifPresent(obj::setName);
         Optional.ofNullable(user.getEmail()).ifPresent(obj::setEmail);
         return userDao.update(obj);
     }
 
     @Override
-    public void delete(int id) {
-        userDao.delete(id);
+    public void delete(int userId) {
+        userDao.delete(userId);
     }
 
     @Override
-    public User find(int id) {
-        return userDao.find(id);
+    public User findById(int userId) {
+        return userDao.findById(userId);
     }
 
     @Override

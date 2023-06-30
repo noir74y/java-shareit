@@ -7,11 +7,12 @@ import java.util.ArrayList;
 public interface UserService {
     User create(User user);
 
-    User update(User user, int id);
+    User update(User user, int userId);
 
-    void delete(int id);
+    void delete(int userId);
 
-    User find(int id);
+    User findById(int userId);
 
     ArrayList<User> findAll();
+
 }

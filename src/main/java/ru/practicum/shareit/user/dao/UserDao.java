@@ -6,8 +6,12 @@ import java.util.ArrayList;
 
 public interface UserDao {
     User create(User user);
+
     User update(User user);
-    void delete(int id);
-    User find(int id);
+
+    void delete(int userId);
+
+    User findById(int userId);
+
     ArrayList<User> findAll();
 }
