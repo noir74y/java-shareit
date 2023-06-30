@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.model.ItemDtoReq;
 import ru.practicum.shareit.item.model.ItemDtoResp;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 
@@ -19,7 +20,7 @@ public class ItemController {
     private final ItemMapper itemMapper;
 
     @PostMapping
-    public ItemDtoResp create(@RequestBody ItemDtoReq itemDtoReq, @RequestHeader("X-Sharer-User-Id") @NotNull int userId) {
+    public ItemDtoResp create(@Valid @RequestBody ItemDtoReq itemDtoReq, @RequestHeader("X-Sharer-User-Id") @NotNull int userId) {
         return itemMapper.item2dtoResp(itemService.create(itemMapper.dtoReq2item(itemDtoReq), userId));
     }
 
