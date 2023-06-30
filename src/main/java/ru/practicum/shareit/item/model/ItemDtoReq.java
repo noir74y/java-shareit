@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import ru.practicum.shareit.validation.OnCreate;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -12,10 +13,10 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ItemDtoReq {
-    @NotBlank
+    @NotBlank(groups = {OnCreate.class})
     private String name;
-    @NotNull
+    @NotNull(groups = {OnCreate.class})
     private String description;
-    @NotNull
+    @NotNull(groups = {OnCreate.class})
     private Boolean available;
 }

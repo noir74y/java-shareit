@@ -1,9 +1,11 @@
 package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.model.ItemDtoReq;
 import ru.practicum.shareit.item.model.ItemDtoResp;
+import ru.practicum.shareit.validation.OnCreate;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -20,13 +22,13 @@ public class ItemController {
     private final ItemMapper itemMapper;
 
     @PostMapping
-    public ItemDtoResp create(@Valid @RequestBody ItemDtoReq itemDtoReq, @RequestHeader("X-Sharer-User-Id") @NotNull int userId) {
-        return itemMapper.item2dtoResp(itemService.create(itemMapper.dtoReq2item(itemDtoReq), userId));
+    public ItemDtoResp create(@Validated(OnCreate.class) @RequestBody ItemDtoReq itemDtoReq, @RequestHeader("X-Sharer-User-Id") @NotNull int ownerId) {
+        return itemMapper.item2dtoResp(itemService.create(itemMapper.dtoReq2item(itemDtoReq), ownerId));
     }
 
     @PatchMapping("/{itemId}")
-    public ItemDtoResp update(@RequestBody ItemDtoReq itemDtoReq, @PathVariable int itemId) {
-        return null;
+    public ItemDtoResp update(@RequestBody ItemDtoReq itemDtoReq, @RequestHeader("X-Sharer-User-Id") @NotNull int ownerId, @PathVariable int itemId) {
+        return itemMapper.item2dtoResp(itemService.update(itemMapper.dtoReq2item(itemDtoReq),ownerId,itemId));
     }
 
     @GetMapping("/{itemId}")

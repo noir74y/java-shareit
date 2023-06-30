@@ -23,12 +23,13 @@ public class ItemDaoInMemoryImpl implements ItemDao {
 
     @Override
     public Item update(Item item) {
-        return null;
+        itemEntities.replace(item.getId(), itemMapper.item2entity(item));
+        return item;
     }
 
     @Override
     public Item findById(int itemId) {
-        return null;
+        return itemMapper.entity2item(itemEntities.get(itemId));
     }
 
     @Override

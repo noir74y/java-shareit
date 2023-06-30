@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public interface ItemService {
     Item create(Item item, int userId);
 
-    Item update(Item item);
+    Item update(Item item, int ownerId, int itemId);
 
     Item findById(int itemId);
 
