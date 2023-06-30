@@ -11,7 +11,11 @@ public class User {
     private String name;
     private String email;
 
+    private static int getNewId() {
+        return ++userId;
+    }
+
     public void setNewId() {
-        this.id = ++userId;
+        this.id = User.getNewId();
     }
 }

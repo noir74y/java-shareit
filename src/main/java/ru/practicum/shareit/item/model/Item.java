@@ -14,7 +14,11 @@ public class Item {
     private int owner;
     private int request;
 
+    private static int getNewId() {
+        return ++itemId;
+    }
+
     public void setNewId() {
-        this.id = ++itemId;
+        this.id = Item.getNewId();
     }
 }
