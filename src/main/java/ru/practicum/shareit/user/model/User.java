@@ -11,7 +11,7 @@ public class User {
     private String name;
     private String email;
 
-    public void setId() {
+    public void setNewId() {
         this.id = ++userId;
     }
 }

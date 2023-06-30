@@ -20,7 +20,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Item create(Item item, int ownerId) {
         Optional.ofNullable(userService.findById(ownerId)).orElseThrow(() -> new NotFoundException("нет такого юзера", String.valueOf(ownerId)));
-        item.setId();
+        item.setNewId();
         item.setOwner(ownerId);
         return itemDao.create(item);
     }

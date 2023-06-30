@@ -14,7 +14,7 @@ public class Item {
     private int owner;
     private int request;
 
-    public void setId() {
+    public void setNewId() {
         this.id = ++itemId;
     }
 }
