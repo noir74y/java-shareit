@@ -7,7 +7,6 @@ import ru.practicum.shareit.item.model.ItemDtoReq;
 import ru.practicum.shareit.item.model.ItemDtoResp;
 import ru.practicum.shareit.validation.OnCreate;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 
@@ -28,7 +27,7 @@ public class ItemController {
 
     @PatchMapping("/{itemId}")
     public ItemDtoResp update(@RequestBody ItemDtoReq itemDtoReq, @RequestHeader("X-Sharer-User-Id") @NotNull int ownerId, @PathVariable int itemId) {
-        return itemMapper.item2dtoResp(itemService.update(itemMapper.dtoReq2item(itemDtoReq),ownerId,itemId));
+        return itemMapper.item2dtoResp(itemService.update(itemMapper.dtoReq2item(itemDtoReq), ownerId, itemId));
     }
 
     @GetMapping("/{itemId}")

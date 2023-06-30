@@ -8,9 +8,9 @@ import ru.practicum.shareit.user.model.UserDtoReq;
 import ru.practicum.shareit.user.model.UserDtoResp;
 import ru.practicum.shareit.user.model.UserEntity;
 
-import java.util.Optional;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
