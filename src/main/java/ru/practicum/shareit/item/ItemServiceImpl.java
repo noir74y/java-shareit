@@ -38,16 +38,16 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Item findById(int itemId) {
-        return null;
+        return itemDao.findById(itemId);
     }
 
     @Override
     public ArrayList<Item> findByOwner(int ownerId) {
-        return null;
+        return itemDao.findByOwner(ownerId);
     }
 
     @Override
     public ArrayList<Item> findByText(String text) {
-        return null;
+        return itemDao.findByText(text);
     }
 }

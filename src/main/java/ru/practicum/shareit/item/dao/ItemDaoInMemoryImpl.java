@@ -8,6 +8,7 @@ import ru.practicum.shareit.item.model.ItemEntity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -34,7 +35,7 @@ public class ItemDaoInMemoryImpl implements ItemDao {
 
     @Override
     public ArrayList<Item> findByOwner(int ownerId) {
-        return null;
+        return itemMapper.bulkEntity2item(itemEntities.values().stream().filter(obj -> obj.getOwner() == ownerId).collect(Collectors.toCollection(ArrayList::new)));
     }
 
     @Override

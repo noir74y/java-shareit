@@ -7,6 +7,7 @@ import ru.practicum.shareit.item.model.ItemDtoReq;
 import ru.practicum.shareit.item.model.ItemDtoResp;
 import ru.practicum.shareit.validation.OnCreate;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 
@@ -32,14 +33,16 @@ public class ItemController {
 
     @GetMapping("/{itemId}")
     public ItemDtoResp findById(@PathVariable int itemId) {
-        return null;
+        return itemMapper.item2dtoResp(itemService.findById(itemId));
     }
 
-    public ArrayList<ItemDtoResp> findByOwner(int ownerId) {
-        return null;
+    @GetMapping
+    public ArrayList<ItemDtoResp> findByOwner(@RequestHeader("X-Sharer-User-Id") int ownerId) {
+        return itemMapper.bulkItem2dtoResp(itemService.findByOwner(ownerId));
     }
 
-    public ArrayList<ItemDtoResp> findByText(String text) {
-        return null;
-    }
+//    @GetMapping("/{itemId}")
+//    public ArrayList<ItemDtoResp> findByText(String text) {
+//        return itemMapper.bulkItem2dtoResp(itemService.findByText(text));
+//    }
 }
