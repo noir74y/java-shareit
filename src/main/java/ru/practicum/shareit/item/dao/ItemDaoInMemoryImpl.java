@@ -44,9 +44,10 @@ public class ItemDaoInMemoryImpl implements ItemDao {
 
     @Override
     public ArrayList<Item> findByText(String text) {
+        Pattern pattern = Pattern.compile(text.isBlank() ? "" : "^.*" + text + ".*$", Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
         return itemMapper.bulkEntity2item(itemEntities.values().stream()
                 .filter(ItemEntity::getAvailable)
-                .filter(obj -> obj.isItemRelevantForText(Pattern.compile(text.isBlank() ? "" : "^.*" + text + ".*$", Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE)))
+                .filter(obj -> obj.isItemRelevantForText(pattern))
                 .collect(Collectors.toCollection(ArrayList::new)));
     }
 }
