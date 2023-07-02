@@ -8,8 +8,8 @@ import java.time.LocalDate;
 @Data
 @RequiredArgsConstructor
 public class ItemRequest {
-    private final int id;
+    private int id;
     private String description;
-    private final int requester;
-    private final LocalDate created;
+    private int requester;
+    private LocalDate created;
 }

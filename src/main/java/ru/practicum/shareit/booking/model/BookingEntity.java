@@ -8,10 +8,10 @@ import java.time.LocalDate;
 @Data
 @RequiredArgsConstructor
 public class BookingEntity {
-    private final int id;
-    private final LocalDate start;
-    private final LocalDate end;
-    private final int item;
-    private final int booker;
+    private int id;
+    private LocalDate start;
+    private LocalDate end;
+    private int item;
+    private int booker;
     private String status;
 }
