@@ -17,8 +17,10 @@ public class UserDaoInMemoryImpl implements UserDao {
 
     @Override
     public User create(User user) {
-        userEntities.put(user.getId(), userMapper.user2entity(user));
-        return user;
+        UserEntity userEntity = userMapper.user2entity(user);
+        userEntity.setNewId();
+        userEntities.put(user.getId(), userEntity);
+        return userMapper.entity2user(userEntity);
     }
 
     @Override

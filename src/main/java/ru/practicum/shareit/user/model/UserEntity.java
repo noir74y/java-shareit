@@ -8,7 +8,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserEntity {
+    private static int userId = 0;
     private int id;
     private String name;
     private String email;
+
+    private static int getNewId() {
+        return ++userId;
+    }
+
+    public void setNewId() {
+        this.id = UserEntity.getNewId();
+    }
 }

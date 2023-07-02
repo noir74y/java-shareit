@@ -17,7 +17,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public User create(User user) {
         checkEmailForDuplicate(user);
-        user.setNewId();
         return userDao.create(user);
     }
 
