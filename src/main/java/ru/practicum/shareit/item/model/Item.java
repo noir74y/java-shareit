@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class Item {
     private static int itemId = 0;
-    private int id;
+    private Integer id;
     private String name;
     private String description;
     private Boolean available;

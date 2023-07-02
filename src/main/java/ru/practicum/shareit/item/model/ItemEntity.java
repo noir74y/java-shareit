@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 @Data
 @RequiredArgsConstructor
 public class ItemEntity {
-    private int id;
+    private Integer id;
     private String name;
     private String description;
     private Boolean available;
