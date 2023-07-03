@@ -19,7 +19,7 @@ public class UserDaoInMemoryImpl implements UserDao {
     public User create(User user) {
         UserEntity userEntity = userMapper.user2entity(user);
         userEntity.setNewId();
-        userEntities.put(user.getId(), userEntity);
+        userEntities.put(userEntity.getId(), userEntity);
         return userMapper.entity2user(userEntity);
     }
 
