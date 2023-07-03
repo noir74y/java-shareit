@@ -27,7 +27,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Item update(Item item, int ownerId, int itemId) {
         Item obj = itemDao.findById(itemId);
-        if (obj.getOwner() != ownerId)
+        if (!obj.getOwner().equals(ownerId))
             throw new ForbiddenException("это item другого юзера", obj.getOwner() + " != " + ownerId);
         Optional.ofNullable(item.getName()).ifPresent(obj::setName);
         Optional.ofNullable(item.getDescription()).ifPresent(obj::setDescription);
