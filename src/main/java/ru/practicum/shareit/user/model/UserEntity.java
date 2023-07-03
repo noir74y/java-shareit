@@ -8,12 +8,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserEntity {
-    private static int userId = 0;
-    private int id;
+    private static Integer userId = 0;
+    private Integer id;
     private String name;
     private String email;
 
-    private static int getNewId() {
+    private static Integer getNewId() {
         return ++userId;
     }
 

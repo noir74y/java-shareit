@@ -20,8 +20,10 @@ public class ItemDaoInMemoryImpl implements ItemDao {
 
     @Override
     public Item create(Item item) {
-        itemEntities.put(item.getId(), itemMapper.item2entity(item));
-        return item;
+        ItemEntity itemEntity = itemMapper.item2entity(item);
+        itemEntity.setNewId();
+        itemEntities.put(itemEntity.getId(), itemEntity);
+        return itemMapper.entity2item(itemEntity);
     }
 
     @Override

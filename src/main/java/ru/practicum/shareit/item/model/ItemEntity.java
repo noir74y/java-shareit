@@ -9,12 +9,21 @@ import java.util.regex.Pattern;
 @Data
 @RequiredArgsConstructor
 public class ItemEntity {
+    private static Integer itemId = 0;
     private Integer id;
     private String name;
     private String description;
     private Boolean available;
-    private int owner;
-    private int request;
+    private Integer owner;
+    private Integer request;
+
+    private static Integer getNewId() {
+        return ++itemId;
+    }
+
+    public void setNewId() {
+        this.id = ItemEntity.getNewId();
+    }
 
     public boolean isItemRelevantForText(Pattern pattern) {
         Matcher matcherName = pattern.matcher(name);
