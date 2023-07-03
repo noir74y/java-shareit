@@ -40,7 +40,7 @@ public class ItemDaoInMemoryImpl implements ItemDao {
     @Override
     public ArrayList<Item> findByOwner(int ownerId) {
         return itemMapper.bulkEntity2item(itemEntities.values().stream()
-                .filter(obj -> obj.getOwner() == ownerId)
+                .filter(obj -> obj.getOwner().equals(ownerId))
                 .collect(Collectors.toCollection(ArrayList::new)));
     }
 

@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private void checkEmailForDuplicate(User user) {
-        if (findAll().stream().anyMatch(obj -> obj.getId() != user.getId() && obj.getEmail().equals(user.getEmail())))
+        if (findAll().stream().anyMatch(obj -> !obj.getId().equals(user.getId()) && obj.getEmail().equals(user.getEmail())))
             throw new DuplicateEmailException(user.getEmail());
     }
 }
