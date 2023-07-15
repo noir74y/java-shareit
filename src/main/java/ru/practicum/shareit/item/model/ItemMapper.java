@@ -3,13 +3,12 @@ package ru.practicum.shareit.item.model;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
-import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.model.ItemDtoReq;
-import ru.practicum.shareit.item.model.ItemDtoResp;
-import ru.practicum.shareit.item.model.ItemEntity;
+import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.model.UserMapper;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -17,6 +16,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ItemMapper {
     private final ModelMapper modelMapper;
+    private final UserMapper userMapper;
 
     public Item dtoReq2item(ItemDtoReq itemDtoReq) {
         return Optional.ofNullable(itemDtoReq).map(obj -> modelMapper.map(obj, Item.class)).orElse(null);
@@ -30,8 +30,18 @@ public class ItemMapper {
         return Optional.ofNullable(item).map(obj -> modelMapper.map(obj, ItemEntity.class)).orElse(null);
     }
 
+    public ItemEntity item2entity(Item item, User user) {
+        var itemEntity = Optional.ofNullable(item).map(obj -> modelMapper.map(obj, ItemEntity.class)).orElse(null);
+        Objects.requireNonNull(itemEntity).setOwner(userMapper.user2entity(user));
+        return itemEntity;
+    }
+
     public Item entity2item(ItemEntity itemEntity) {
-        return Optional.ofNullable(itemEntity).map(obj -> modelMapper.map(obj, Item.class)).orElse(null);
+        var item = Optional.ofNullable(itemEntity).map(obj -> modelMapper.map(obj, Item.class)).orElse(null);
+        Optional.ofNullable(item)
+                .ifPresent(itemObj -> Optional.ofNullable(Objects.requireNonNull(itemEntity).getOwner())
+                        .ifPresent(userEntity -> itemObj.setOwnerId(userEntity.getId())));
+        return item;
     }
 
     public ArrayList<ItemDtoResp> bulkItem2dtoResp(Collection<Item> items) {

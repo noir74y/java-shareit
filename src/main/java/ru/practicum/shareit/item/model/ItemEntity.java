@@ -13,8 +13,6 @@ import java.util.regex.Pattern;
 @Entity
 @Table(name = "items")
 public class ItemEntity {
-    private static Integer itemId = 0;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -23,12 +21,21 @@ public class ItemEntity {
     private String description;
     private Boolean available;
 
-    @Transient
-    private Integer ownerId; // for InMemory only
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity owner;
+
+    public boolean isItemRelevantForText(Pattern pattern) {
+        Matcher matcherName = pattern.matcher(name);
+        Matcher matcherDescription = pattern.matcher(description);
+        return matcherName.matches() || matcherDescription.matches();
+    }
+
+    // code below is for InMemory only
+    private static Integer itemId = 0;
+
+    @Transient
+    private Integer ownerId;
 
     private static Integer getNewId() {
         return ++itemId;
@@ -36,11 +43,5 @@ public class ItemEntity {
 
     public void setNewId() {
         this.id = ItemEntity.getNewId();
-    }
-
-    public boolean isItemRelevantForText(Pattern pattern) {
-        Matcher matcherName = pattern.matcher(name);
-        Matcher matcherDescription = pattern.matcher(description);
-        return matcherName.matches() || matcherDescription.matches();
     }
 }

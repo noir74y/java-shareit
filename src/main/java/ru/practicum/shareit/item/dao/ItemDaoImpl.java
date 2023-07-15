@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Primary
-public class ItemDaoInMemoryImpl implements ItemDao {
+public class ItemDaoImpl implements ItemDao {
     private final HashMap<Integer, ItemEntity> itemEntities;
     private final ItemMapper itemMapper;
 

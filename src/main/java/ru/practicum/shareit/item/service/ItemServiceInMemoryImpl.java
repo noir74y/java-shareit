@@ -1,4 +1,4 @@
-package ru.practicum.shareit.item;
+package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class ItemServiceDbImpl implements ItemService {
+public class ItemServiceInMemoryImpl implements ItemService {
     private final ItemDao itemDao;
     private final UserService userService;
 

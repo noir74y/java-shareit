@@ -12,10 +12,10 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ItemDtoReq {
-    @NotBlank(groups = {OnCreate.class})
+    @NotBlank(groups = {OnCreate.class}, message = "name is empty")
     private String name;
-    @NotNull(groups = {OnCreate.class})
+    @NotNull(groups = {OnCreate.class}, message = "description is absent")
     private String description;
-    @NotNull(groups = {OnCreate.class})
+    @NotNull(groups = {OnCreate.class}, message = "available is absent")
     private Boolean available;
 }

@@ -15,7 +15,7 @@ import javax.validation.constraints.NotBlank;
 public class UserDtoReq {
     private String name;
 
-    @NotBlank(groups = {OnCreate.class})
+    @NotBlank(groups = {OnCreate.class}, message = "email is empty")
     @Email(groups = {OnCreate.class, OnUpdate.class})
     private String email;
 }
