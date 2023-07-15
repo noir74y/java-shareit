@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item.dao;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.item.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
+@Primary
 public class ItemDaoInMemoryImpl implements ItemDao {
     private final HashMap<Integer, ItemEntity> itemEntities;
     private final ItemMapper itemMapper;
@@ -40,7 +42,7 @@ public class ItemDaoInMemoryImpl implements ItemDao {
     @Override
     public ArrayList<Item> findByOwner(int ownerId) {
         return itemMapper.bulkEntity2item(itemEntities.values().stream()
-                .filter(obj -> obj.getOwner().equals(ownerId))
+                .filter(obj -> obj.getOwnerId().equals(ownerId))
                 .collect(Collectors.toCollection(ArrayList::new)));
     }
 

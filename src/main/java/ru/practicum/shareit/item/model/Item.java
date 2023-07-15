@@ -10,6 +10,6 @@ public class Item {
     private String name;
     private String description;
     private Boolean available;
-    private Integer owner;
+    private Integer ownerId;
     private Integer request;
 }
