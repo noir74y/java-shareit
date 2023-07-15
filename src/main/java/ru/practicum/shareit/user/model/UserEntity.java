@@ -12,16 +12,18 @@ import javax.persistence.*;
 @Entity
 @Table(name = "users")
 public class UserEntity {
-    private static Integer userId = 0;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String name;
+
+    @Column(unique=true)
     private String email;
 
     private Integer request;
+
+    private static Integer userId = 0;
 
     private static Integer getNewId() {
         return ++userId;

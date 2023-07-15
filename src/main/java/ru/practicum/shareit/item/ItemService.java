@@ -5,7 +5,7 @@ import ru.practicum.shareit.item.model.Item;
 import java.util.ArrayList;
 
 public interface ItemService {
-    Item create(Item item, int userId);
+    Item create(Item item, int userId) throws Throwable;
 
     Item update(Item item, int ownerId, int itemId);
 

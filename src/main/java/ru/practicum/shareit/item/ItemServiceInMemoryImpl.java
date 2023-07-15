@@ -7,7 +7,7 @@ import ru.practicum.shareit.exception.ForbiddenException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dao.ItemDao;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.user.UserService;
+import ru.practicum.shareit.user.service.UserService;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -20,7 +20,7 @@ public class ItemServiceInMemoryImpl implements ItemService {
     private final UserService userService;
 
     @Override
-    public Item create(Item item, int ownerId) {
+    public Item create(Item item, int ownerId) throws Throwable {
         Optional.ofNullable(userService.findById(ownerId)).orElseThrow(() -> new NotFoundException("нет такого юзера", String.valueOf(ownerId)));
         item.setOwnerId(ownerId);
         return itemDao.create(item);

@@ -2,7 +2,7 @@ package ru.practicum.shareit.user.dao;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.practicum.shareit.user.UserMapper;
+import ru.practicum.shareit.user.model.UserMapper;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.model.UserEntity;
 
@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 @Component
 @RequiredArgsConstructor
-public class UserDaoInMemoryImpl implements UserDao {
+public class UserDaoImpl implements UserDao {
     private final HashMap<Integer, UserEntity> userEntities;
     private final UserMapper userMapper;
 

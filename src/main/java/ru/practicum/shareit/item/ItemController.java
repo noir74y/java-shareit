@@ -6,6 +6,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.model.ItemDtoReq;
 import ru.practicum.shareit.item.model.ItemDtoResp;
+import ru.practicum.shareit.item.model.ItemMapper;
 import ru.practicum.shareit.validation.OnCreate;
 
 import javax.validation.constraints.NotNull;
@@ -20,7 +21,7 @@ public class ItemController {
     private final ItemMapper itemMapper;
 
     @PostMapping
-    public ItemDtoResp create(@Validated(OnCreate.class) @RequestBody ItemDtoReq itemDtoReq, @RequestHeader(ItemConstant.HEADER_USER_ID) @NotNull int ownerId) {
+    public ItemDtoResp create(@Validated(OnCreate.class) @RequestBody ItemDtoReq itemDtoReq, @RequestHeader(ItemConstant.HEADER_USER_ID) @NotNull int ownerId) throws Throwable {
         log.info("POST /items/ {}", itemDtoReq);
         return itemMapper.item2dtoResp(itemService.create(itemMapper.dtoReq2item(itemDtoReq), ownerId));
     }
