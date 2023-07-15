@@ -6,23 +6,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.ForbiddenException;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.item.dao.ItemDao;
 import ru.practicum.shareit.item.dao.ItemRepository;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.model.ItemEntity;
 import ru.practicum.shareit.item.model.ItemMapper;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 @Service
 @RequiredArgsConstructor
 @Primary
 public class ItemServiceDbImpl implements ItemService {
-    private final ItemDao itemDao;
     private final ItemRepository itemRepository;
     private final ItemMapper itemMapper;
     private final UserService userService;
@@ -37,7 +33,6 @@ public class ItemServiceDbImpl implements ItemService {
     @Override
     @Transactional
     public Item update(Item item, int ownerId, int itemId) {
-
         var itemEntity = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("no item with such id", String.valueOf(itemId)));
 
         if (!itemEntity.getOwner().getId().equals(ownerId))
@@ -58,13 +53,13 @@ public class ItemServiceDbImpl implements ItemService {
 
     @Override
     @Transactional(readOnly = true)
-    public ArrayList<Item> findByOwner(int ownerId) {
-        return itemDao.findByOwner(ownerId);
+    public ArrayList<Item> findByOwner(int userId) {
+        return itemMapper.bulkEntity2item(itemRepository.findAllByOwnerIdOrderById(userId));
     }
 
     @Override
     @Transactional(readOnly = true)
     public ArrayList<Item> findByText(String text) {
-        return itemDao.findByText(text);
+        return !text.isBlank() ? itemMapper.bulkEntity2item(itemRepository.search(text)) : new ArrayList<>();
     }
 }

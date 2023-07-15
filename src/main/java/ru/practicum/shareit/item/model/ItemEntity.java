@@ -21,21 +21,15 @@ public class ItemEntity {
     private String description;
     private Boolean available;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id")
     private UserEntity owner;
-
-    public boolean isItemRelevantForText(Pattern pattern) {
-        Matcher matcherName = pattern.matcher(name);
-        Matcher matcherDescription = pattern.matcher(description);
-        return matcherName.matches() || matcherDescription.matches();
-    }
 
     // code below is for InMemory only
     private static Integer itemId = 0;
 
     @Transient
-    private Integer ownerId;
+    private Integer ownerUserId;
 
     private static Integer getNewId() {
         return ++itemId;
@@ -43,5 +37,11 @@ public class ItemEntity {
 
     public void setNewId() {
         this.id = ItemEntity.getNewId();
+    }
+
+    public boolean isItemRelevantForText(Pattern pattern) {
+        Matcher matcherName = pattern.matcher(name);
+        Matcher matcherDescription = pattern.matcher(description);
+        return matcherName.matches() || matcherDescription.matches();
     }
 }

@@ -41,8 +41,8 @@ public class ItemServiceInMemoryImpl implements ItemService {
     }
 
     @Override
-    public ArrayList<Item> findByOwner(int ownerId) {
-        return itemDao.findByOwner(ownerId);
+    public ArrayList<Item> findByOwner(int userId) {
+        return itemDao.findByOwner(userId);
     }
 
     @Override

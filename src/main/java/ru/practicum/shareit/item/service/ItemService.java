@@ -11,7 +11,7 @@ public interface ItemService {
 
     Item findById(int itemId);
 
-    ArrayList<Item> findByOwner(int ownerId);
+    ArrayList<Item> findByOwner(int userId);
 
     ArrayList<Item> findByText(String text);
 }
