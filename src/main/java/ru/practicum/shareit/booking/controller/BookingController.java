@@ -11,6 +11,7 @@ import ru.practicum.shareit.booking.model.BookingState;
 import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.validation.OnCreate;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 
@@ -26,7 +27,7 @@ public class BookingController {
 
     @PostMapping
     public BookingDtoResp create(@RequestHeader(HEADER_USER_ID) @NotNull Integer requesterId,
-                                 @Validated(OnCreate.class) @RequestBody BookingDtoReq dtoReq) throws Throwable {
+                                 @Valid @Validated(OnCreate.class) @RequestBody BookingDtoReq dtoReq) throws Throwable {
         log.info("POST /bookings/ requesterId={}, {}", requesterId, dtoReq);
         return bookingMapper.model2dtoResp(bookingService.create(requesterId, bookingMapper.dtoReq2model(dtoReq)));
     }

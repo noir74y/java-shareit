@@ -1,9 +1,11 @@
-package ru.practicum.shareit.exception;
+package ru.practicum.shareit.exception.handler;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import ru.practicum.shareit.exception.*;
 
 @RestControllerAdvice
 public class ExceptionController {
@@ -18,9 +20,13 @@ public class ExceptionController {
             appException = (DuplicateEmailException) exception;
         else if (exception instanceof ForbiddenException)
             appException = (ForbiddenException) exception;
+        else if (exception instanceof CustomValidationException)
+            appException = (CustomValidationException) exception;
         else if (exception instanceof MethodArgumentNotValidException)
-            appException = new ValidationException(exception);
-        else
+            appException = new GenericValidationException(exception);
+        else if (exception instanceof MissingRequestHeaderException) {
+            appException = new HeaderMissingException(exception);
+        } else
             appException = new OtherException(exception);
 
         return ResponseEntity

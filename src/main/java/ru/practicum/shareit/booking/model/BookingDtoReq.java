@@ -1,6 +1,5 @@
 package ru.practicum.shareit.booking.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,15 +17,15 @@ import static ru.practicum.shareit.AppConstants.DATE_TIME_FORMAT;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookingDtoReq {
-    @NotNull(groups = {OnCreate.class}, message = "itemId is absent")
+    @NotNull
     private Integer itemId;
 
-    @NotNull(groups = {OnCreate.class}, message = "start is absent")
+    @NotNull
     @DateTimeFormat(pattern = DATE_TIME_FORMAT)
     @FutureOrPresent
     private LocalDateTime start;
 
-    @NotNull(groups = {OnCreate.class}, message = "end is absent")
+    @NotNull
     @DateTimeFormat(pattern = DATE_TIME_FORMAT)
     @Future
     private LocalDateTime end;

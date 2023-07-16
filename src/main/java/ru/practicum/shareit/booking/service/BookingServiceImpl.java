@@ -8,8 +8,8 @@ import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingMapper;
 import ru.practicum.shareit.booking.model.BookingState;
 import ru.practicum.shareit.booking.model.BookingStatus;
+import ru.practicum.shareit.exception.CustomValidationException;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.dao.ItemRepository;
 import ru.practicum.shareit.user.dao.UserRepository;
 
@@ -29,7 +29,7 @@ public class BookingServiceImpl implements BookingService {
     @Transactional
     public Booking create(Integer requesterId, Booking booking) throws Throwable {
         if (!booking.getStart().isBefore(booking.getEnd()))
-            throw new ValidationException("start is not after end", booking.getStart() + " " + booking.getEnd());
+            throw new CustomValidationException("start is not after end", booking.getStart() + " " + booking.getEnd());
 
         var userEntity = Optional.of(userRepository.findById(requesterId))
                 .get()
@@ -38,6 +38,9 @@ public class BookingServiceImpl implements BookingService {
         var itemEntity = Optional.of(itemRepository.findById(booking.getItemId()))
                 .get()
                 .orElseThrow((Supplier<Throwable>) () -> new NotFoundException("no such item", String.valueOf(booking.getItemId())));
+
+        if (!itemEntity.getAvailable())
+            throw new CustomValidationException("item is not available", String.valueOf(itemEntity.getId()));
 
         booking.setStatus(BookingStatus.WAITING);
 

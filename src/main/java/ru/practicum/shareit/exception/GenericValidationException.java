@@ -6,24 +6,13 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.stream.Collectors;
 
-public class ValidationException extends AppException {
-
-    public ValidationException() {
+public class GenericValidationException extends AppException {
+    public GenericValidationException(Exception exception) {
         httpErrorStatus = HttpStatus.BAD_REQUEST;
-    }
-
-    public ValidationException(Exception exception) {
-        this();
         cause = "ошибка валидации";
         message = ((MethodArgumentNotValidException) exception)
                 .getBindingResult()
                 .getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .collect(Collectors.joining(", "));
-    }
-
-    public ValidationException(String cause, String message) {
-        this();
-        this.cause = cause;
-        this.message = message;
     }
 }
