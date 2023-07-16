@@ -6,10 +6,7 @@ import org.springframework.stereotype.Component;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.model.UserMapper;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -31,16 +28,24 @@ public class ItemMapper {
     }
 
     public ItemEntity item2entity(Item item, User user) {
-        var itemEntity = Optional.ofNullable(item).map(obj -> modelMapper.map(obj, ItemEntity.class)).orElse(null);
-        Objects.requireNonNull(itemEntity).setOwner(userMapper.user2entity(user));
+        ItemEntity itemEntity;
+        try {
+            itemEntity = Optional.ofNullable(item).map(obj -> modelMapper.map(obj, ItemEntity.class)).orElseThrow(null);
+            itemEntity.setOwner(userMapper.user2entity(user));
+        } catch (NoSuchElementException e) {
+            itemEntity= null;
+        }
         return itemEntity;
     }
 
     public Item entity2item(ItemEntity itemEntity) {
-        var item = Optional.ofNullable(itemEntity).map(obj -> modelMapper.map(obj, Item.class)).orElse(null);
-        Optional.ofNullable(item)
-                .ifPresent(itemObj -> Optional.ofNullable(Objects.requireNonNull(itemEntity).getOwner())
-                        .ifPresent(userEntity -> itemObj.setOwnerId(userEntity.getId())));
+        Item item;
+        try {
+            item = Optional.ofNullable(itemEntity).map(obj -> modelMapper.map(obj, Item.class)).orElseThrow();
+            item.setOwnerId(itemEntity.getOwner().getId());
+        } catch (NoSuchElementException e) {
+            item = null;
+        }
         return item;
     }
 
