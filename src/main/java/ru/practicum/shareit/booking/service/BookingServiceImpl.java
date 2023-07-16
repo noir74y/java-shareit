@@ -27,13 +27,13 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     @Transactional
-    public Booking create(Integer requesterId, Booking booking) throws Throwable {
+    public Booking create(Integer userId, Booking booking) throws Throwable {
         if (!booking.getStart().isBefore(booking.getEnd()))
             throw new CustomValidationException("start is not after end", booking.getStart() + " " + booking.getEnd());
 
-        var userEntity = Optional.of(userRepository.findById(requesterId))
+        var userEntity = Optional.of(userRepository.findById(userId))
                 .get()
-                .orElseThrow((Supplier<Throwable>) () -> new NotFoundException("no such user", String.valueOf(requesterId)));
+                .orElseThrow((Supplier<Throwable>) () -> new NotFoundException("no such user", String.valueOf(userId)));
 
         var itemEntity = Optional.of(itemRepository.findById(booking.getItemId()))
                 .get()
@@ -49,25 +49,25 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     @Transactional
-    public Booking update(Integer requesterId, Integer bookingId, Boolean approved) {
+    public Booking update(Integer userId, Integer bookingId, Boolean approved) {
         return null;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Booking findById(Integer requesterId, Integer bookingId) {
+    public Booking findById(Integer userId, Integer bookingId) {
         return null;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Booking> findByBookerAndState(Integer requesterId, BookingState state) {
+    public List<Booking> findByBookerAndState(Integer userId, BookingState state) {
         return null;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Booking> findByOwnerAndState(Integer requesterId, BookingState state) {
+    public List<Booking> findByOwnerAndState(Integer userId, BookingState state) {
         return null;
     }
 

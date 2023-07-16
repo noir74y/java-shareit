@@ -26,38 +26,38 @@ public class BookingController {
     private final BookingMapper bookingMapper;
 
     @PostMapping
-    public BookingDtoResp create(@RequestHeader(HEADER_USER_ID) @NotNull Integer requesterId,
+    public BookingDtoResp create(@RequestHeader(HEADER_USER_ID) @NotNull Integer userId,
                                  @Valid @Validated(OnCreate.class) @RequestBody BookingDtoReq dtoReq) throws Throwable {
-        log.info("POST /bookings/ requesterId={}, {}", requesterId, dtoReq);
-        return bookingMapper.model2dtoResp(bookingService.create(requesterId, bookingMapper.dtoReq2model(dtoReq)));
+        log.info("POST /bookings/ userId={}, {}", userId, dtoReq);
+        return bookingMapper.model2dtoResp(bookingService.create(userId, bookingMapper.dtoReq2model(dtoReq)));
     }
 
     @PatchMapping("/{bookingId}?approved={approved}")
-    public BookingDtoResp update(@RequestHeader(HEADER_USER_ID) @NotNull Integer requesterId,
+    public BookingDtoResp update(@RequestHeader(HEADER_USER_ID) @NotNull Integer userId,
                                  @PathVariable Integer bookingId,
                                  @RequestParam Boolean approved) {
-        log.info("POST /bookings/ requesterId={}, approved={}, {}", requesterId, bookingId, approved);
-        return bookingMapper.model2dtoResp(bookingService.update(requesterId, bookingId, approved));
+        log.info("POST /bookings/ userId={}, approved={}, {}", userId, bookingId, approved);
+        return bookingMapper.model2dtoResp(bookingService.update(userId, bookingId, approved));
     }
 
     @GetMapping("/{bookingId}")
-    public BookingDtoResp findById(@RequestHeader(HEADER_USER_ID) @NotNull Integer requesterId,
+    public BookingDtoResp findById(@RequestHeader(HEADER_USER_ID) @NotNull Integer userId,
                                    @PathVariable Integer bookingId) {
-        log.info("GET /bookings/{} requesterId={}", bookingId, requesterId);
-        return bookingMapper.model2dtoResp(bookingService.findById(requesterId, bookingId));
+        log.info("GET /bookings/{} userId={}", bookingId, userId);
+        return bookingMapper.model2dtoResp(bookingService.findById(userId, bookingId));
     }
 
     @GetMapping("/?state={state}")
-    public ArrayList<BookingDtoResp> findByBookerAndState(@RequestHeader(HEADER_USER_ID) @NotNull Integer requesterId,
+    public ArrayList<BookingDtoResp> findByBookerAndState(@RequestHeader(HEADER_USER_ID) @NotNull Integer userId,
                                                           @RequestParam String state) {
-        log.info("GET /bookings/?state={} requesterId={}", state, requesterId);
-        return bookingMapper.bulkModel2dtoResp(bookingService.findByBookerAndState(requesterId, BookingState.valueOf(state)));
+        log.info("GET /bookings/?state={} userId={}", state, userId);
+        return bookingMapper.bulkModel2dtoResp(bookingService.findByBookerAndState(userId, BookingState.valueOf(state)));
     }
 
     @GetMapping("/owner?state={state}")
-    public ArrayList<BookingDtoResp> findByOwnerAndState(@RequestHeader(HEADER_USER_ID) @NotNull Integer requesterId,
+    public ArrayList<BookingDtoResp> findByOwnerAndState(@RequestHeader(HEADER_USER_ID) @NotNull Integer userId,
                                                          @RequestParam String state) {
-        log.info("GET /bookings/owner?state={} requesterId={}", state, requesterId);
-        return bookingMapper.bulkModel2dtoResp(bookingService.findByOwnerAndState(requesterId, BookingState.valueOf(state)));
+        log.info("GET /bookings/owner?state={} userId={}", state, userId);
+        return bookingMapper.bulkModel2dtoResp(bookingService.findByOwnerAndState(userId, BookingState.valueOf(state)));
     }
 }
