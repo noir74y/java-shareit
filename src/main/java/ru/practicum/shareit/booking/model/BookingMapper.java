@@ -45,7 +45,7 @@ public class BookingMapper {
             obj.setItemId(entity.getItem().getId());
             obj.setItemName(entity.getItem().getName());
         });
-        return null;
+        return model;
     }
 
     public ArrayList<BookingDtoResp> bulkModel2dtoResp(Collection<Booking> models) {
