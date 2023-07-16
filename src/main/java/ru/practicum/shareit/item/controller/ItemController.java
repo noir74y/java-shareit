@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.AppConstants;
 import ru.practicum.shareit.item.model.ItemDtoReq;
 import ru.practicum.shareit.item.model.ItemDtoResp;
 import ru.practicum.shareit.item.model.ItemMapper;
@@ -22,13 +23,13 @@ public class ItemController {
     private final ItemMapper itemMapper;
 
     @PostMapping
-    public ItemDtoResp create(@Validated(OnCreate.class) @RequestBody ItemDtoReq itemDtoReq, @RequestHeader(ItemConstant.HEADER_USER_ID) @NotNull int ownerId) throws Throwable {
+    public ItemDtoResp create(@Validated(OnCreate.class) @RequestBody ItemDtoReq itemDtoReq, @RequestHeader(AppConstants.HEADER_USER_ID) @NotNull int ownerId) throws Throwable {
         log.info("POST /items/ {}", itemDtoReq);
         return itemMapper.item2dtoResp(itemService.create(itemMapper.dtoReq2item(itemDtoReq), ownerId));
     }
 
     @PatchMapping("/{itemId}")
-    public ItemDtoResp update(@RequestBody ItemDtoReq itemDtoReq, @RequestHeader(ItemConstant.HEADER_USER_ID) @NotNull int ownerId, @PathVariable int itemId) {
+    public ItemDtoResp update(@RequestBody ItemDtoReq itemDtoReq, @RequestHeader(AppConstants.HEADER_USER_ID) @NotNull int ownerId, @PathVariable int itemId) {
         log.info("PATCH /items/" + itemId + " {}", itemDtoReq);
         return itemMapper.item2dtoResp(itemService.update(itemMapper.dtoReq2item(itemDtoReq), ownerId, itemId));
     }
@@ -40,7 +41,7 @@ public class ItemController {
     }
 
     @GetMapping
-    public ArrayList<ItemDtoResp> findByOwner(@RequestHeader(ItemConstant.HEADER_USER_ID) int ownerId) {
+    public ArrayList<ItemDtoResp> findByOwner(@RequestHeader(AppConstants.HEADER_USER_ID) int ownerId) {
         log.info("GET /items/" + ownerId);
         return itemMapper.bulkItem2dtoResp(itemService.findByOwner(ownerId));
     }
