@@ -4,7 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.booking.model.*;
+import ru.practicum.shareit.booking.model.BookingDtoReq;
+import ru.practicum.shareit.booking.model.BookingDtoResp;
+import ru.practicum.shareit.booking.model.BookingMapper;
+import ru.practicum.shareit.booking.model.State;
 import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.validation.OnCreate;
 
@@ -45,14 +48,14 @@ public class BookingController {
 
     @GetMapping("/?state={state}")
     public ArrayList<BookingDtoResp> findByBookerAndState(@RequestHeader(HEADER_USER_ID) @NotNull Integer requesterId,
-                                                  @RequestParam String state) {
+                                                          @RequestParam String state) {
         log.info("GET /bookings/?state={} requesterId={}", state, requesterId);
         return bookingMapper.bulkModel2dtoResp(bookingService.findByBookerAndState(requesterId, State.valueOf(state)));
     }
 
     @GetMapping("/owner?state={state}")
     public ArrayList<BookingDtoResp> findByOwnerAndState(@RequestHeader(HEADER_USER_ID) @NotNull Integer requesterId,
-                                                          @RequestParam String state) {
+                                                         @RequestParam String state) {
         log.info("GET /bookings/owner?state={} requesterId={}", state, requesterId);
         return bookingMapper.bulkModel2dtoResp(bookingService.findByOwnerAndState(requesterId, State.valueOf(state)));
     }

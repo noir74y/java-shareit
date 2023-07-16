@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.model.ItemEntity;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.ArrayList;

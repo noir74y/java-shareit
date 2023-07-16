@@ -14,15 +14,6 @@ public class BookingDtoResp {
     private LocalDate start;
     private LocalDate end;
     private String status;
-    private Booker booker;
-    private Item item;
-}
-
-class Booker {
-    Integer id;
-}
-
-class Item {
-    Integer id;
-    String name;
+    private BookingDtoRespBooker booker;
+    private BookingDtoRespItem item;
 }
