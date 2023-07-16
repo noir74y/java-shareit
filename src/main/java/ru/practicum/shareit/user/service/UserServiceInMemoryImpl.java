@@ -1,7 +1,6 @@
 package ru.practicum.shareit.user.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.DuplicateEmailException;
 import ru.practicum.shareit.user.dao.UserDao;
@@ -12,7 +11,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceInMemoryImpl implements UserService {
+public class UserServiceInMemoryImpl implements ru.practicum.shareit.user.service.UserService {
     private final UserDao userDao;
 
     @Override

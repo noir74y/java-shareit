@@ -16,14 +16,14 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Primary
-public class UserServiceDbImpl implements UserService {
+public class UserServiceDbImpl implements ru.practicum.shareit.user.service.UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
     @Override
     @Transactional
     public User create(User user) {
-        return userMapper.entity2user(userRepository.save(userMapper.user2entity(user)));
+        return userMapper.entity2model(userRepository.save(userMapper.model2entity(user)));
     }
 
     @Override
@@ -33,7 +33,7 @@ public class UserServiceDbImpl implements UserService {
         User obj = findById(userId);
         Optional.ofNullable(user.getName()).ifPresent(obj::setName);
         Optional.ofNullable(user.getEmail()).ifPresent(obj::setEmail);
-        return userMapper.entity2user(userRepository.save(userMapper.user2entity(obj)));
+        return userMapper.entity2model(userRepository.save(userMapper.model2entity(obj)));
     }
 
     @Override
@@ -45,12 +45,12 @@ public class UserServiceDbImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public User findById(int userId) throws Throwable {
-        return userMapper.entity2user(userRepository.findById(userId).orElseThrow(() -> new NotFoundException("no user with such id", String.valueOf(userId))));
+        return userMapper.entity2model(userRepository.findById(userId).orElseThrow(() -> new NotFoundException("no user with such id", String.valueOf(userId))));
     }
 
     @Override
     @Transactional(readOnly = true)
     public ArrayList<User> findAll() {
-        return userMapper.bulkEntity2user(userRepository.findAll());
+        return userMapper.bulkEntity2model(userRepository.findAll());
     }
 }

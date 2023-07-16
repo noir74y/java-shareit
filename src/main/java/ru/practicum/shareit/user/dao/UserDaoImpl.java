@@ -17,15 +17,15 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User create(User user) {
-        UserEntity userEntity = userMapper.user2entity(user);
+        UserEntity userEntity = userMapper.model2entity(user);
         userEntity.setNewId();
         userEntities.put(userEntity.getId(), userEntity);
-        return userMapper.entity2user(userEntity);
+        return userMapper.entity2model(userEntity);
     }
 
     @Override
     public User update(User user) {
-        userEntities.replace(user.getId(), userMapper.user2entity(user));
+        userEntities.replace(user.getId(), userMapper.model2entity(user));
         return user;
     }
 
@@ -36,11 +36,11 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User findById(int userId) {
-        return userMapper.entity2user(userEntities.get(userId));
+        return userMapper.entity2model(userEntities.get(userId));
     }
 
     @Override
     public ArrayList<User> findAll() {
-        return userMapper.bulkEntity2user(userEntities.values());
+        return userMapper.bulkEntity2model(userEntities.values());
     }
 }

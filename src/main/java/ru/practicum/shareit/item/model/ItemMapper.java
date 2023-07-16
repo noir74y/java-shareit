@@ -15,45 +15,45 @@ public class ItemMapper {
     private final ModelMapper modelMapper;
     private final UserMapper userMapper;
 
-    public Item dtoReq2item(ItemDtoReq itemDtoReq) {
-        return Optional.ofNullable(itemDtoReq).map(obj -> modelMapper.map(obj, Item.class)).orElse(null);
+    public Item dtoReq2model(ItemDtoReq dtoReq) {
+        return Optional.ofNullable(dtoReq).map(obj -> modelMapper.map(obj, Item.class)).orElse(null);
     }
 
-    public ItemDtoResp item2dtoResp(Item item) {
-        return Optional.ofNullable(item).map(obj -> modelMapper.map(obj, ItemDtoResp.class)).orElse(null);
+    public ItemDtoResp model2dtoResp(Item model) {
+        return Optional.ofNullable(model).map(obj -> modelMapper.map(obj, ItemDtoResp.class)).orElse(null);
     }
 
-    public ItemEntity item2entity(Item item) {
-        return Optional.ofNullable(item).map(obj -> modelMapper.map(obj, ItemEntity.class)).orElse(null);
+    public ItemEntity model2entity(Item model) {
+        return Optional.ofNullable(model).map(obj -> modelMapper.map(obj, ItemEntity.class)).orElse(null);
     }
 
-    public ItemEntity item2entity(Item item, User user) {
-        ItemEntity itemEntity;
+    public ItemEntity model2entity(Item model, User user) {
+        ItemEntity entity;
         try {
-            itemEntity = Optional.ofNullable(item).map(obj -> modelMapper.map(obj, ItemEntity.class)).orElseThrow(null);
-            itemEntity.setOwner(userMapper.user2entity(user));
+            entity = Optional.ofNullable(model).map(obj -> modelMapper.map(obj, ItemEntity.class)).orElseThrow(null);
+            entity.setOwner(userMapper.model2entity(user));
         } catch (NoSuchElementException e) {
-            itemEntity= null;
+            entity= null;
         }
-        return itemEntity;
+        return entity;
     }
 
-    public Item entity2item(ItemEntity itemEntity) {
-        Item item;
+    public Item entity2model(ItemEntity entity) {
+        Item model;
         try {
-            item = Optional.ofNullable(itemEntity).map(obj -> modelMapper.map(obj, Item.class)).orElseThrow();
-            item.setOwnerId(itemEntity.getOwner().getId());
+            model = Optional.ofNullable(entity).map(obj -> modelMapper.map(obj, Item.class)).orElseThrow();
+            model.setOwnerId(entity.getOwner().getId());
         } catch (NoSuchElementException e) {
-            item = null;
+            model = null;
         }
-        return item;
+        return model;
     }
 
-    public ArrayList<ItemDtoResp> bulkItem2dtoResp(Collection<Item> items) {
-        return items.stream().map(this::item2dtoResp).collect(Collectors.toCollection(ArrayList::new));
+    public ArrayList<ItemDtoResp> bulkModel2dtoResp(Collection<Item> models) {
+        return models.stream().map(this::model2dtoResp).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public ArrayList<Item> bulkEntity2item(Collection<ItemEntity> entities) {
-        return entities.stream().map(this::entity2item).collect(Collectors.toCollection(ArrayList::new));
+    public ArrayList<Item> bulkEntity2model(Collection<ItemEntity> entities) {
+        return entities.stream().map(this::entity2model).collect(Collectors.toCollection(ArrayList::new));
     }
 }

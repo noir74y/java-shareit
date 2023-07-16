@@ -22,26 +22,26 @@ public class ItemDaoImpl implements ItemDao {
 
     @Override
     public Item create(Item item) {
-        ItemEntity itemEntity = itemMapper.item2entity(item);
+        ItemEntity itemEntity = itemMapper.model2entity(item);
         itemEntity.setNewId();
         itemEntities.put(itemEntity.getId(), itemEntity);
-        return itemMapper.entity2item(itemEntity);
+        return itemMapper.entity2model(itemEntity);
     }
 
     @Override
     public Item update(Item item) {
-        itemEntities.replace(item.getId(), itemMapper.item2entity(item));
+        itemEntities.replace(item.getId(), itemMapper.model2entity(item));
         return item;
     }
 
     @Override
     public Item findById(int itemId) {
-        return itemMapper.entity2item(itemEntities.get(itemId));
+        return itemMapper.entity2model(itemEntities.get(itemId));
     }
 
     @Override
     public ArrayList<Item> findByOwner(int ownerId) {
-        return itemMapper.bulkEntity2item(itemEntities.values().stream()
+        return itemMapper.bulkEntity2model(itemEntities.values().stream()
                 .filter(obj -> obj.getOwnerUserId().equals(ownerId))
                 .collect(Collectors.toCollection(ArrayList::new)));
     }
@@ -49,7 +49,7 @@ public class ItemDaoImpl implements ItemDao {
     @Override
     public ArrayList<Item> findByText(String text) {
         Pattern pattern = Pattern.compile(text.isBlank() ? "" : "^.*" + text + ".*$", Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
-        return itemMapper.bulkEntity2item(itemEntities.values().stream()
+        return itemMapper.bulkEntity2model(itemEntities.values().stream()
                 .filter(ItemEntity::getAvailable)
                 .filter(obj -> obj.isItemRelevantForText(pattern))
                 .collect(Collectors.toCollection(ArrayList::new)));

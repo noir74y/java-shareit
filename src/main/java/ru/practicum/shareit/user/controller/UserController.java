@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.user.model.UserMapper;
 import ru.practicum.shareit.user.model.UserDtoReq;
 import ru.practicum.shareit.user.model.UserDtoResp;
+import ru.practicum.shareit.user.model.UserMapper;
 import ru.practicum.shareit.user.service.UserService;
 import ru.practicum.shareit.validation.OnCreate;
 import ru.practicum.shareit.validation.OnUpdate;
@@ -22,15 +22,18 @@ public class UserController {
     private final UserMapper userMapper;
 
     @PostMapping
-    public UserDtoResp create(@Validated(OnCreate.class) @RequestBody UserDtoReq userDtoReq) throws Throwable {
-        log.info("POST /users/ {}", userDtoReq);
-        return userMapper.user2dtoResp(userService.create(userMapper.dtoReq2user(userDtoReq)));
+    public UserDtoResp create(@Validated(OnCreate.class)
+                              @RequestBody UserDtoReq dtoReq) throws Throwable {
+        log.info("POST /users/ {}", dtoReq);
+        return userMapper.model2dtoResp(userService.create(userMapper.dtoReq2model(dtoReq)));
     }
 
     @PatchMapping("/{userId}")
-    public UserDtoResp update(@Validated(OnUpdate.class) @RequestBody UserDtoReq userDtoReq, @PathVariable int userId) throws Throwable {
-        log.info("PATCH /users/" + userId + " {}", userDtoReq);
-        return userMapper.user2dtoResp(userService.update(userMapper.dtoReq2user(userDtoReq), userId));
+    public UserDtoResp update(@Validated(OnUpdate.class)
+                              @RequestBody UserDtoReq dtoReq,
+                              @PathVariable int userId) throws Throwable {
+        log.info("PATCH /users/" + userId + " {}", dtoReq);
+        return userMapper.model2dtoResp(userService.update(userMapper.dtoReq2model(dtoReq), userId));
     }
 
     @DeleteMapping("/{userId}")
@@ -42,12 +45,12 @@ public class UserController {
     @GetMapping("/{userId}")
     public UserDtoResp find(@PathVariable int userId) throws Throwable {
         log.info("GET /users/" + userId);
-        return userMapper.user2dtoResp(userService.findById(userId));
+        return userMapper.model2dtoResp(userService.findById(userId));
     }
 
     @GetMapping
     public ArrayList<UserDtoResp> findAll() {
         log.info("GET /users/");
-        return userMapper.bulkUser2dtoResp(userService.findAll());
+        return userMapper.bulkModel2dtoResp(userService.findAll());
     }
 }
