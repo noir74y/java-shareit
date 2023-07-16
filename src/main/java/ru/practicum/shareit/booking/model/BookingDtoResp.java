@@ -3,16 +3,23 @@ package ru.practicum.shareit.booking.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDate;
+import static ru.practicum.shareit.AppConstants.DATE_TIME_FORMAT;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookingDtoResp {
     private Integer id;
-    private LocalDate start;
-    private LocalDate end;
+
+    @DateTimeFormat(pattern = DATE_TIME_FORMAT)
+    private LocalDateTime start;
+
+    @DateTimeFormat(pattern = DATE_TIME_FORMAT)
+    private LocalDateTime end;
+
     private String status;
     private BookingDtoRespBooker booker;
     private BookingDtoRespItem item;

@@ -7,6 +7,7 @@ import ru.practicum.shareit.user.model.UserEntity;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @RequiredArgsConstructor
@@ -18,10 +19,10 @@ public class BookingEntity {
     private Integer id;
 
     @Column(name = "start_date")
-    private LocalDate start;
+    private LocalDateTime start;
 
     @Column(name = "end_date")
-    private LocalDate end;
+    private LocalDateTime end;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
