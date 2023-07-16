@@ -6,7 +6,7 @@ import ru.practicum.shareit.booking.model.BookingState;
 import java.util.List;
 
 public interface BookingService {
-    Booking create(Integer requesterId, Booking booking);
+    Booking create(Integer requesterId, Booking booking) throws Throwable;
 
     Booking update(Integer requesterId, Integer bookingId, Boolean approved);
 

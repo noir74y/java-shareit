@@ -10,9 +10,10 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class Booking {
     private Integer id;
+    private Integer itemId;
     private LocalDateTime start;
     private LocalDateTime end;
-    private Integer itemId;
+    private String itemName;
     private Integer bookerId;
     private BookingStatus status;
 }

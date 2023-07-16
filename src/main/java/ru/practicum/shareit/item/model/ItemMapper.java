@@ -33,7 +33,7 @@ public class ItemMapper {
     public ItemEntity model2entity(Item model, User user) {
         ItemEntity entity;
         try {
-            entity = Optional.ofNullable(model).map(obj -> modelMapper.map(obj, ItemEntity.class)).orElseThrow(null);
+            entity = Optional.ofNullable(model).map(obj -> modelMapper.map(obj, ItemEntity.class)).orElseThrow();
             entity.setOwner(userMapper.model2entity(user));
         } catch (NoSuchElementException e) {
             entity = null;

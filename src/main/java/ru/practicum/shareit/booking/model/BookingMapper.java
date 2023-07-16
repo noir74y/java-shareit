@@ -3,8 +3,8 @@ package ru.practicum.shareit.booking.model;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
-import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.item.model.ItemEntity;
+import ru.practicum.shareit.user.model.UserEntity;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,18 +21,30 @@ public class BookingMapper {
     }
 
     public BookingDtoResp model2dtoResp(Booking model) {
-        return Optional.ofNullable(model).map(obj -> modelMapper.map(obj, BookingDtoResp.class)).orElse(null);
+        var dtoResp = Optional.ofNullable(model).map(obj -> modelMapper.map(obj, BookingDtoResp.class)).orElse(null);
+        Optional.ofNullable(dtoResp).ifPresent(obj -> {
+            obj.setBooker(BookingDtoRespBooker.builder().id(model.getBookerId()).build());
+            obj.setItem(BookingDtoRespItem.builder().id(model.getItemId()).name(model.getItemName()).build());
+        });
+        return dtoResp;
     }
 
-    public BookingEntity model2entity(Booking model) {
-        return Optional.ofNullable(model).map(obj -> modelMapper.map(obj, BookingEntity.class)).orElse(null);
-    }
-
-    public BookingEntity model2entity(Booking model, User user, Item item) {
-        return null;
+    public BookingEntity model2entity(Booking model, UserEntity userEntity, ItemEntity itemEntity) {
+        var entity = Optional.ofNullable(model).map(obj -> modelMapper.map(obj, BookingEntity.class)).orElse(null);
+        Optional.ofNullable(entity).ifPresent(obj -> {
+            obj.setBooker(userEntity);
+            obj.setItem(itemEntity);
+        });
+        return entity;
     }
 
     public Booking entity2model(BookingEntity entity) {
+        var model = Optional.ofNullable(entity).map(obj -> modelMapper.map(obj, Booking.class)).orElse(null);
+        Optional.ofNullable(model).ifPresent(obj -> {
+            obj.setBookerId(entity.getBooker().getId());
+            obj.setItemId(entity.getItem().getId());
+            obj.setItemName(entity.getItem().getName());
+        });
         return null;
     }
 
