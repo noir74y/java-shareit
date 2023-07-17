@@ -48,11 +48,14 @@ public class BookingServiceImpl implements BookingService {
         var bookingEntity = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException("no such bookingIg", String.valueOf(bookingId)));
 
+        if (bookingEntity.getStatus().equals(BookingStatus.APPROVED))
+            throw new CustomValidationException("booking is already approved", String.valueOf(bookingEntity.getId()));
+
         if (requesterId.equals(bookingEntity.getItem().getOwner().getId())) {
             bookingEntity.setStatus(approved ? BookingStatus.APPROVED : BookingStatus.REJECTED);
             return bookingMapper.entity2model(bookingRepository.save(bookingEntity));
         } else
-            throw new WrongUserException(requesterId);
+            throw new NotFoundException("wrong user", String.valueOf(requesterId));
     }
 
     @Override
@@ -64,7 +67,7 @@ public class BookingServiceImpl implements BookingService {
         if (requesterId.equals(bookingEntity.getItem().getOwner().getId()) || requesterId.equals(bookingEntity.getBooker().getId()))
             return bookingMapper.entity2model(bookingEntity);
         else
-            throw new WrongUserException(requesterId);
+            throw new NotFoundException("user is neither booker nor owner", String.valueOf(requesterId));
     }
 
     @Override

@@ -22,6 +22,8 @@ public class ExceptionController {
             appException = (ForbiddenException) exception;
         else if (exception instanceof CustomValidationException)
             appException = (CustomValidationException) exception;
+        else if (exception instanceof WrongUserException)
+            appException = (WrongUserException) exception;
         else if (exception instanceof MethodArgumentNotValidException)
             appException = new GenericValidationException(exception);
         else if (exception instanceof MissingRequestHeaderException) {
