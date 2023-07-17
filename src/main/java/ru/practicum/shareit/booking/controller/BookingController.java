@@ -49,14 +49,14 @@ public class BookingController {
 
     @GetMapping
     public ArrayList<BookingDtoResp> findByBookerAndState(@RequestHeader(HEADER_USER_ID) @NotNull Integer requesterId,
-                                                          @RequestParam String state) {
+                                                          @RequestParam(required = false) String state) {
         log.info("GET /bookings/?state={} requesterId={}", state, requesterId);
         return bookingMapper.bulkModel2dtoResp(bookingService.findByBookerAndState(requesterId, BookingState.valueOf(state)));
     }
 
     @GetMapping("/owner")
     public ArrayList<BookingDtoResp> findByOwnerAndState(@RequestHeader(HEADER_USER_ID) @NotNull Integer requesterId,
-                                                         @RequestParam String state) {
+                                                         @RequestParam(required = false) String state) {
         log.info("GET /bookings/owner?state={} requesterId={}", state, requesterId);
         return bookingMapper.bulkModel2dtoResp(bookingService.findByOwnerAndState(requesterId, BookingState.valueOf(state)));
     }
