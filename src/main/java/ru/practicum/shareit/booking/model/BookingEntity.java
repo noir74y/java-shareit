@@ -6,7 +6,6 @@ import ru.practicum.shareit.item.model.ItemEntity;
 import ru.practicum.shareit.user.model.UserEntity;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data

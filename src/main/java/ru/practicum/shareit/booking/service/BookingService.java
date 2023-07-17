@@ -6,13 +6,13 @@ import ru.practicum.shareit.booking.model.BookingState;
 import java.util.List;
 
 public interface BookingService {
-    Booking create(Integer userId, Booking booking) throws Throwable;
+    Booking create(Integer requesterId, Booking booking) throws Throwable;
 
-    Booking update(Integer userId, Integer bookingId, Boolean approved);
+    Booking update(Integer requesterId, Integer bookingId, Boolean approved) throws Throwable;
 
-    Booking findById(Integer userId, Integer bookingId);
+    Booking findById(Integer requesterId, Integer bookingId) throws Throwable;
 
-    List<Booking> findByBookerAndState(Integer userId, BookingState state);
+    List<Booking> findByBookerAndState(Integer requesterId, BookingState state);
 
-    List<Booking> findByOwnerAndState(Integer userId, BookingState state);
+    List<Booking> findByOwnerAndState(Integer requesterId, BookingState state);
 }
