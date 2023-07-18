@@ -1,11 +1,14 @@
 package ru.practicum.shareit.exception.handler;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.practicum.shareit.exception.*;
+
+import javax.validation.ConstraintViolationException;
 
 @RestControllerAdvice
 public class ExceptionController {
@@ -26,13 +29,14 @@ public class ExceptionController {
             appException = (WrongUserException) exception;
         else if (exception instanceof MethodArgumentNotValidException)
             appException = new GenericValidationException(exception);
-        else if (exception instanceof MissingRequestHeaderException) {
+        else if (exception instanceof MissingRequestHeaderException)
             appException = new HeaderMissingException(exception);
-        } else
+        else if (exception instanceof ConstraintViolationException) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessage(exception.getMessage(), "Unknown state: UNSUPPORTED_STATUS"));
+        }
+        else
             appException = new OtherException(exception);
 
-        return ResponseEntity
-                .status(appException.getHttpErrorStatus())
-                .body(appException.prepareErrorMessage());
+        return ResponseEntity.status(appException.getHttpErrorStatus()).body(appException.prepareErrorMessage());
     }
 }
