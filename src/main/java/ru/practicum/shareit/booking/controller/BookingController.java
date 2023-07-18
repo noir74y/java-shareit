@@ -10,6 +10,7 @@ import ru.practicum.shareit.booking.model.BookingMapper;
 import ru.practicum.shareit.booking.model.BookingState;
 import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.validation.OnCreate;
+import ru.practicum.shareit.validation.ValueOfEnumConstraint;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -21,6 +22,7 @@ import static ru.practicum.shareit.AppConstants.HEADER_USER_ID;
 @RestController
 @RequestMapping("/bookings")
 @RequiredArgsConstructor
+@Validated
 public class BookingController {
     private final BookingService bookingService;
     private final BookingMapper bookingMapper;
@@ -49,15 +51,15 @@ public class BookingController {
 
     @GetMapping
     public ArrayList<BookingDtoResp> findByBookerAndState(@RequestHeader(HEADER_USER_ID) @NotNull Integer requesterId,
-                                                          @RequestParam(required = false) String state) {
+                                                          @RequestParam(required = false) @ValueOfEnumConstraint(enumClass = BookingState.class) String state) {
         log.info("GET /bookings/?state={} requesterId={}", state, requesterId);
-        return bookingMapper.bulkModel2dtoResp(bookingService.findByBookerAndState(requesterId, BookingState.valueOf(state)));
+        return bookingMapper.bulkModel2dtoResp(bookingService.findByBookerAndState(requesterId, state));
     }
 
     @GetMapping("/owner")
     public ArrayList<BookingDtoResp> findByOwnerAndState(@RequestHeader(HEADER_USER_ID) @NotNull Integer requesterId,
-                                                         @RequestParam(required = false) String state) {
+                                                         @RequestParam(required = false) @ValueOfEnumConstraint(enumClass = BookingState.class) String state) {
         log.info("GET /bookings/owner?state={} requesterId={}", state, requesterId);
-        return bookingMapper.bulkModel2dtoResp(bookingService.findByOwnerAndState(requesterId, BookingState.valueOf(state)));
+        return bookingMapper.bulkModel2dtoResp(bookingService.findByOwnerAndState(requesterId,state));
     }
 }

@@ -12,7 +12,7 @@ public interface BookingService {
 
     Booking findById(Integer requesterId, Integer bookingId) throws Throwable;
 
-    List<Booking> findByBookerAndState(Integer requesterId, BookingState state);
+    List<Booking> findByBookerAndState(Integer requesterId, String state);
 
-    List<Booking> findByOwnerAndState(Integer requesterId, BookingState state);
+    List<Booking> findByOwnerAndState(Integer requesterId, String state);
 }

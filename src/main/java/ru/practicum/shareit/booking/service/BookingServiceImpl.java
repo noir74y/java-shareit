@@ -72,38 +72,58 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Booking> findByBookerAndState(Integer requesterId, BookingState state) {
+    public List<Booking> findByBookerAndState(Integer requesterId, String state) {
         List<BookingEntity> entities = new ArrayList<>();
         var userEntity = userRepository.findById(requesterId).orElseThrow(() -> new WrongUserException(requesterId));
-        switch (state) {
-            case WAITING:
-                entities = bookingRepository.findByBookerIdAndStatusOrderByStartDesc(requesterId, BookingStatus.WAITING);
-                break;
-            case REJECTED:
-                entities = bookingRepository.findByBookerIdAndStatusOrderByStartDesc(requesterId, BookingStatus.REJECTED);
-                break;
-            case FUTURE:
-                entities = bookingRepository.findByBookerIdAndStartAfterOrderByStartDesc(requesterId, LocalDateTime.now());
-                break;
-            case CURRENT:
-                entities = bookingRepository.findByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(requesterId, LocalDateTime.now(), LocalDateTime.now());
-                break;
-            case PAST:
-                entities = bookingRepository.findByBookerIdAndEndBeforeOrderByStartDesc(requesterId, LocalDateTime.now());
-                break;
-            case ALL:
-                entities = bookingRepository.findByBookerIdOrderByStartDesc(requesterId);
-                break;
-            default:
-                throw new CustomValidationException("wrong state", state.name());
+        switch (BookingState.valueOf(state)) {
+                case FUTURE:
+                    entities = bookingRepository.findAllByBookerIdAndStartAfterOrderByStartDesc(requesterId, LocalDateTime.now());
+                    break;
+                case CURRENT:
+                    entities = bookingRepository.findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(requesterId, LocalDateTime.now(), LocalDateTime.now());
+                    break;
+                case PAST:
+                    entities = bookingRepository.findAllByBookerIdAndEndBeforeOrderByStartDesc(requesterId, LocalDateTime.now());
+                    break;
+                case WAITING:
+                    entities = bookingRepository.findAllByBookerIdAndStatusOrderByStartDesc(requesterId, BookingStatus.WAITING);
+                    break;
+                case REJECTED:
+                    entities = bookingRepository.findAllByBookerIdAndStatusOrderByStartDesc(requesterId, BookingStatus.REJECTED);
+                    break;
+                case ALL:
+                    entities = bookingRepository.findAllByBookerIdOrderByStartDesc(requesterId);
+                    break;
         }
         return bookingMapper.bulkEntity2model(entities);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Booking> findByOwnerAndState(Integer requesterId, BookingState state) {
-        return null;
+    public List<Booking> findByOwnerAndState(Integer requesterId, String state) {
+        List<BookingEntity> entities = new ArrayList<>();
+        var userEntity = userRepository.findById(requesterId).orElseThrow(() -> new WrongUserException(requesterId));
+        switch (BookingState.valueOf(state)) {
+            case FUTURE:
+                entities = bookingRepository.findAllByItemOwnerIdAndStartAfterOrderByStartDesc(requesterId, LocalDateTime.now());
+                break;
+            case CURRENT:
+                entities = bookingRepository.findAllByItemOwnerIdAndStartBeforeAndEndAfterOrderByStartDesc(requesterId, LocalDateTime.now(), LocalDateTime.now());
+                break;
+            case PAST:
+                entities = bookingRepository.findAllByItemOwnerIdAndEndBeforeOrderByStartDesc(requesterId, LocalDateTime.now());
+                break;
+            case WAITING:
+                entities = bookingRepository.findAllByItemOwnerIdAndStatusOrderByStartDesc(requesterId, BookingStatus.WAITING);
+                break;
+            case REJECTED:
+                entities = bookingRepository.findAllByItemOwnerIdAndStatusOrderByStartDesc(requesterId, BookingStatus.REJECTED);
+                break;
+            case ALL:
+                entities = bookingRepository.findAllByItemOwnerIdOrderByStartDesc(requesterId);
+                break;
+        }
+        return bookingMapper.bulkEntity2model(entities);
     }
 
 }

@@ -3,7 +3,6 @@ package ru.practicum.shareit.booking.model;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data

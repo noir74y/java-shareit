@@ -11,13 +11,23 @@ import java.util.List;
 @Repository
 public interface BookingRepository extends JpaRepository<BookingEntity, Integer> {
 
-    List<BookingEntity> findByBookerIdAndStartAfterOrderByStartDesc(Integer bookerId, LocalDateTime currentDateTime);
+    List<BookingEntity> findAllByBookerIdAndStartAfterOrderByStartDesc(Integer bookerId, LocalDateTime currentDateTime);
 
-    List<BookingEntity> findByBookerIdAndEndBeforeOrderByStartDesc(Integer bookerId, LocalDateTime currentDateTime);
+    List<BookingEntity> findAllByItemOwnerIdAndStartAfterOrderByStartDesc(Integer ownerId, LocalDateTime currentDateTime);
 
-    List<BookingEntity> findByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(Integer bookerId, LocalDateTime currentDateTime1, LocalDateTime currentDateTime2);
+    List<BookingEntity> findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(Integer bookerId, LocalDateTime currentDateTime1, LocalDateTime currentDateTime2);
 
-    List<BookingEntity> findByBookerIdAndStatusOrderByStartDesc(Integer bookerId, BookingStatus status);
+    List<BookingEntity> findAllByItemOwnerIdAndStartBeforeAndEndAfterOrderByStartDesc(Integer ownerId, LocalDateTime currentDateTime1, LocalDateTime currentDateTime2);
 
-    List<BookingEntity> findByBookerIdOrderByStartDesc(Integer bookerId);
+    List<BookingEntity> findAllByBookerIdAndEndBeforeOrderByStartDesc(Integer bookerId, LocalDateTime currentDateTime);
+
+    List<BookingEntity> findAllByItemOwnerIdAndEndBeforeOrderByStartDesc(Integer ownerId, LocalDateTime currentDateTime);
+
+    List<BookingEntity> findAllByBookerIdAndStatusOrderByStartDesc(Integer bookerId, BookingStatus status);
+
+    List<BookingEntity> findAllByItemOwnerIdAndStatusOrderByStartDesc(Integer ownerId, BookingStatus status);
+
+    List<BookingEntity> findAllByBookerIdOrderByStartDesc(Integer bookerId);
+
+    List<BookingEntity> findAllByItemOwnerIdOrderByStartDesc(Integer ownerId);
 }
