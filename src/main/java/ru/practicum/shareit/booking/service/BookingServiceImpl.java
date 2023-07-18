@@ -35,6 +35,11 @@ public class BookingServiceImpl implements BookingService {
         var itemEntity = itemRepository.findById(booking.getItemId())
                 .orElseThrow(() -> new NotFoundException("no such item", String.valueOf(booking.getItemId())));
 
+        if (requesterId.equals(itemEntity.getOwner().getId()))
+            throw new CustomValidationException("requester is a owner of the item", String.valueOf(requesterId));
+
+
+
         if (itemEntity.getAvailable()) {
             booking.setStatus(BookingStatus.WAITING);
             return bookingMapper.entity2model(bookingRepository.save(bookingMapper.model2entity(booking, userEntity, itemEntity)));
