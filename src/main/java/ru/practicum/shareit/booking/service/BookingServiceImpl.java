@@ -36,7 +36,7 @@ public class BookingServiceImpl implements BookingService {
                 .orElseThrow(() -> new NotFoundException("no such item", String.valueOf(booking.getItemId())));
 
         if (requesterId.equals(itemEntity.getOwner().getId()))
-            throw new CustomValidationException("requester is a owner of the item", String.valueOf(requesterId));
+            throw new NotFoundException("requester is a owner of the item", String.valueOf(requesterId));
 
 
 
