@@ -9,11 +9,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ItemDtoResp {
+public class ItemDtoRespLastBooking {
     private Integer id;
-    private String name;
-    private String description;
-    private ItemDtoRespLastBooking lastBooking;
-    private ItemDtoRespNextBooking nextBooking;
-    private Boolean available;
+    private Integer bookerId;
 }

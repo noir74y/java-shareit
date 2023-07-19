@@ -27,7 +27,7 @@ public class BookingServiceImpl implements BookingService {
     @Transactional
     public Booking create(Integer requesterId, Booking booking) throws Throwable {
         if (!booking.getStart().isBefore(booking.getEnd()))
-            throw new CustomValidationException("start is not after end", booking.getStart() + " " + booking.getEnd());
+            throw new CustomValidationException("start is not before end", booking.getStart() + " " + booking.getEnd());
 
         var userEntity = userRepository.findById(requesterId)
                 .orElseThrow(() -> new NotFoundException("no such user", String.valueOf(requesterId)));
@@ -37,8 +37,6 @@ public class BookingServiceImpl implements BookingService {
 
         if (requesterId.equals(itemEntity.getOwner().getId()))
             throw new NotFoundException("requester is a owner of the item", String.valueOf(requesterId));
-
-
 
         if (itemEntity.getAvailable()) {
             booking.setStatus(BookingStatus.WAITING);

@@ -4,13 +4,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.booking.dao.BookingRepository;
 import ru.practicum.shareit.exception.ForbiddenException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dao.ItemRepository;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.ItemMapper;
 import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.service.UserService;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -20,7 +23,8 @@ import java.util.Optional;
 public class ItemServiceDbImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final ItemMapper itemMapper;
-    private final ru.practicum.shareit.user.service.UserService userService;
+    private final UserService userService;
+    private final BookingRepository bookingRepository;
 
     @Override
     @Transactional
@@ -47,7 +51,13 @@ public class ItemServiceDbImpl implements ItemService {
     @Override
     @Transactional(readOnly = true)
     public Item findById(int itemId) {
-        return itemMapper.entity2model(itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("no item with such id", String.valueOf(itemId))));
+        var item = itemMapper.entity2model(itemRepository
+                .findById(itemId)
+                .orElseThrow(() -> new NotFoundException("no item with such id", String.valueOf(itemId))));
+        item.setLastBooking(bookingRepository.getPreviousBookings(itemId, LocalDateTime.now()).stream()
+                .findFirst()
+                .orElse(null));
+        return item;
     }
 
     @Override
