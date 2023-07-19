@@ -13,7 +13,6 @@ import ru.practicum.shareit.item.model.ItemMapper;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -51,13 +50,9 @@ public class ItemServiceDbImpl implements ItemService {
     @Override
     @Transactional(readOnly = true)
     public Item findById(int itemId) {
-        var item = itemMapper.entity2model(itemRepository
+        return itemMapper.entity2model(itemRepository
                 .findById(itemId)
                 .orElseThrow(() -> new NotFoundException("no item with such id", String.valueOf(itemId))));
-        item.setLastBooking(bookingRepository.getPreviousBookings(itemId, LocalDateTime.now()).stream()
-                .findFirst()
-                .orElse(null));
-        return item;
     }
 
     @Override

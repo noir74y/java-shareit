@@ -3,9 +3,11 @@ package ru.practicum.shareit.item.model;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
+import ru.practicum.shareit.booking.dao.BookingRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.model.UserMapper;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.NoSuchElementException;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 public class ItemMapper {
     private final ModelMapper modelMapper;
     private final UserMapper userMapper;
+    private final BookingRepository bookingRepository;
 
     public Item dtoReq2model(ItemDtoReq dtoReq) {
         return Optional.ofNullable(dtoReq).map(obj -> modelMapper.map(obj, Item.class)).orElse(null);
@@ -42,14 +45,29 @@ public class ItemMapper {
     }
 
     public Item entity2model(ItemEntity entity) {
-        Item model;
+        Item item;
         try {
-            model = Optional.ofNullable(entity).map(obj -> modelMapper.map(obj, Item.class)).orElseThrow();
-            model.setOwnerId(entity.getOwner().getId());
+            item = Optional.ofNullable(entity).map(obj -> modelMapper.map(obj, Item.class)).orElseThrow();
+            item.setOwnerId(entity.getOwner().getId());
+
+            item.setLastBooking(Optional.ofNullable(bookingRepository.getLastBooking(item.getId(), LocalDateTime.now()))
+                    .map(bookingEntity -> ItemBooking.builder()
+                            .id(bookingEntity.getId())
+                            .bookerId(bookingEntity.getBooker().getId())
+                            .build())
+                    .orElse(null));
+
+            item.setNextBooking(Optional.ofNullable(bookingRepository.getNextBooking(item.getId(), LocalDateTime.now()))
+                    .map(bookingEntity -> ItemBooking.builder()
+                            .id(bookingEntity.getId())
+                            .bookerId(bookingEntity.getBooker().getId())
+                            .build())
+                    .orElse(null));
+
         } catch (NoSuchElementException e) {
-            model = null;
+            item = null;
         }
-        return model;
+        return item;
     }
 
     public ArrayList<ItemDtoResp> bulkModel2dtoResp(Collection<Item> models) {

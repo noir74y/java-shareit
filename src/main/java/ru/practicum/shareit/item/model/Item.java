@@ -11,10 +11,8 @@ public class Item {
     private Integer id;
     private String name;
     private String description;
-    private LocalDateTime lastBooking;
-    private InternalError lastBookerId;
-    private LocalDateTime nextBooking;
-    private InternalError nextBookerId;
+    private ItemBooking lastBooking;
+    private ItemBooking nextBooking;
     private Boolean available;
     private Integer ownerId;
 }

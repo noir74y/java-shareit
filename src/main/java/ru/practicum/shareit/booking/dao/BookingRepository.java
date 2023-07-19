@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.booking.model.BookingEntity;
 import ru.practicum.shareit.booking.model.BookingStatus;
+import ru.practicum.shareit.item.model.ItemBooking;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,6 +33,10 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Integer>
 
     List<BookingEntity> findAllByItemOwnerIdOrderByStartDesc(Integer ownerId);
 
-    @Query("select b.start from BookingEntity as b where b.item.id = ?1 and b.start > ?2 order by b.start desc")
-    List<LocalDateTime> getPreviousBookings(Integer itemId, LocalDateTime localDateTime);
+    //@Query("select b.start from BookingEntity as b where b.item.id = ?1 and b.start > ?2 order by b.start desc")
+    @Query(value = "select * from bookings where item_id = ?1 and start_date < ?2 order by start_date desc limit 1", nativeQuery = true)
+    BookingEntity getLastBooking(Integer itemId, LocalDateTime localDateTime);
+
+    @Query(value = "select * from bookings where item_id = ?1 and start_date > ?2 order by start_date asc limit 1", nativeQuery = true)
+    BookingEntity getNextBooking(Integer itemId, LocalDateTime localDateTime);
 }
