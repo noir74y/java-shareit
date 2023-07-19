@@ -82,13 +82,13 @@ public class BookingServiceImpl implements BookingService {
         var userEntity = userRepository.findById(requesterId).orElseThrow(() -> new WrongUserException(requesterId));
         switch (BookingState.valueOf(state)) {
             case FUTURE:
-                entities = bookingRepository.findAllByBookerIdAndStartAfterOrderByStartDesc(requesterId, LocalDateTime.now());
+                entities = bookingRepository.findAllByBookerIdAndStartIsAfterOrderByStartDesc(requesterId, LocalDateTime.now());
                 break;
             case CURRENT:
-                entities = bookingRepository.findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(requesterId, LocalDateTime.now(), LocalDateTime.now());
+                entities = bookingRepository.findAllByBookerIdAndStartIsBeforeAndEndIsAfterOrderByStartDesc(requesterId, LocalDateTime.now(), LocalDateTime.now());
                 break;
             case PAST:
-                entities = bookingRepository.findAllByBookerIdAndEndBeforeOrderByStartDesc(requesterId, LocalDateTime.now());
+                entities = bookingRepository.findAllByBookerIdAndEndIsBeforeOrderByStartDesc(requesterId, LocalDateTime.now());
                 break;
             case WAITING:
                 entities = bookingRepository.findAllByBookerIdAndStatusOrderByStartDesc(requesterId, BookingStatus.WAITING);
@@ -109,13 +109,13 @@ public class BookingServiceImpl implements BookingService {
         var userEntity = userRepository.findById(requesterId).orElseThrow(() -> new WrongUserException(requesterId));
         switch (BookingState.valueOf(state)) {
             case FUTURE:
-                entities = bookingRepository.findAllByItemOwnerIdAndStartAfterOrderByStartDesc(requesterId, LocalDateTime.now());
+                entities = bookingRepository.findAllByItemOwnerIdAndStartIsAfterOrderByStartDesc(requesterId, LocalDateTime.now());
                 break;
             case CURRENT:
-                entities = bookingRepository.findAllByItemOwnerIdAndStartBeforeAndEndAfterOrderByStartDesc(requesterId, LocalDateTime.now(), LocalDateTime.now());
+                entities = bookingRepository.findAllByItemOwnerIdAndStartIsBeforeAndEndIsAfterOrderByStartDesc(requesterId, LocalDateTime.now(), LocalDateTime.now());
                 break;
             case PAST:
-                entities = bookingRepository.findAllByItemOwnerIdAndEndBeforeOrderByStartDesc(requesterId, LocalDateTime.now());
+                entities = bookingRepository.findAllByItemOwnerIdAndEndIsBeforeOrderByStartDesc(requesterId, LocalDateTime.now());
                 break;
             case WAITING:
                 entities = bookingRepository.findAllByItemOwnerIdAndStatusOrderByStartDesc(requesterId, BookingStatus.WAITING);
