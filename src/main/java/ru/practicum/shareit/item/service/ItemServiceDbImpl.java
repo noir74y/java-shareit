@@ -17,8 +17,8 @@ import ru.practicum.shareit.user.service.UserService;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -54,10 +54,27 @@ public class ItemServiceDbImpl implements ItemService {
     @Override
     @Transactional(readOnly = true)
     public Item findById(int requesterId, int itemId) {
-
-        var item = itemMapper.entity2model(itemRepository
+        return setLastNextBookingsAndMapToItem(itemRepository
                 .findById(itemId)
-                .orElseThrow(() -> new NotFoundException("no item with such id", String.valueOf(itemId))));
+                .orElseThrow(() -> new NotFoundException("no item with such id", String.valueOf(itemId))), requesterId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ArrayList<Item> findByOwner(int requesterId) {
+        return itemRepository.findAllByOwnerIdOrderById(requesterId).stream()
+                .map(itemEntity -> setLastNextBookingsAndMapToItem(itemEntity, requesterId))
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ArrayList<Item> findByText(int requesterId, String text) {
+        return !text.isBlank() ? itemMapper.bulkEntity2model(itemRepository.search(text)) : new ArrayList<>();
+    }
+
+    private Item setLastNextBookingsAndMapToItem(ItemEntity itemEntity, Integer requesterId) {
+        var item = itemMapper.entity2model(itemEntity);
 
         item.setLastBooking(Optional.ofNullable(bookingRepository.getLastBooking(requesterId, item.getId(), LocalDateTime.now()))
                 .map(bookingEntity -> ItemBooking.builder()
@@ -74,19 +91,5 @@ public class ItemServiceDbImpl implements ItemService {
                 .orElse(null));
 
         return item;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public ArrayList<Item> findByOwner(int requesterId) {
-        List<ItemEntity> entities = itemRepository.findAllByOwnerIdOrderById(requesterId);
-
-        return itemMapper.bulkEntity2model(itemRepository.findAllByOwnerIdOrderById(requesterId));
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public ArrayList<Item> findByText(int requesterId, String text) {
-        return !text.isBlank() ? itemMapper.bulkEntity2model(itemRepository.search(text)) : new ArrayList<>();
     }
 }
