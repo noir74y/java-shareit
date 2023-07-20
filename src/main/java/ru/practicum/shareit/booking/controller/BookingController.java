@@ -9,14 +9,13 @@ import ru.practicum.shareit.booking.model.BookingDtoResp;
 import ru.practicum.shareit.booking.model.BookingMapper;
 import ru.practicum.shareit.booking.model.BookingState;
 import ru.practicum.shareit.booking.service.BookingService;
-import ru.practicum.shareit.validation.OnCreate;
-import ru.practicum.shareit.validation.ValueOfEnumConstraint;
+import ru.practicum.shareit.utils.validation.ValueOfEnumConstraint;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 
-import static ru.practicum.shareit.AppConstants.HEADER_USER_ID;
+import static ru.practicum.shareit.utils.AppConstants.HEADER_USER_ID;
 
 @Slf4j
 @RestController

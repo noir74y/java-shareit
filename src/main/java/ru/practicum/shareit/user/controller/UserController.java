@@ -8,8 +8,8 @@ import ru.practicum.shareit.user.model.UserDtoReq;
 import ru.practicum.shareit.user.model.UserDtoResp;
 import ru.practicum.shareit.user.model.UserMapper;
 import ru.practicum.shareit.user.service.UserService;
-import ru.practicum.shareit.validation.OnCreate;
-import ru.practicum.shareit.validation.OnUpdate;
+import ru.practicum.shareit.utils.validation.OnCreate;
+import ru.practicum.shareit.utils.validation.OnUpdate;
 
 import java.util.ArrayList;
 

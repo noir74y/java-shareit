@@ -4,16 +4,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.item.model.ItemDtoReq;
-import ru.practicum.shareit.item.model.ItemDtoResp;
-import ru.practicum.shareit.item.model.ItemMapper;
+import ru.practicum.shareit.item.model.*;
+import ru.practicum.shareit.item.service.CommentService;
 import ru.practicum.shareit.item.service.ItemService;
-import ru.practicum.shareit.validation.OnCreate;
+import ru.practicum.shareit.utils.validation.OnCreate;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 
-import static ru.practicum.shareit.AppConstants.HEADER_USER_ID;
+import static ru.practicum.shareit.utils.AppConstants.HEADER_USER_ID;
 
 @Slf4j
 @RestController
@@ -22,6 +22,8 @@ import static ru.practicum.shareit.AppConstants.HEADER_USER_ID;
 public class ItemController {
     private final ItemService itemService;
     private final ItemMapper itemMapper;
+    private final CommentService commentService;
+    private final CommentMapper commentMapper;
 
     @PostMapping
     public ItemDtoResp create(@RequestHeader(HEADER_USER_ID) @NotNull int requesterId,
@@ -29,6 +31,15 @@ public class ItemController {
     ) throws Throwable {
         log.info("POST /items/ requesterId={}, {}", requesterId, dtoReq);
         return itemMapper.model2dtoResp(itemService.create(requesterId, itemMapper.dtoReq2model(dtoReq)));
+    }
+
+    @PostMapping("/{itemId}/comment")
+    public CommentDtoResp create(@RequestHeader(HEADER_USER_ID) @NotNull int requesterId,
+                                 @PathVariable int itemId,
+                                 @Valid @RequestBody CommentDtoReq dtoReq
+    ) throws Throwable {
+        log.info("POST /items/{}/comment requesterId={}, {}", itemId, requesterId, dtoReq);
+        return commentMapper.entity2dtoResp(commentService.create(requesterId, dtoReq));
     }
 
     @PatchMapping("/{itemId}")

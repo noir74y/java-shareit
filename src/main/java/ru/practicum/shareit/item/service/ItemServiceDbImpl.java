@@ -4,14 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.shareit.booking.dao.BookingRepository;
-import ru.practicum.shareit.exception.ForbiddenException;
-import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.item.dao.ItemRepository;
-import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.model.ItemBooking;
-import ru.practicum.shareit.item.model.ItemEntity;
-import ru.practicum.shareit.item.model.ItemMapper;
+import ru.practicum.shareit.booking.repository.BookingRepository;
+import ru.practicum.shareit.item.model.*;
+import ru.practicum.shareit.utils.exception.ForbiddenException;
+import ru.practicum.shareit.utils.exception.NotFoundException;
+import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
@@ -23,7 +20,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Primary
-public class ItemServiceDbImpl implements ItemService {
+public class ItemServiceDbImpl implements ItemService, CommentService {
     private final ItemRepository itemRepository;
     private final ItemMapper itemMapper;
     private final UserService userService;
@@ -34,6 +31,12 @@ public class ItemServiceDbImpl implements ItemService {
     public Item create(int requesterId, Item item) throws Throwable {
         User user = Optional.ofNullable(this.userService.findById(requesterId)).orElseThrow(() -> new NotFoundException("нет такого юзера", String.valueOf(requesterId)));
         return itemMapper.entity2model(itemRepository.save(itemMapper.model2entity(item, user)));
+    }
+
+    @Override
+    @Transactional
+    public CommentEntity create(Integer requesterId, CommentDtoReq dtoReq) {
+        return null;
     }
 
     @Override

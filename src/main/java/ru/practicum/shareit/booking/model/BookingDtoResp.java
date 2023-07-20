@@ -1,12 +1,11 @@
 package ru.practicum.shareit.booking.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import static ru.practicum.shareit.AppConstants.DATE_TIME_FORMAT;
+import static ru.practicum.shareit.utils.AppConstants.DATE_TIME_FORMAT;
 import java.time.LocalDateTime;
 
 @Data
