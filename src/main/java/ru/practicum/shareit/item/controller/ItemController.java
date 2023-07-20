@@ -27,7 +27,7 @@ public class ItemController {
     public ItemDtoResp create(@RequestHeader(HEADER_USER_ID) @NotNull int requesterId,
                               @Validated(OnCreate.class) @RequestBody ItemDtoReq dtoReq
     ) throws Throwable {
-        log.info("POST /items/ {}", dtoReq);
+        log.info("POST /items/ requesterId={}, {}", requesterId, dtoReq);
         return itemMapper.model2dtoResp(itemService.create(requesterId, itemMapper.dtoReq2model(dtoReq)));
     }
 
@@ -35,27 +35,27 @@ public class ItemController {
     public ItemDtoResp update(@RequestHeader(HEADER_USER_ID) @NotNull int requesterId,
                               @RequestBody ItemDtoReq dtoReq,
                               @PathVariable int itemId) {
-        log.info("PATCH /items/" + itemId + " {}", dtoReq);
+        log.info("PATCH /items/{}, requesterId={}, {}", itemId, requesterId, dtoReq);
         return itemMapper.model2dtoResp(itemService.update(requesterId, itemMapper.dtoReq2model(dtoReq), itemId));
     }
 
     @GetMapping("/{itemId}")
     public ItemDtoResp findById(@RequestHeader(HEADER_USER_ID) @NotNull int requesterId,
                                 @PathVariable int itemId) {
-        log.info("GET /items/" + itemId);
+        log.info("GET /items/{}, requesterId={}", itemId, requesterId);
         return itemMapper.model2dtoResp(itemService.findById(requesterId, itemId));
     }
 
     @GetMapping
     public ArrayList<ItemDtoResp> findByOwner(@RequestHeader(HEADER_USER_ID) int requesterId) {
-        log.info("GET /items/" + requesterId);
+        log.info("GET /items, requesterId={}", requesterId);
         return itemMapper.bulkModel2dtoResp(itemService.findByOwner(requesterId));
     }
 
     @GetMapping("/search")
     public ArrayList<ItemDtoResp> findByText(@RequestHeader(HEADER_USER_ID) @NotNull int requesterId,
                                              @RequestParam(value = "text") String text) {
-        log.info("GET /search/" + text);
+        log.info("GET /search?text={}, requesterId={}", text, requesterId);
         return itemMapper.bulkModel2dtoResp(itemService.findByText(requesterId, text));
     }
 }
