@@ -6,11 +6,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.item.model.*;
-import ru.practicum.shareit.utils.exception.ForbiddenException;
-import ru.practicum.shareit.utils.exception.NotFoundException;
+import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
+import ru.practicum.shareit.utils.exception.ForbiddenException;
+import ru.practicum.shareit.utils.exception.NotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -25,6 +26,8 @@ public class ItemServiceDbImpl implements ItemService, CommentService {
     private final ItemMapper itemMapper;
     private final UserService userService;
     private final BookingRepository bookingRepository;
+    private final CommentRepository commentRepository;
+    private final CommentMapper commentMapper;
 
     @Override
     @Transactional
@@ -36,7 +39,8 @@ public class ItemServiceDbImpl implements ItemService, CommentService {
     @Override
     @Transactional
     public CommentEntity create(Integer requesterId, CommentDtoReq dtoReq) {
-        return null;
+        var entity = commentMapper.dtoReq2entity(dtoReq);
+        return commentRepository.save(entity);
     }
 
     @Override
@@ -57,7 +61,7 @@ public class ItemServiceDbImpl implements ItemService, CommentService {
     @Override
     @Transactional(readOnly = true)
     public Item findById(int requesterId, int itemId) {
-        return setLastNextBookingsAndMapToItem(itemRepository
+        return setLastNextBookingsAndCommentsAndMapToItem(itemRepository
                 .findById(itemId)
                 .orElseThrow(() -> new NotFoundException("no item with such id", String.valueOf(itemId))), requesterId);
     }
@@ -66,7 +70,7 @@ public class ItemServiceDbImpl implements ItemService, CommentService {
     @Transactional(readOnly = true)
     public ArrayList<Item> findByOwner(int requesterId) {
         return itemRepository.findAllByOwnerIdOrderById(requesterId).stream()
-                .map(itemEntity -> setLastNextBookingsAndMapToItem(itemEntity, requesterId))
+                .map(itemEntity -> setLastNextBookingsAndCommentsAndMapToItem(itemEntity, requesterId))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
@@ -76,7 +80,7 @@ public class ItemServiceDbImpl implements ItemService, CommentService {
         return !text.isBlank() ? itemMapper.bulkEntity2model(itemRepository.search(text)) : new ArrayList<>();
     }
 
-    private Item setLastNextBookingsAndMapToItem(ItemEntity itemEntity, Integer requesterId) {
+    private Item setLastNextBookingsAndCommentsAndMapToItem(ItemEntity itemEntity, Integer requesterId) {
         var item = itemMapper.entity2model(itemEntity);
 
         item.setLastBooking(Optional.ofNullable(bookingRepository.getLastBooking(requesterId, item.getId(), LocalDateTime.now()))
