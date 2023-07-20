@@ -35,7 +35,7 @@ public class ItemController {
 
     @PostMapping("/{itemId}/comment")
     public CommentDtoResp create(@RequestHeader(HEADER_USER_ID) @NotNull int requesterId,
-                                 @PathVariable int itemId,
+                                 @Valid @PathVariable int itemId,
                                  @Valid @RequestBody CommentDtoReq dtoReq
     ) throws Throwable {
         log.info("requesterId={}, POST /items/{}/comment {}", requesterId, itemId, dtoReq);
