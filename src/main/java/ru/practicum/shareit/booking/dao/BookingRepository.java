@@ -34,9 +34,22 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Integer>
     List<BookingEntity> findAllByItemOwnerIdOrderByStartDesc(Integer ownerId);
 
     //@Query("select b.start from BookingEntity as b where b.item.id = ?1 and b.start > ?2 order by b.start desc")
-    @Query(value = "select * from bookings where item_id = ?1 and start_date < ?2 order by start_date desc limit 1", nativeQuery = true)
-    BookingEntity getLastBooking(Integer itemId, LocalDateTime localDateTime);
 
-    @Query(value = "select * from bookings where item_id = ?1 and start_date > ?2 order by start_date asc limit 1", nativeQuery = true)
-    BookingEntity getNextBooking(Integer itemId, LocalDateTime localDateTime);
+    @Query(value = "select b.* from bookings b " +
+            "join items i on i.id = b.item_id and i.owner_id = ?1 " +
+            "where b.item_id = ?2 " +
+            "and b.start_date < ?3 " +
+            "and b.status = 'APPROVED' " +
+            "order by b.start_date desc " +
+            "limit 1", nativeQuery = true)
+    BookingEntity getLastBooking(Integer requester_id, Integer itemId, LocalDateTime localDateTime);
+
+    @Query(value = "select b.* from bookings b " +
+            "join items i on i.id = b.item_id and i.owner_id = ?1 " +
+            "where b.item_id = ?2 " +
+            "and b.start_date > ?3 " +
+            "and b.status = 'APPROVED' " +
+            "order by b.start_date asc " +
+            "limit 1", nativeQuery = true)
+    BookingEntity getNextBooking(Integer requester_id,Integer itemId, LocalDateTime localDateTime);
 }

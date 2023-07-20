@@ -50,14 +50,16 @@ public class ItemMapper {
             item = Optional.ofNullable(entity).map(obj -> modelMapper.map(obj, Item.class)).orElseThrow();
             item.setOwnerId(entity.getOwner().getId());
 
-            item.setLastBooking(Optional.ofNullable(bookingRepository.getLastBooking(item.getId(), LocalDateTime.now()))
+            var obj = bookingRepository.getLastBooking(item.getOwnerId(), item.getId(), LocalDateTime.now());
+
+            item.setLastBooking(Optional.ofNullable(obj)
                     .map(bookingEntity -> ItemBooking.builder()
                             .id(bookingEntity.getId())
                             .bookerId(bookingEntity.getBooker().getId())
                             .build())
                     .orElse(null));
 
-            item.setNextBooking(Optional.ofNullable(bookingRepository.getNextBooking(item.getId(), LocalDateTime.now()))
+            item.setNextBooking(Optional.ofNullable(bookingRepository.getNextBooking(item.getOwnerId(), item.getId(), LocalDateTime.now()))
                     .map(bookingEntity -> ItemBooking.builder()
                             .id(bookingEntity.getId())
                             .bookerId(bookingEntity.getBooker().getId())

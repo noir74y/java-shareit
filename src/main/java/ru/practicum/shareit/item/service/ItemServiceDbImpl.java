@@ -27,18 +27,18 @@ public class ItemServiceDbImpl implements ItemService {
 
     @Override
     @Transactional
-    public Item create(Item item, int ownerId) throws Throwable {
-        User user = Optional.ofNullable(this.userService.findById(ownerId)).orElseThrow(() -> new NotFoundException("нет такого юзера", String.valueOf(ownerId)));
+    public Item create(int requesterId, Item item) throws Throwable {
+        User user = Optional.ofNullable(this.userService.findById(requesterId)).orElseThrow(() -> new NotFoundException("нет такого юзера", String.valueOf(requesterId)));
         return itemMapper.entity2model(itemRepository.save(itemMapper.model2entity(item, user)));
     }
 
     @Override
     @Transactional
-    public Item update(Item item, int ownerId, int itemId) {
+    public Item update(int requesterId, Item item, int itemId) {
         var itemEntity = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("no item with such id", String.valueOf(itemId)));
 
-        if (!itemEntity.getOwner().getId().equals(ownerId))
-            throw new ForbiddenException("это item другого юзера", itemEntity.getOwner().getId() + " != " + ownerId);
+        if (!itemEntity.getOwner().getId().equals(requesterId))
+            throw new ForbiddenException("это item другого юзера", itemEntity.getOwner().getId() + " != " + requesterId);
 
         Optional.ofNullable(item.getName()).ifPresent(itemEntity::setName);
         Optional.ofNullable(item.getDescription()).ifPresent(itemEntity::setDescription);
@@ -49,7 +49,7 @@ public class ItemServiceDbImpl implements ItemService {
 
     @Override
     @Transactional(readOnly = true)
-    public Item findById(int itemId) {
+    public Item findById(int requesterId, int itemId) {
         return itemMapper.entity2model(itemRepository
                 .findById(itemId)
                 .orElseThrow(() -> new NotFoundException("no item with such id", String.valueOf(itemId))));
@@ -57,13 +57,13 @@ public class ItemServiceDbImpl implements ItemService {
 
     @Override
     @Transactional(readOnly = true)
-    public ArrayList<Item> findByOwner(int userId) {
-        return itemMapper.bulkEntity2model(itemRepository.findAllByOwnerIdOrderById(userId));
+    public ArrayList<Item> findByOwner(int requesterId) {
+        return itemMapper.bulkEntity2model(itemRepository.findAllByOwnerIdOrderById(requesterId));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public ArrayList<Item> findByText(String text) {
+    public ArrayList<Item> findByText(int requesterId, String text) {
         return !text.isBlank() ? itemMapper.bulkEntity2model(itemRepository.search(text)) : new ArrayList<>();
     }
 }
