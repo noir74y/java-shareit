@@ -12,25 +12,25 @@ import java.util.List;
 @Repository
 public interface BookingRepository extends JpaRepository<BookingEntity, Integer> {
 
-    List<BookingEntity> findAllByBookerIdAndStartIsAfterOrderByStartDesc(Integer bookerId, LocalDateTime localDateTime);
+    List<BookingEntity> findAllByBookerIdAndStartDateIsAfterOrderByStartDateDesc(Integer bookerId, LocalDateTime localDateTime);
 
-    List<BookingEntity> findAllByItemOwnerIdAndStartIsAfterOrderByStartDesc(Integer ownerId, LocalDateTime localDateTime);
+    List<BookingEntity> findAllByItemOwnerIdAndStartDateIsAfterOrderByStartDateDesc(Integer ownerId, LocalDateTime localDateTime);
 
-    List<BookingEntity> findAllByBookerIdAndStartIsBeforeAndEndIsAfterOrderByStartDesc(Integer bookerId, LocalDateTime localDateTime1, LocalDateTime localDateTime2);
+    List<BookingEntity> findAllByBookerIdAndStartDateIsBeforeAndEndDateIsAfterOrderByStartDateDesc(Integer bookerId, LocalDateTime localDateTime1, LocalDateTime localDateTime2);
 
-    List<BookingEntity> findAllByItemOwnerIdAndStartIsBeforeAndEndIsAfterOrderByStartDesc(Integer ownerId, LocalDateTime localDateTime1, LocalDateTime localDateTime2);
+    List<BookingEntity> findAllByItemOwnerIdAndStartDateIsBeforeAndEndDateIsAfterOrderByStartDateDesc(Integer ownerId, LocalDateTime localDateTime1, LocalDateTime localDateTime2);
 
-    List<BookingEntity> findAllByBookerIdAndEndIsBeforeOrderByStartDesc(Integer bookerId, LocalDateTime localDateTime);
+    List<BookingEntity> findAllByBookerIdAndEndDateIsBeforeOrderByStartDateDesc(Integer bookerId, LocalDateTime localDateTime);
 
-    List<BookingEntity> findAllByItemOwnerIdAndEndIsBeforeOrderByStartDesc(Integer ownerId, LocalDateTime localDateTime);
+    List<BookingEntity> findAllByItemOwnerIdAndEndDateIsBeforeOrderByStartDateDesc(Integer ownerId, LocalDateTime localDateTime);
 
-    List<BookingEntity> findAllByBookerIdAndStatusOrderByStartDesc(Integer bookerId, BookingStatus status);
+    List<BookingEntity> findAllByBookerIdAndStatusOrderByStartDateDesc(Integer bookerId, BookingStatus status);
 
-    List<BookingEntity> findAllByItemOwnerIdAndStatusOrderByStartDesc(Integer ownerId, BookingStatus status);
+    List<BookingEntity> findAllByItemOwnerIdAndStatusOrderByStartDateDesc(Integer ownerId, BookingStatus status);
 
-    List<BookingEntity> findAllByBookerIdOrderByStartDesc(Integer bookerId);
+    List<BookingEntity> findAllByBookerIdOrderByStartDateDesc(Integer bookerId);
 
-    List<BookingEntity> findAllByItemOwnerIdOrderByStartDesc(Integer ownerId);
+    List<BookingEntity> findAllByItemOwnerIdOrderByStartDateDesc(Integer ownerId);
 
     @Query(value = "select b.* from bookings b " +
             "join items i on i.id = b.item_id and i.owner_id = ?1 " +

@@ -18,10 +18,10 @@ public class BookingEntity {
     private Integer id;
 
     @Column(name = "start_date")
-    private LocalDateTime start;
+    private LocalDateTime startDate;
 
     @Column(name = "end_date")
-    private LocalDateTime end;
+    private LocalDateTime endDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")

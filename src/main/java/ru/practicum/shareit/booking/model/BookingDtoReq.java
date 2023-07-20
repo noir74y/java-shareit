@@ -1,5 +1,6 @@
 package ru.practicum.shareit.booking.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,10 +23,20 @@ public class BookingDtoReq {
     @NotNull
     @DateTimeFormat(pattern = DATE_TIME_FORMAT)
     @FutureOrPresent
-    private LocalDateTime start;
+    private LocalDateTime startDate;
 
     @NotNull
     @DateTimeFormat(pattern = DATE_TIME_FORMAT)
     @Future
-    private LocalDateTime end;
+    private LocalDateTime endDate;
+
+    @JsonProperty("start")
+    public void setStartDate(LocalDateTime startDate) {
+        this.startDate = startDate;
+    }
+
+    @JsonProperty("end")
+    public void setEndDate(LocalDateTime endDate) {
+        this.endDate = endDate;
+    }
 }

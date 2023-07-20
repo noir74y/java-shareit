@@ -13,7 +13,7 @@ public interface CommentRepository extends JpaRepository<CommentEntity, Integer>
             "from BookingEntity b " +
             "where booker.id = ?1 " +
             "and item.id = ?2 " +
-            "and end_date <= ?3" +
+            "and endDate <= ?3 " +
             "and status = 'APPROVED'")
     boolean isCommentFairy(Integer requesterId, Integer itemId, LocalDateTime currentDateTime);
 

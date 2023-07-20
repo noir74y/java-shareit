@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 public class Booking {
     private Integer id;
     private Integer itemId;
-    private LocalDateTime start;
-    private LocalDateTime end;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
     private String itemName;
     private Integer bookerId;
     private BookingStatus status;
