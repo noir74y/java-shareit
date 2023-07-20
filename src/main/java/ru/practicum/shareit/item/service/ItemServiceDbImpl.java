@@ -9,7 +9,10 @@ import ru.practicum.shareit.item.model.*;
 import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.model.UserEntity;
+import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.user.service.UserService;
+import ru.practicum.shareit.utils.exception.CustomValidationException;
 import ru.practicum.shareit.utils.exception.ForbiddenException;
 import ru.practicum.shareit.utils.exception.NotFoundException;
 
@@ -25,6 +28,7 @@ public class ItemServiceDbImpl implements ItemService, CommentService {
     private final ItemRepository itemRepository;
     private final ItemMapper itemMapper;
     private final UserService userService;
+    private final UserRepository userRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
@@ -32,15 +36,24 @@ public class ItemServiceDbImpl implements ItemService, CommentService {
     @Override
     @Transactional
     public Item create(int requesterId, Item item) throws Throwable {
-        User user = Optional.ofNullable(this.userService.findById(requesterId)).orElseThrow(() -> new NotFoundException("нет такого юзера", String.valueOf(requesterId)));
-        return itemMapper.entity2model(itemRepository.save(itemMapper.model2entity(item, user)));
+        var userEntity = userRepository.findById(requesterId)
+                .orElseThrow(() -> new NotFoundException("no such user", String.valueOf(requesterId)));
+        return itemMapper.entity2model(itemRepository.save(itemMapper.model2entity(item, userEntity)));
     }
 
     @Override
     @Transactional
-    public CommentEntity create(Integer requesterId, CommentDtoReq dtoReq) {
-        var entity = commentMapper.dtoReq2entity(dtoReq);
-        return commentRepository.save(entity);
+    public CommentEntity create(Integer requesterId, Integer itemId, CommentDtoReq dtoReq) throws Throwable {
+        var userEntity = userRepository.findById(requesterId)
+                .orElseThrow(() -> new NotFoundException("no such user", String.valueOf(requesterId)));
+
+        var itemEntity = itemRepository.findById(itemId)
+                .orElseThrow(() -> new NotFoundException("no such item", String.valueOf(itemId)));
+
+        if (!commentRepository.isCommentFairy(requesterId, itemId, LocalDateTime.now()))
+            throw new CustomValidationException("Comment won't be fairy", "sorry");
+
+        return commentRepository.save(commentMapper.dtoReq2entity(dtoReq, userEntity, itemEntity));
     }
 
     @Override

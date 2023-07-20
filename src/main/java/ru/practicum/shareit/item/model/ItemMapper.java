@@ -5,6 +5,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.model.UserEntity;
 import ru.practicum.shareit.user.model.UserMapper;
 
 import java.util.ArrayList;
@@ -31,11 +32,11 @@ public class ItemMapper {
         return Optional.ofNullable(model).map(obj -> modelMapper.map(obj, ItemEntity.class)).orElse(null);
     }
 
-    public ItemEntity model2entity(Item model, User user) {
+    public ItemEntity model2entity(Item model, UserEntity userEntity) {
         ItemEntity entity;
         try {
             entity = Optional.ofNullable(model).map(obj -> modelMapper.map(obj, ItemEntity.class)).orElseThrow();
-            entity.setOwner(userMapper.model2entity(user));
+            entity.setOwner(userEntity);
         } catch (NoSuchElementException e) {
             entity = null;
         }
