@@ -29,7 +29,7 @@ public class BookingController {
 
     @PostMapping
     public BookingDtoResp create(@RequestHeader(HEADER_USER_ID) @NotNull Integer requesterId,
-                                 @Valid @Validated(OnCreate.class) @RequestBody BookingDtoReq dtoReq) throws Throwable {
+                                 @Valid @RequestBody BookingDtoReq dtoReq) throws Throwable {
         log.info("POST /bookings/ requesterId={}, {}", requesterId, dtoReq);
         return bookingMapper.model2dtoResp(bookingService.create(requesterId, bookingMapper.dtoReq2model(dtoReq)));
     }

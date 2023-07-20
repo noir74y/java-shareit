@@ -33,8 +33,6 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Integer>
 
     List<BookingEntity> findAllByItemOwnerIdOrderByStartDesc(Integer ownerId);
 
-    //@Query("select b.start from BookingEntity as b where b.item.id = ?1 and b.start > ?2 order by b.start desc")
-
     @Query(value = "select b.* from bookings b " +
             "join items i on i.id = b.item_id and i.owner_id = ?1 " +
             "where b.item_id = ?2 " +
