@@ -14,17 +14,18 @@ public class CommentMapper {
     private final ModelMapper modelMapper;
 
     public CommentEntity dtoReq2entity(CommentDtoReq dtoReq, UserEntity userEntity, ItemEntity itemEntity) {
-        var entity = Optional.ofNullable(dtoReq).map(obj -> modelMapper.map(obj, CommentEntity.class)).orElse(null);
-        assert entity != null;
-        entity.setCreated(LocalDateTime.now());
-        entity.setUser(userEntity);
-        entity.setItem(itemEntity);
+        var entity = modelMapper.map(dtoReq, CommentEntity.class);
+        Optional.ofNullable(entity).ifPresent(obj -> {
+            obj.setCreated(LocalDateTime.now());
+            obj.setAuthor(userEntity);
+            obj.setItem(itemEntity);
+        });
         return entity;
     }
 
     public CommentDtoResp entity2dtoResp(CommentEntity entity) {
-        var droResp = Optional.ofNullable(entity).map(obj -> modelMapper.map(obj, CommentDtoResp.class)).orElse(null);
+        var droResp = modelMapper.map(entity, CommentDtoResp.class);
+        Optional.ofNullable(droResp).ifPresent(obj -> obj.setAuthorName(entity.getAuthor().getName()));
         return droResp;
     }
-
 }

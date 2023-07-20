@@ -8,8 +8,6 @@ import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.item.model.*;
 import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
-import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.model.UserEntity;
 import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.user.service.UserService;
 import ru.practicum.shareit.utils.exception.CustomValidationException;
@@ -109,6 +107,12 @@ public class ItemServiceDbImpl implements ItemService, CommentService {
                         .bookerId(bookingEntity.getBooker().getId())
                         .build())
                 .orElse(null));
+
+        item.setComments(
+                commentRepository.findCommentsOfOtherUsers(requesterId, item.getId())
+                        .stream()
+                        .map(commentMapper::entity2dtoResp)
+                        .collect(Collectors.toList()));
 
         return item;
     }

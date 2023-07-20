@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import ru.practicum.shareit.item.model.CommentEntity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface CommentRepository extends JpaRepository<CommentEntity, Integer> {
 
@@ -24,5 +25,10 @@ public interface CommentRepository extends JpaRepository<CommentEntity, Integer>
 //            "and status = 'APPROVED'")
 //    List<BookingEntity> isCommentFairy(Integer requesterId, Integer itemId, LocalDateTime currentDateTime);
 
-
+    @Query("select c " +
+            "from CommentEntity c " +
+            "where author.id != ?1 " +
+            "and item.id = ?2 " +
+            "order by created asc")
+    List<CommentEntity> findCommentsOfOtherUsers(Integer requesterId, Integer itemId);
 }

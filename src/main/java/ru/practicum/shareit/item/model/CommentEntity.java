@@ -25,7 +25,7 @@ public class CommentEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
-    private UserEntity user;
+    private UserEntity author;
 
     private LocalDateTime created;
 

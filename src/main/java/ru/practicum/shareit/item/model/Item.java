@@ -3,7 +3,7 @@ package ru.practicum.shareit.item.model;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @RequiredArgsConstructor
@@ -11,8 +11,9 @@ public class Item {
     private Integer id;
     private String name;
     private String description;
+    private Boolean available;
     private ItemBooking lastBooking;
     private ItemBooking nextBooking;
-    private Boolean available;
+    private List<CommentDtoResp> comments;
     private Integer ownerId;
 }
