@@ -16,7 +16,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Primary
-public class UserServiceDbImpl implements ru.practicum.shareit.user.service.UserService {
+public class UserServiceDbImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
