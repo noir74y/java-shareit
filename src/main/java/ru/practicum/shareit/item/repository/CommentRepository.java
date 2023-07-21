@@ -17,18 +17,9 @@ public interface CommentRepository extends JpaRepository<CommentEntity, Integer>
             "and status = 'APPROVED'")
     boolean isCommentFairy(Integer requesterId, Integer itemId, LocalDateTime currentDateTime);
 
-//    @Query("select b " +
-//            "from BookingEntity b " +
-//            "where booker.id = ?1 " +
-//            "and item.id = ?2 " +
-//            "and end_date <= ?3" +
-//            "and status = 'APPROVED'")
-//    List<BookingEntity> isCommentFairy(Integer requesterId, Integer itemId, LocalDateTime currentDateTime);
-
     @Query("select c " +
             "from CommentEntity c " +
-            "where author.id != ?1 " +
-            "and item.id = ?2 " +
+            "where item.id = ?1 " +
             "order by created asc")
-    List<CommentEntity> findCommentsOfOtherUsers(Integer requesterId, Integer itemId);
+    List<CommentEntity> findCommentsOfOtherUsers(Integer itemId);
 }

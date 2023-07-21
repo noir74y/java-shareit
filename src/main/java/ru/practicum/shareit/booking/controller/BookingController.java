@@ -59,6 +59,6 @@ public class BookingController {
     public ArrayList<BookingDtoResp> findByOwnerAndState(@RequestHeader(HEADER_USER_ID) @NotNull Integer requesterId,
                                                          @RequestParam(required = false, defaultValue = "ALL") @ValueOfEnumConstraint(enumClass = BookingState.class) String state) {
         log.info("GET /bookings/owner?state={} requesterId={}", state, requesterId);
-        return bookingMapper.bulkModel2dtoResp(bookingService.findByOwnerAndState(requesterId,state));
+        return bookingMapper.bulkModel2dtoResp(bookingService.findByOwnerAndState(requesterId, state));
     }
 }

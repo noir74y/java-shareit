@@ -2,7 +2,6 @@ package ru.practicum.shareit.item.model;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import ru.practicum.shareit.item.model.ItemEntity;
 import ru.practicum.shareit.user.model.UserEntity;
 
 import javax.persistence.*;

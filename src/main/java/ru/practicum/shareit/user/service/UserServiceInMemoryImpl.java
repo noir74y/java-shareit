@@ -2,9 +2,9 @@ package ru.practicum.shareit.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.utils.exception.DuplicateEmailException;
-import ru.practicum.shareit.user.repository.UserDao;
 import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.repository.UserDao;
+import ru.practicum.shareit.utils.exception.DuplicateEmailException;
 
 import java.util.ArrayList;
 import java.util.Optional;

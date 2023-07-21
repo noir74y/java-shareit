@@ -48,5 +48,5 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Integer>
             "and b.status = 'APPROVED' " +
             "order by b.start_date asc " +
             "limit 1", nativeQuery = true)
-    BookingEntity getNextBooking(Integer requester_id,Integer itemId, LocalDateTime localDateTime);
+    BookingEntity getNextBooking(Integer requester_id, Integer itemId, LocalDateTime localDateTime);
 }

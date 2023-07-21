@@ -3,8 +3,6 @@ package ru.practicum.shareit.item.model;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
-import ru.practicum.shareit.booking.repository.BookingRepository;
-import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.model.UserEntity;
 import ru.practicum.shareit.user.model.UserMapper;
 

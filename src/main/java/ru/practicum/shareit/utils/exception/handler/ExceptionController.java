@@ -33,8 +33,7 @@ public class ExceptionController {
             appException = new HeaderMissingException(exception);
         else if (exception instanceof ConstraintViolationException) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessage(exception.getMessage(), "Unknown state: UNSUPPORTED_STATUS"));
-        }
-        else
+        } else
             appException = new OtherException(exception);
 
         return ResponseEntity.status(appException.getHttpErrorStatus()).body(appException.prepareErrorMessage());

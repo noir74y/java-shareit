@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.shareit.utils.exception.NotFoundException;
-import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.model.UserMapper;
+import ru.practicum.shareit.user.repository.UserRepository;
+import ru.practicum.shareit.utils.exception.NotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;

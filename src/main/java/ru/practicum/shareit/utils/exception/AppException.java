@@ -1,6 +1,6 @@
 package ru.practicum.shareit.utils.exception;
 
-import lombok.*;
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import ru.practicum.shareit.utils.exception.handler.ErrorMessage;
 

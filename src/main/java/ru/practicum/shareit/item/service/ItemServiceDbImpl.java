@@ -109,7 +109,7 @@ public class ItemServiceDbImpl implements ItemService, CommentService {
                 .orElse(null));
 
         item.setComments(
-                commentRepository.findCommentsOfOtherUsers(requesterId, item.getId())
+                commentRepository.findCommentsOfOtherUsers(item.getId())
                         .stream()
                         .map(commentMapper::entity2dtoResp)
                         .collect(Collectors.toList()));
