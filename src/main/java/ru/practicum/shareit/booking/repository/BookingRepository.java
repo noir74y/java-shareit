@@ -39,7 +39,7 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Integer>
             "and b.status = 'APPROVED' " +
             "order by b.start_date desc " +
             "limit 1", nativeQuery = true)
-    BookingEntity getLastBooking(Integer requester_id, Integer itemId, LocalDateTime localDateTime);
+    BookingEntity getLastBooking(Integer requesterId, Integer itemId, LocalDateTime localDateTime);
 
     @Query(value = "select b.* from bookings b " +
             "join items i on i.id = b.item_id and i.owner_id = ?1 " +
@@ -48,5 +48,5 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Integer>
             "and b.status = 'APPROVED' " +
             "order by b.start_date asc " +
             "limit 1", nativeQuery = true)
-    BookingEntity getNextBooking(Integer requester_id, Integer itemId, LocalDateTime localDateTime);
+    BookingEntity getNextBooking(Integer requesterId, Integer itemId, LocalDateTime localDateTime);
 }
