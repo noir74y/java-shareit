@@ -3,15 +3,16 @@ package ru.practicum.shareit.booking.model;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @RequiredArgsConstructor
 public class Booking {
-    private int id;
-    private LocalDate start;
-    private LocalDate end;
-    private int item;
-    private int booker;
+    private Integer id;
+    private Integer itemId;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
+    private String itemName;
+    private Integer bookerId;
     private BookingStatus status;
 }
