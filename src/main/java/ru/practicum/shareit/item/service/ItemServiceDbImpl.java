@@ -94,14 +94,14 @@ public class ItemServiceDbImpl implements ItemService, CommentService {
     private Item setLastNextBookingsAndCommentsAndMapToItem(ItemEntity itemEntity, Integer requesterId) {
         var item = itemMapper.entity2model(itemEntity);
 
-        item.setLastBooking(Optional.ofNullable(bookingRepository.getLastBooking(requesterId, item.getId(), LocalDateTime.now()))
+        item.setLastBooking(Optional.ofNullable(bookingRepository.getLastBooking(requesterId, item.getId()))
                 .map(bookingEntity -> ItemBooking.builder()
                         .id(bookingEntity.getId())
                         .bookerId(bookingEntity.getBooker().getId())
                         .build())
                 .orElse(null));
 
-        item.setNextBooking(Optional.ofNullable(bookingRepository.getNextBooking(requesterId, item.getId(), LocalDateTime.now()))
+        item.setNextBooking(Optional.ofNullable(bookingRepository.getNextBooking(requesterId, item.getId()))
                 .map(bookingEntity -> ItemBooking.builder()
                         .id(bookingEntity.getId())
                         .bookerId(bookingEntity.getBooker().getId())
