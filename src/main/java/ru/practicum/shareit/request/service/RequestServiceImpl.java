@@ -10,6 +10,8 @@ import ru.practicum.shareit.request.repository.RequestRepository;
 import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.utils.exception.NotFoundException;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class RequestServiceImpl implements RequestService {
@@ -23,6 +25,15 @@ public class RequestServiceImpl implements RequestService {
         if (!userRepository.existsById(requesterId))
             throw new NotFoundException("no such user", String.valueOf(requesterId));
 
-        return requestRepository.save(requestMapper.dtoReq2entity(dtoReq));
+        return requestRepository.save(requestMapper.dtoReq2entity(dtoReq, requesterId));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<RequestEntity> findByUser(Integer requesterId) {
+        if (!userRepository.existsById(requesterId))
+            throw new NotFoundException("no such user", String.valueOf(requesterId));
+
+        return requestRepository.findAllByRequesterId(requesterId);
     }
 }

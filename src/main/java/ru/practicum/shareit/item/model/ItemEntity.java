@@ -26,10 +26,6 @@ public class ItemEntity {
     @JoinColumn(name = "owner_id")
     private UserEntity owner;
 
-//    @OneToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "request_id")
-//    private RequestEntity request;
-
     private Integer requestId;
 
     // code below is for InMemory only
