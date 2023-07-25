@@ -25,6 +25,6 @@ public class RequestController {
     public RequestDtoResp create(@RequestHeader(HEADER_USER_ID) @NotNull Integer requesterId,
                                  @Valid @RequestBody RequestDtoReq dtoReq) throws Throwable {
         log.info("POST /requests/ requesterId={}, {}", requesterId, dtoReq);
-        return requestMapper.model2dtoResp(requestService.create(requesterId, requestMapper.dtoReq2model(dtoReq)));
+        return requestMapper.entity2dtoResp(requestService.create(requesterId, dtoReq));
     }
 }

@@ -1,10 +1,26 @@
 package ru.practicum.shareit.request.service;
 
-import ru.practicum.shareit.request.model.Request;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import ru.practicum.shareit.request.model.RequestDtoReq;
+import ru.practicum.shareit.request.model.RequestEntity;
+import ru.practicum.shareit.request.model.RequestMapper;
+import ru.practicum.shareit.request.repository.RequestRepository;
+import ru.practicum.shareit.user.repository.UserRepository;
+import ru.practicum.shareit.utils.exception.NotFoundException;
 
-public class RequestServiceImpl implements RequestService{
+@Service
+@RequiredArgsConstructor
+public class RequestServiceImpl implements RequestService {
+    private final UserRepository userRepository;
+    private final RequestRepository requestRepository;
+    private final RequestMapper requestMapper;
+
     @Override
-    public Request create(Integer requesterId, Request request) throws Throwable {
-        return null;
+    public RequestEntity create(Integer requesterId, RequestDtoReq dtoReq) throws Throwable {
+        if (!userRepository.existsById(requesterId))
+            throw new NotFoundException("no such user", String.valueOf(requesterId));
+
+        return requestRepository.save(requestMapper.dtoReq2entity(dtoReq));
     }
 }

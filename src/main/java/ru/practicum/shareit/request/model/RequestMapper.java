@@ -3,7 +3,13 @@ package ru.practicum.shareit.request.model;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
+import ru.practicum.shareit.item.model.CommentDtoReq;
+import ru.practicum.shareit.item.model.CommentDtoResp;
+import ru.practicum.shareit.item.model.CommentEntity;
+import ru.practicum.shareit.item.model.ItemEntity;
+import ru.practicum.shareit.user.model.UserEntity;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
@@ -14,27 +20,15 @@ import java.util.stream.Collectors;
 public class RequestMapper {
     private final ModelMapper modelMapper;
 
-    public Request dtoReq2model(RequestDtoReq dtoReq) {
-        return Optional.ofNullable(dtoReq).map(obj -> modelMapper.map(obj, Request.class)).orElse(null);
+    public RequestEntity dtoReq2entity(RequestDtoReq dtoReq) {
+        var entity = modelMapper.map(dtoReq, RequestEntity.class);
+        Optional.ofNullable(entity).ifPresent(obj -> {
+            obj.setCreated(LocalDateTime.now());
+        });
+        return entity;
     }
 
-    public RequestDtoResp model2dtoResp(Request model) {
-        return Optional.ofNullable(model).map(obj -> modelMapper.map(obj, RequestDtoResp.class)).orElse(null);
-    }
-
-    public RequestEntity model2entity(Request model) {
-        return Optional.ofNullable(model).map(obj -> modelMapper.map(obj, RequestEntity.class)).orElse(null);
-    }
-
-    public Request entity2model(RequestEntity entity) {
-        return Optional.ofNullable(entity).map(obj -> modelMapper.map(obj, Request.class)).orElse(null);
-    }
-
-    public ArrayList<RequestDtoResp> bulkModel2dtoResp(Collection<Request> models) {
-        return models.stream().map(this::model2dtoResp).collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    public ArrayList<Request> bulkEntity2model(Collection<RequestEntity> entities) {
-        return entities.stream().map(this::entity2model).collect(Collectors.toCollection(ArrayList::new));
+    public RequestDtoResp entity2dtoResp(RequestEntity entity) {
+        return modelMapper.map(entity, RequestDtoResp.class);
     }
 }
