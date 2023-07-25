@@ -59,4 +59,8 @@ public class ItemMapper {
     public ArrayList<Item> bulkEntity2model(Collection<ItemEntity> entities) {
         return entities.stream().map(this::entity2model).collect(Collectors.toCollection(ArrayList::new));
     }
+
+    public ArrayList<ItemDtoResp> bulkEntity2dtoResp(Collection<ItemEntity> entities) {
+        return bulkModel2dtoResp(bulkEntity2model(entities));
+    }
 }
