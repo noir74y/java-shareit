@@ -30,6 +30,8 @@ public class ItemEntity {
 //    @JoinColumn(name = "request_id")
 //    private RequestEntity request;
 
+    private Integer requestId;
+
     // code below is for InMemory only
     private static Integer itemId = 0;
 

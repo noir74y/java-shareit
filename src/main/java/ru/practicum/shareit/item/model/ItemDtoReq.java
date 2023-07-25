@@ -18,4 +18,5 @@ public class ItemDtoReq {
     private String description;
     @NotNull(groups = {OnCreate.class}, message = "available is absent")
     private Boolean available;
+    private Integer requestId;
 }

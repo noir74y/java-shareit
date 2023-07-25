@@ -2,6 +2,7 @@ package ru.practicum.shareit.request.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.request.model.RequestDtoReq;
 import ru.practicum.shareit.request.model.RequestEntity;
 import ru.practicum.shareit.request.model.RequestMapper;
@@ -17,6 +18,7 @@ public class RequestServiceImpl implements RequestService {
     private final RequestMapper requestMapper;
 
     @Override
+    @Transactional
     public RequestEntity create(Integer requesterId, RequestDtoReq dtoReq) throws Throwable {
         if (!userRepository.existsById(requesterId))
             throw new NotFoundException("no such user", String.valueOf(requesterId));
