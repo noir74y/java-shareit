@@ -14,6 +14,7 @@ import ru.practicum.shareit.utils.validation.ValueOfEnumConstraint;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.List;
 
 import static ru.practicum.shareit.utils.AppConstants.HEADER_USER_ID;
 
@@ -49,15 +50,15 @@ public class BookingController {
     }
 
     @GetMapping
-    public ArrayList<BookingDtoResp> findByBookerAndState(@RequestHeader(HEADER_USER_ID) @NotNull Integer requesterId,
+    public List<BookingDtoResp> findByBookerAndState(@RequestHeader(HEADER_USER_ID) @NotNull Integer requesterId,
                                                           @RequestParam(required = false, defaultValue = "ALL") @ValueOfEnumConstraint(enumClass = BookingState.class) String state) {
         log.info("GET /bookings/?state={} requesterId={}", state, requesterId);
         return bookingMapper.bulkModel2dtoResp(bookingService.findByBookerAndState(requesterId, state));
     }
 
     @GetMapping("/owner")
-    public ArrayList<BookingDtoResp> findByOwnerAndState(@RequestHeader(HEADER_USER_ID) @NotNull Integer requesterId,
-                                                         @RequestParam(required = false, defaultValue = "ALL") @ValueOfEnumConstraint(enumClass = BookingState.class) String state) {
+    public List<BookingDtoResp> findByOwnerAndState(@RequestHeader(HEADER_USER_ID) @NotNull Integer requesterId,
+                                                    @RequestParam(required = false, defaultValue = "ALL") @ValueOfEnumConstraint(enumClass = BookingState.class) String state) {
         log.info("GET /bookings/owner?state={} requesterId={}", state, requesterId);
         return bookingMapper.bulkModel2dtoResp(bookingService.findByOwnerAndState(requesterId, state));
     }

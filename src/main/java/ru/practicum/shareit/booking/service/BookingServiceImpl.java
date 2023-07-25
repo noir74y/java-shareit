@@ -13,6 +13,7 @@ import ru.practicum.shareit.utils.exception.WrongUserException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -76,7 +77,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     @Transactional(readOnly = true)
     public List<Booking> findByBookerAndState(Integer requesterId, String state) {
-        List<BookingEntity> entities = new ArrayList<>();
+        List<BookingEntity> entities = new LinkedList<>();
         var userEntity = userRepository.findById(requesterId).orElseThrow(() -> new WrongUserException(requesterId));
         switch (BookingState.valueOf(state)) {
             case FUTURE:
@@ -103,7 +104,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     @Transactional(readOnly = true)
     public List<Booking> findByOwnerAndState(Integer requesterId, String state) {
-        List<BookingEntity> entities = new ArrayList<>();
+        List<BookingEntity> entities = new LinkedList<>();
         var userEntity = userRepository.findById(requesterId).orElseThrow(() -> new WrongUserException(requesterId));
         switch (BookingState.valueOf(state)) {
             case FUTURE:

@@ -8,6 +8,7 @@ import ru.practicum.shareit.user.model.UserEntity;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -48,11 +49,11 @@ public class BookingMapper {
         return model;
     }
 
-    public ArrayList<BookingDtoResp> bulkModel2dtoResp(Collection<Booking> models) {
+    public List<BookingDtoResp> bulkModel2dtoResp(Collection<Booking> models) {
         return models.stream().map(this::model2dtoResp).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public ArrayList<Booking> bulkEntity2model(Collection<BookingEntity> entities) {
+    public List<Booking> bulkEntity2model(Collection<BookingEntity> entities) {
         return entities.stream().map(this::entity2model).collect(Collectors.toCollection(ArrayList::new));
     }
 }
