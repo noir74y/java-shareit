@@ -2,6 +2,7 @@ package ru.practicum.shareit.request.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.request.model.RequestDtoReq;
 import ru.practicum.shareit.request.model.RequestDtoResp;
@@ -9,6 +10,7 @@ import ru.practicum.shareit.request.model.RequestMapper;
 import ru.practicum.shareit.request.service.RequestService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -18,6 +20,7 @@ import static ru.practicum.shareit.utils.AppConstants.HEADER_USER_ID;
 @RestController
 @RequestMapping("/requests")
 @RequiredArgsConstructor
+@Validated
 public class RequestController {
     private final RequestService requestService;
     private final RequestMapper requestMapper;
@@ -30,8 +33,16 @@ public class RequestController {
     }
 
     @GetMapping
-    public List<RequestDtoResp> findByUser(@RequestHeader(HEADER_USER_ID) @NotNull Integer requesterId) {
+    public List<RequestDtoResp> findAllByUser(@RequestHeader(HEADER_USER_ID) @NotNull Integer requesterId) {
         log.info("GET /requests/ requesterId={}", requesterId);
-        return requestService.findByUser(requesterId);
+        return requestService.findAllByUser(requesterId);
+    }
+
+    @GetMapping("/all")
+    public List<RequestDtoResp> findAllByOthers(@RequestHeader(HEADER_USER_ID) @NotNull Integer requesterId,
+                                                @RequestParam(required = false, name = "from") @Min(0) Integer offset,
+                                                @RequestParam(required = false, name = "size") @Min(1) Integer pageSize) {
+        log.info("GET /requests/all?from={},size={} requesterId={}", offset, pageSize, requesterId);
+        return requestService.findAllByOthers(requesterId, offset, pageSize);
     }
 }

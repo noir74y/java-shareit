@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.item.model.ItemEntity;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface ItemRepository extends JpaRepository<ItemEntity, Integer> {
@@ -26,4 +27,7 @@ public interface ItemRepository extends JpaRepository<ItemEntity, Integer> {
                     "WHERE r.requester_id = ?1"
             , nativeQuery = true)
     List<ItemForRequestView> findAllByRequesterId(Integer requesterId);
+
+    @Query("SELECT ie FROM ItemEntity ie WHERE requestId IN ?1")
+    List<ItemEntity> findAllByRequestIdIn(Set<Integer> requestIdSet);
 }

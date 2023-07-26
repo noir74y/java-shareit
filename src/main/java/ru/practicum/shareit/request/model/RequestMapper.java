@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.item.model.ItemDtoResp;
+import ru.practicum.shareit.item.model.ItemEntity;
 import ru.practicum.shareit.item.model.ItemMapper;
 import ru.practicum.shareit.item.repository.ItemForRequestView;
 import ru.practicum.shareit.item.repository.ItemRepository;
@@ -32,10 +33,22 @@ public class RequestMapper {
         return modelMapper.map(entity, RequestDtoResp.class);
     }
 
-    public List<RequestDtoResp> bulkEntity2dtoResp(List<RequestEntity> entityList, Integer requesterId) {
-        List<ItemForRequestView> q = itemRepository
-                .findAllByRequesterId(requesterId);
+    public List<RequestDtoResp> bulkEntity2dtoResp(List<RequestEntity> requestEntities) {
+        Set<Integer> requestIdSet = requestEntities.stream().map(RequestEntity::getId).collect(Collectors.toSet());
 
+        Map<Integer, List<ItemEntity>> itemEntitiesByRequestId = itemRepository
+                .findAllByRequestIdIn(requestIdSet)
+                .stream()
+                .collect(Collectors.groupingBy(ItemEntity::getRequestId));
+
+        return requestEntities.stream()
+                .map(this::entity2dtoResp)
+                .peek(dtoResp -> Optional.ofNullable(dtoResp)
+                        .ifPresent(obj -> obj.setItems(itemMapper.bulkEntity2dtoResp(itemEntitiesByRequestId.get(obj.getId())))))
+                .collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    public List<RequestDtoResp> bulkEntity2dtoResp(List<RequestEntity> entityList, Integer requesterId) {
         Map<Integer, List<ItemForRequestView>> itemsViewByRequestId = itemRepository
                 .findAllByRequesterId(requesterId)
                 .stream()
@@ -50,8 +63,8 @@ public class RequestMapper {
     }
 
     private List<ItemDtoResp> convert2itemsDtoResp(List<ItemForRequestView> inList) {
-        if (inList == null)
-            return new ArrayList<>();
+        if (Objects.isNull(inList))
+            return Collections.emptyList();
         else
             return inList.stream().map(ItemForRequestView::getItemDtoResp).collect(Collectors.toList());
     }
