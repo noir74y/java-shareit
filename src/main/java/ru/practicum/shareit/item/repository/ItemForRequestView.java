@@ -19,6 +19,7 @@ public interface ItemForRequestView {
                 .name(getName())
                 .description(getDescription())
                 .requestId(getRequestId())
+                .available(getAvailable())
                 .build();
     }
 }
