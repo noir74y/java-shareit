@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.request.model.RequestDtoReq;
 import ru.practicum.shareit.request.model.RequestDtoResp;
 import ru.practicum.shareit.request.model.RequestEntity;
@@ -57,6 +58,16 @@ public class RequestServiceImpl implements RequestService {
                 .toList();
 
         return requestMapper.bulkEntity2dtoResp(entityList);
+    }
+
+    @Override
+    public RequestDtoResp findById(Integer requesterId, Integer requestId) {
+        checkUser(requesterId);
+
+        if (!requestRepository.existsById(requestId))
+            throw new NotFoundException("no such request", String.valueOf(requestId));
+
+        return null;
     }
 
     private void checkUser(Integer requesterId) {

@@ -12,6 +12,8 @@ public interface RequestService {
 
     List<RequestDtoResp> findAllByOthers(Integer requesterId, Integer offset, Integer pageSIze);
 
+    RequestDtoResp findById(Integer requesterId, Integer requestId);
+
 //    Booking update(Integer requesterId, Integer bookingId, Boolean approved) throws Throwable;
 //
 //    Booking findById(Integer requesterId, Integer bookingId) throws Throwable;

@@ -28,13 +28,13 @@ public class RequestController {
     @PostMapping
     public RequestDtoResp create(@RequestHeader(HEADER_USER_ID) @NotNull Integer requesterId,
                                  @Valid @RequestBody RequestDtoReq dtoReq) throws Throwable {
-        log.info("POST /requests/ requesterId={}, {}", requesterId, dtoReq);
+        log.info("requesterId={}, POST /requests/ {}", requesterId, dtoReq);
         return requestService.create(requesterId, dtoReq);
     }
 
     @GetMapping
     public List<RequestDtoResp> findAllByUser(@RequestHeader(HEADER_USER_ID) @NotNull Integer requesterId) {
-        log.info("GET /requests/ requesterId={}", requesterId);
+        log.info("requesterId={}, GET /requests/", requesterId);
         return requestService.findAllByUser(requesterId);
     }
 
@@ -42,7 +42,14 @@ public class RequestController {
     public List<RequestDtoResp> findAllByOthers(@RequestHeader(HEADER_USER_ID) @NotNull Integer requesterId,
                                                 @RequestParam(required = false, name = "from") @Min(0) Integer offset,
                                                 @RequestParam(required = false, name = "size") @Min(1) Integer pageSize) {
-        log.info("GET /requests/all?from={},size={} requesterId={}", offset, pageSize, requesterId);
+        log.info("requesterId={}, GET /requests/all?from={},size={}", requesterId, offset, pageSize);
         return requestService.findAllByOthers(requesterId, offset, pageSize);
+    }
+
+    @GetMapping("/{requestId}")
+    public RequestDtoResp findById(@RequestHeader(HEADER_USER_ID) @NotNull Integer requesterId,
+                                   @PathVariable @NotNull Integer requestId) {
+        log.info("requesterId={}, GET /requests/{}", requesterId, requestId);
+        return requestService.findById(requesterId, requestId);
     }
 }
