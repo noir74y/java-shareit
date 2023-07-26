@@ -10,7 +10,6 @@ import ru.practicum.shareit.request.service.RequestService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-
 import java.util.List;
 
 import static ru.practicum.shareit.utils.AppConstants.HEADER_USER_ID;
@@ -27,12 +26,12 @@ public class RequestController {
     public RequestDtoResp create(@RequestHeader(HEADER_USER_ID) @NotNull Integer requesterId,
                                  @Valid @RequestBody RequestDtoReq dtoReq) throws Throwable {
         log.info("POST /requests/ requesterId={}, {}", requesterId, dtoReq);
-        return requestMapper.entity2dtoResp(requestService.create(requesterId, dtoReq));
+        return requestService.create(requesterId, dtoReq);
     }
 
     @GetMapping
     public List<RequestDtoResp> findByUser(@RequestHeader(HEADER_USER_ID) @NotNull Integer requesterId) {
         log.info("GET /requests/ requesterId={}", requesterId);
-        return requestMapper.bulkEntity2dtoResp(requestService.findByUser(requesterId));
+        return requestService.findByUser(requesterId);
     }
 }

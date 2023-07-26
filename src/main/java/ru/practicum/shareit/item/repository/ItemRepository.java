@@ -18,4 +18,12 @@ public interface ItemRepository extends JpaRepository<ItemEntity, Integer> {
     List<ItemEntity> findAllByOwnerIdOrderById(Integer userId);
 
     List<ItemEntity> findAllByRequestId(Integer requestId);
+
+    @Query(
+            value = "SELECT r.id request_id, i.id item_id, i.name, i.description, i.available " +
+                    "FROM requests r " +
+                    "JOIN items i ON i.request_id = r.id " +
+                    "WHERE r.requester_id = ?1"
+            , nativeQuery = true)
+    List<ItemForRequestView> findAllByRequesterId(Integer requesterId);
 }
