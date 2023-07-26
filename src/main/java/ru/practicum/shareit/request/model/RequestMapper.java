@@ -48,13 +48,13 @@ public class RequestMapper {
                 .collect(Collectors.toCollection(LinkedList::new));
     }
 
-    public List<RequestDtoResp> bulkEntity2dtoResp(List<RequestEntity> entityList, Integer requestorId) {
+    public List<RequestDtoResp> bulkEntity2dtoResp(List<RequestEntity> requestEntities, Integer requestorId) {
         Map<Integer, List<ItemForRequestView>> itemsViewByRequestId = itemRepository
                 .findAllByRequesterId(requestorId)
                 .stream()
                 .collect(Collectors.groupingBy(ItemForRequestView::getRequestId));
 
-        return entityList.stream()
+        return requestEntities.stream()
                 .map(this::entity2dtoResp)
                 .peek(dtoResp -> Optional
                         .ofNullable(dtoResp)
