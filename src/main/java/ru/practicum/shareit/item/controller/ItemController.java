@@ -26,28 +26,28 @@ public class ItemController {
     private final CommentMapper commentMapper;
 
     @PostMapping
-    public ItemDtoResp create(@RequestHeader(HEADER_USER_ID) @NotNull int requesterId,
+    public ItemDtoResp create(@RequestHeader(HEADER_USER_ID) @NotNull int requestorId,
                               @Validated(OnCreate.class) @RequestBody ItemDtoReq dtoReq
     ) throws Throwable {
-        log.info("requesterId={}, POST /items/ {}", requesterId, dtoReq);
-        return itemMapper.model2dtoResp(itemService.create(requesterId, itemMapper.dtoReq2model(dtoReq)));
+        log.info("requestorId={}, POST /items/ {}", requestorId, dtoReq);
+        return itemMapper.model2dtoResp(itemService.create(requestorId, itemMapper.dtoReq2model(dtoReq)));
     }
 
     @PostMapping("/{itemId}/comment")
-    public CommentDtoResp create(@RequestHeader(HEADER_USER_ID) @NotNull int requesterId,
+    public CommentDtoResp create(@RequestHeader(HEADER_USER_ID) @NotNull int requestorId,
                                  @Valid @PathVariable int itemId,
                                  @Valid @RequestBody CommentDtoReq dtoReq
     ) throws Throwable {
-        log.info("requesterId={}, POST /items/{}/comment {}", requesterId, itemId, dtoReq);
-        return commentMapper.entity2dtoResp(commentService.create(requesterId, itemId, dtoReq));
+        log.info("requestorId={}, POST /items/{}/comment {}", requestorId, itemId, dtoReq);
+        return commentMapper.entity2dtoResp(commentService.create(requestorId, itemId, dtoReq));
     }
 
     @PatchMapping("/{itemId}")
-    public ItemDtoResp update(@RequestHeader(HEADER_USER_ID) @NotNull int requesterId,
+    public ItemDtoResp update(@RequestHeader(HEADER_USER_ID) @NotNull int requestorId,
                               @RequestBody ItemDtoReq dtoReq,
                               @PathVariable int itemId) {
-        log.info("requesterId={}, PATCH /items/{}, {}", requesterId, itemId, dtoReq);
-        return itemMapper.model2dtoResp(itemService.update(requesterId, itemMapper.dtoReq2model(dtoReq), itemId));
+        log.info("requestorId={}, PATCH /items/{}, {}", requestorId, itemId, dtoReq);
+        return itemMapper.model2dtoResp(itemService.update(requestorId, itemMapper.dtoReq2model(dtoReq), itemId));
     }
 
     @GetMapping("/{itemId}")

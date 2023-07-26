@@ -23,7 +23,7 @@ public class RequestEntity {
     private String description;
 
     @Column(nullable = false)
-    private Integer requesterId;
+    private Integer requestorId;
 
     @Column(nullable = false)
     private LocalDateTime created;

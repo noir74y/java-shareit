@@ -18,17 +18,17 @@ public class ItemServiceInMemoryImpl implements ItemService {
     private final UserService userService;
 
     @Override
-    public Item create(int requesterId, Item item) throws Throwable {
-        Optional.ofNullable(userService.findById(requesterId)).orElseThrow(() -> new NotFoundException("нет такого юзера", String.valueOf(requesterId)));
-        item.setOwnerId(requesterId);
+    public Item create(int requestorId, Item item) throws Throwable {
+        Optional.ofNullable(userService.findById(requestorId)).orElseThrow(() -> new NotFoundException("нет такого юзера", String.valueOf(requestorId)));
+        item.setOwnerId(requestorId);
         return itemDao.create(item);
     }
 
     @Override
-    public Item update(int requesterId, Item item, int itemId) {
+    public Item update(int requestorId, Item item, int itemId) {
         Item obj = itemDao.findById(itemId);
-        if (!obj.getOwnerId().equals(requesterId))
-            throw new ForbiddenException("это item другого юзера", obj.getOwnerId() + " != " + requesterId);
+        if (!obj.getOwnerId().equals(requestorId))
+            throw new ForbiddenException("это item другого юзера", obj.getOwnerId() + " != " + requestorId);
         Optional.ofNullable(item.getName()).ifPresent(obj::setName);
         Optional.ofNullable(item.getDescription()).ifPresent(obj::setDescription);
         Optional.ofNullable(item.getAvailable()).ifPresent(obj::setAvailable);
@@ -36,13 +36,13 @@ public class ItemServiceInMemoryImpl implements ItemService {
     }
 
     @Override
-    public Item findById(int requesterId, int itemId) {
+    public Item findById(int requestorId, int itemId) {
         return itemDao.findById(itemId);
     }
 
     @Override
-    public ArrayList<Item> findByOwner(int requesterId) {
-        return itemDao.findByOwner(requesterId);
+    public ArrayList<Item> findByOwner(int requestorId) {
+        return itemDao.findByOwner(requestorId);
     }
 
     @Override

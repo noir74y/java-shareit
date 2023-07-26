@@ -28,25 +28,25 @@ public class BookingController {
     private final BookingMapper bookingMapper;
 
     @PostMapping
-    public BookingDtoResp create(@RequestHeader(HEADER_USER_ID) @NotNull Integer requesterId,
+    public BookingDtoResp create(@RequestHeader(HEADER_USER_ID) @NotNull Integer requestorId,
                                  @Valid @RequestBody BookingDtoReq dtoReq) throws Throwable {
-        log.info("POST /bookings/ requesterId={}, {}", requesterId, dtoReq);
-        return bookingMapper.model2dtoResp(bookingService.create(requesterId, bookingMapper.dtoReq2model(dtoReq)));
+        log.info("POST /bookings/ requestorId={}, {}", requestorId, dtoReq);
+        return bookingMapper.model2dtoResp(bookingService.create(requestorId, bookingMapper.dtoReq2model(dtoReq)));
     }
 
     @PatchMapping("/{bookingId}")
-    public BookingDtoResp update(@RequestHeader(HEADER_USER_ID) @NotNull Integer requesterId,
+    public BookingDtoResp update(@RequestHeader(HEADER_USER_ID) @NotNull Integer requestorId,
                                  @PathVariable Integer bookingId,
                                  @RequestParam Boolean approved) throws Throwable {
-        log.info("PATCH /bookings/ requesterId={}, approved={}, {}", requesterId, bookingId, approved);
-        return bookingMapper.model2dtoResp(bookingService.update(requesterId, bookingId, approved));
+        log.info("PATCH /bookings/ requestorId={}, approved={}, {}", requestorId, bookingId, approved);
+        return bookingMapper.model2dtoResp(bookingService.update(requestorId, bookingId, approved));
     }
 
     @GetMapping("/{bookingId}")
-    public BookingDtoResp findById(@RequestHeader(HEADER_USER_ID) @NotNull Integer requesterId,
+    public BookingDtoResp findById(@RequestHeader(HEADER_USER_ID) @NotNull Integer requestorId,
                                    @PathVariable Integer bookingId) throws Throwable {
-        log.info("GET /bookings/{} requesterId={}", bookingId, requesterId);
-        return bookingMapper.model2dtoResp(bookingService.findById(requesterId, bookingId));
+        log.info("GET /bookings/{} requestorId={}", bookingId, requestorId);
+        return bookingMapper.model2dtoResp(bookingService.findById(requestorId, bookingId));
     }
 
     @GetMapping

@@ -6,19 +6,19 @@ import ru.practicum.shareit.request.model.RequestDtoResp;
 import java.util.List;
 
 public interface RequestService {
-    RequestDtoResp create(Integer requesterId, RequestDtoReq request) throws Throwable;
+    RequestDtoResp create(Integer requestorId, RequestDtoReq request) throws Throwable;
 
-    List<RequestDtoResp> findAllByUser(Integer requesterId);
+    List<RequestDtoResp> findAllByUser(Integer requestorId);
 
-    List<RequestDtoResp> findAllByOthers(Integer requesterId, Integer offset, Integer pageSIze);
+    List<RequestDtoResp> findAllByOthers(Integer requestorId, Integer offset, Integer pageSIze);
 
-    RequestDtoResp findById(Integer requesterId, Integer requestId);
+    RequestDtoResp findById(Integer requestorId, Integer requestId);
 
-//    Booking update(Integer requesterId, Integer bookingId, Boolean approved) throws Throwable;
+//    Booking update(Integer requestorId, Integer bookingId, Boolean approved) throws Throwable;
 //
-//    Booking findById(Integer requesterId, Integer bookingId) throws Throwable;
+//    Booking findById(Integer requestorId, Integer bookingId) throws Throwable;
 //
-//    List<Booking> findByBookerAndState(Integer requesterId, String state);
+//    List<Booking> findByBookerAndState(Integer requestorId, String state);
 //
-//    List<Booking> findByOwnerAndState(Integer requesterId, String state);
+//    List<Booking> findByOwnerAndState(Integer requestorId, String state);
 }

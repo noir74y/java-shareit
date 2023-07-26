@@ -10,9 +10,9 @@ import java.util.List;
 
 @Repository
 public interface RequestRepository extends JpaRepository<RequestEntity, Integer> {
-    List<RequestEntity> findAllByRequesterIdOrderByCreatedDesc(Integer requesterId);
+    List<RequestEntity> findAllByRequestorIdOrderByCreatedDesc(Integer requestorId);
 
-    Page<RequestEntity> findAllByRequesterIdNotOrderByCreatedDesc(Integer requesterId, Pageable page);
+    Page<RequestEntity> findAllByRequestorIdNotOrderByCreatedDesc(Integer requestorId, Pageable page);
 
 
 }

@@ -26,16 +26,16 @@ public class RequestController {
     private final RequestMapper requestMapper;
 
     @PostMapping
-    public RequestDtoResp create(@RequestHeader(HEADER_USER_ID) @NotNull Integer requesterId,
+    public RequestDtoResp create(@RequestHeader(HEADER_USER_ID) @NotNull Integer requestorId,
                                  @Valid @RequestBody RequestDtoReq dtoReq) throws Throwable {
-        log.info("requesterId={}, POST /requests/ {}", requesterId, dtoReq);
-        return requestService.create(requesterId, dtoReq);
+        log.info("requestorId={}, POST /requests/ {}", requestorId, dtoReq);
+        return requestService.create(requestorId, dtoReq);
     }
 
     @GetMapping
-    public List<RequestDtoResp> findAllByUser(@RequestHeader(HEADER_USER_ID) @NotNull Integer requesterId) {
-        log.info("requesterId={}, GET /requests/", requesterId);
-        return requestService.findAllByUser(requesterId);
+    public List<RequestDtoResp> findAllByUser(@RequestHeader(HEADER_USER_ID) @NotNull Integer requestorId) {
+        log.info("requestorId={}, GET /requests/", requestorId);
+        return requestService.findAllByUser(requestorId);
     }
 
     @GetMapping("/all")

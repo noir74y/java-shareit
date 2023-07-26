@@ -20,11 +20,11 @@ public class RequestMapper {
     private final ItemRepository itemRepository;
     private final ItemMapper itemMapper;
 
-    public RequestEntity dtoReq2entity(RequestDtoReq dtoReq, Integer requesterId) {
+    public RequestEntity dtoReq2entity(RequestDtoReq dtoReq, Integer requestorId) {
         var entity = modelMapper.map(dtoReq, RequestEntity.class);
         Optional.ofNullable(entity).ifPresent(obj -> {
             obj.setCreated(LocalDateTime.now());
-            obj.setRequesterId(requesterId);
+            obj.setRequestorId(requestorId);
         });
         return entity;
     }
@@ -48,9 +48,9 @@ public class RequestMapper {
                 .collect(Collectors.toCollection(LinkedList::new));
     }
 
-    public List<RequestDtoResp> bulkEntity2dtoResp(List<RequestEntity> entityList, Integer requesterId) {
+    public List<RequestDtoResp> bulkEntity2dtoResp(List<RequestEntity> entityList, Integer requestorId) {
         Map<Integer, List<ItemForRequestView>> itemsViewByRequestId = itemRepository
-                .findAllByRequesterId(requesterId)
+                .findAllByRequesterId(requestorId)
                 .stream()
                 .collect(Collectors.groupingBy(ItemForRequestView::getRequestId));
 

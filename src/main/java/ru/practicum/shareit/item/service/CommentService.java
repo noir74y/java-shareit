@@ -4,5 +4,5 @@ import ru.practicum.shareit.item.model.CommentDtoReq;
 import ru.practicum.shareit.item.model.CommentEntity;
 
 public interface CommentService {
-    CommentEntity create(Integer requesterId, Integer itemId, CommentDtoReq dtoReq) throws Throwable;
+    CommentEntity create(Integer requestorId, Integer itemId, CommentDtoReq dtoReq) throws Throwable;
 }

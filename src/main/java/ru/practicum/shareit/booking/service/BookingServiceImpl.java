@@ -26,18 +26,18 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     @Transactional
-    public Booking create(Integer requesterId, Booking booking) throws Throwable {
+    public Booking create(Integer requestorId, Booking booking) throws Throwable {
         if (!booking.getStartDate().isBefore(booking.getEndDate()))
             throw new CustomValidationException("start is not before end", booking.getStartDate() + " " + booking.getEndDate());
 
-        var userEntity = userRepository.findById(requesterId)
-                .orElseThrow(() -> new NotFoundException("no such user", String.valueOf(requesterId)));
+        var userEntity = userRepository.findById(requestorId)
+                .orElseThrow(() -> new NotFoundException("no such user", String.valueOf(requestorId)));
 
         var itemEntity = itemRepository.findById(booking.getItemId())
                 .orElseThrow(() -> new NotFoundException("no such item", String.valueOf(booking.getItemId())));
 
-        if (requesterId.equals(itemEntity.getOwner().getId()))
-            throw new NotFoundException("requester is a owner of the item", String.valueOf(requesterId));
+        if (requestorId.equals(itemEntity.getOwner().getId()))
+            throw new NotFoundException("requester is a owner of the item", String.valueOf(requestorId));
 
         if (itemEntity.getAvailable()) {
             booking.setStatus(BookingStatus.WAITING);
@@ -48,30 +48,30 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     @Transactional
-    public Booking update(Integer requesterId, Integer bookingId, Boolean approved) throws Throwable {
+    public Booking update(Integer requestorId, Integer bookingId, Boolean approved) throws Throwable {
         var bookingEntity = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException("no such bookingIg", String.valueOf(bookingId)));
 
         if (bookingEntity.getStatus().equals(BookingStatus.APPROVED))
             throw new CustomValidationException("booking is already approved", String.valueOf(bookingEntity.getId()));
 
-        if (requesterId.equals(bookingEntity.getItem().getOwner().getId())) {
+        if (requestorId.equals(bookingEntity.getItem().getOwner().getId())) {
             bookingEntity.setStatus(approved ? BookingStatus.APPROVED : BookingStatus.REJECTED);
             return bookingMapper.entity2model(bookingRepository.save(bookingEntity));
         } else
-            throw new NotFoundException("wrong user", String.valueOf(requesterId));
+            throw new NotFoundException("wrong user", String.valueOf(requestorId));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Booking findById(Integer requesterId, Integer bookingId) throws Throwable {
+    public Booking findById(Integer requestorId, Integer bookingId) throws Throwable {
         var bookingEntity = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException("no such bookingIg", String.valueOf(bookingId)));
 
-        if (requesterId.equals(bookingEntity.getItem().getOwner().getId()) || requesterId.equals(bookingEntity.getBooker().getId()))
+        if (requestorId.equals(bookingEntity.getItem().getOwner().getId()) || requestorId.equals(bookingEntity.getBooker().getId()))
             return bookingMapper.entity2model(bookingEntity);
         else
-            throw new NotFoundException("user is neither booker nor owner", String.valueOf(requesterId));
+            throw new NotFoundException("user is neither booker nor owner", String.valueOf(requestorId));
     }
 
     @Override
