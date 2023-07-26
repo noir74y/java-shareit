@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.item.model.ItemMapper;
+import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.request.model.RequestDtoReq;
 import ru.practicum.shareit.request.model.RequestDtoResp;
 import ru.practicum.shareit.request.model.RequestEntity;
@@ -22,12 +24,14 @@ public class RequestServiceImpl implements RequestService {
     private final UserRepository userRepository;
     private final RequestRepository requestRepository;
     private final RequestMapper requestMapper;
+    private final ItemMapper itemMapper;
+    private final ItemRepository itemRepository;
 
     @Override
     @Transactional
     public RequestDtoResp create(Integer requestorId, RequestDtoReq dtoReq) throws Throwable {
         checkUser(requestorId);
-        ;
+
         return requestMapper.entity2dtoResp(
                 requestRepository.save(requestMapper.dtoReq2entity(dtoReq, requestorId))
         );
@@ -37,6 +41,7 @@ public class RequestServiceImpl implements RequestService {
     @Transactional(readOnly = true)
     public List<RequestDtoResp> findAllByUser(Integer requestorId) {
         checkUser(requestorId);
+
         return requestMapper.bulkEntity2dtoResp(
                 requestRepository.findAllByRequestorIdOrderByCreatedDesc(requestorId),
                 requestorId
@@ -59,13 +64,17 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public RequestDtoResp findById(Integer requestorId, Integer requestId) {
         checkUser(requestorId);
 
-        if (!requestRepository.existsById(requestId))
-            throw new NotFoundException("no such request", String.valueOf(requestId));
+        var dtoResp = requestRepository.findById(requestId)
+                .map(requestMapper::entity2dtoResp)
+                .orElseThrow(() -> new NotFoundException("no such request", String.valueOf(requestId)));
 
-        return null;
+        dtoResp.setItems(itemMapper.bulkEntity2dtoResp(itemRepository.findAllByRequestId(requestId)));
+
+        return dtoResp;
     }
 
     private void checkUser(Integer requestorId) {

@@ -19,5 +19,5 @@ public class RequestDtoResp {
     private Integer id;
     private String description;
     private LocalDateTime created;
-    List<ItemDtoResp> items;
+    private List<ItemDtoResp> items;
 }
