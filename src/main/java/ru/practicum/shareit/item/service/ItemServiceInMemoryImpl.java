@@ -46,7 +46,7 @@ public class ItemServiceInMemoryImpl implements ItemService {
     }
 
     @Override
-    public ArrayList<Item> findByText(int requesterId, String text) {
+    public ArrayList<Item> findByText(int requestorId, String text) {
         return itemDao.findByText(text);
     }
 }

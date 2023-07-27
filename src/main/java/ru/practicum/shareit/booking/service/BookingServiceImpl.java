@@ -76,54 +76,54 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Booking> findByBookerAndState(Integer requesterId, String state) {
+    public List<Booking> findByBookerAndState(Integer requestorId, String state) {
         List<BookingEntity> entities = new LinkedList<>();
-        var userEntity = userRepository.findById(requesterId).orElseThrow(() -> new WrongUserException(requesterId));
+        var userEntity = userRepository.findById(requestorId).orElseThrow(() -> new WrongUserException(requestorId));
         switch (BookingState.valueOf(state)) {
             case FUTURE:
-                entities = bookingRepository.findAllByBookerIdAndStartDateIsAfterOrderByStartDateDesc(requesterId, LocalDateTime.now());
+                entities = bookingRepository.findAllByBookerIdAndStartDateIsAfterOrderByStartDateDesc(requestorId, LocalDateTime.now());
                 break;
             case CURRENT:
-                entities = bookingRepository.findAllByBookerIdAndStartDateIsBeforeAndEndDateIsAfterOrderByStartDateDesc(requesterId, LocalDateTime.now(), LocalDateTime.now());
+                entities = bookingRepository.findAllByBookerIdAndStartDateIsBeforeAndEndDateIsAfterOrderByStartDateDesc(requestorId, LocalDateTime.now(), LocalDateTime.now());
                 break;
             case PAST:
-                entities = bookingRepository.findAllByBookerIdAndEndDateIsBeforeOrderByStartDateDesc(requesterId, LocalDateTime.now());
+                entities = bookingRepository.findAllByBookerIdAndEndDateIsBeforeOrderByStartDateDesc(requestorId, LocalDateTime.now());
                 break;
             case WAITING:
-                entities = bookingRepository.findAllByBookerIdAndStatusOrderByStartDateDesc(requesterId, BookingStatus.WAITING);
+                entities = bookingRepository.findAllByBookerIdAndStatusOrderByStartDateDesc(requestorId, BookingStatus.WAITING);
                 break;
             case REJECTED:
-                entities = bookingRepository.findAllByBookerIdAndStatusOrderByStartDateDesc(requesterId, BookingStatus.REJECTED);
+                entities = bookingRepository.findAllByBookerIdAndStatusOrderByStartDateDesc(requestorId, BookingStatus.REJECTED);
                 break;
             case ALL:
-                entities = bookingRepository.findAllByBookerIdOrderByStartDateDesc(requesterId);
+                entities = bookingRepository.findAllByBookerIdOrderByStartDateDesc(requestorId);
         }
         return bookingMapper.bulkEntity2model(entities);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Booking> findByOwnerAndState(Integer requesterId, String state) {
+    public List<Booking> findByOwnerAndState(Integer requestorId, String state) {
         List<BookingEntity> entities = new LinkedList<>();
-        var userEntity = userRepository.findById(requesterId).orElseThrow(() -> new WrongUserException(requesterId));
+        var userEntity = userRepository.findById(requestorId).orElseThrow(() -> new WrongUserException(requestorId));
         switch (BookingState.valueOf(state)) {
             case FUTURE:
-                entities = bookingRepository.findAllByItemOwnerIdAndStartDateIsAfterOrderByStartDateDesc(requesterId, LocalDateTime.now());
+                entities = bookingRepository.findAllByItemOwnerIdAndStartDateIsAfterOrderByStartDateDesc(requestorId, LocalDateTime.now());
                 break;
             case CURRENT:
-                entities = bookingRepository.findAllByItemOwnerIdAndStartDateIsBeforeAndEndDateIsAfterOrderByStartDateDesc(requesterId, LocalDateTime.now(), LocalDateTime.now());
+                entities = bookingRepository.findAllByItemOwnerIdAndStartDateIsBeforeAndEndDateIsAfterOrderByStartDateDesc(requestorId, LocalDateTime.now(), LocalDateTime.now());
                 break;
             case PAST:
-                entities = bookingRepository.findAllByItemOwnerIdAndEndDateIsBeforeOrderByStartDateDesc(requesterId, LocalDateTime.now());
+                entities = bookingRepository.findAllByItemOwnerIdAndEndDateIsBeforeOrderByStartDateDesc(requestorId, LocalDateTime.now());
                 break;
             case WAITING:
-                entities = bookingRepository.findAllByItemOwnerIdAndStatusOrderByStartDateDesc(requesterId, BookingStatus.WAITING);
+                entities = bookingRepository.findAllByItemOwnerIdAndStatusOrderByStartDateDesc(requestorId, BookingStatus.WAITING);
                 break;
             case REJECTED:
-                entities = bookingRepository.findAllByItemOwnerIdAndStatusOrderByStartDateDesc(requesterId, BookingStatus.REJECTED);
+                entities = bookingRepository.findAllByItemOwnerIdAndStatusOrderByStartDateDesc(requestorId, BookingStatus.REJECTED);
                 break;
             case ALL:
-                entities = bookingRepository.findAllByItemOwnerIdOrderByStartDateDesc(requesterId);
+                entities = bookingRepository.findAllByItemOwnerIdOrderByStartDateDesc(requestorId);
         }
         return bookingMapper.bulkEntity2model(entities);
     }

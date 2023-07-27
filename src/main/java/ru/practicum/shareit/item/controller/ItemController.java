@@ -51,22 +51,22 @@ public class ItemController {
     }
 
     @GetMapping("/{itemId}")
-    public ItemDtoResp findById(@RequestHeader(HEADER_USER_ID) @NotNull int requesterId,
+    public ItemDtoResp findById(@RequestHeader(HEADER_USER_ID) @NotNull int requestorId,
                                 @PathVariable int itemId) {
-        log.info("requesterId={}, GET /items/{}", requesterId, itemId);
-        return itemMapper.model2dtoResp(itemService.findById(requesterId, itemId));
+        log.info("requestorId={}, GET /items/{}", requestorId, itemId);
+        return itemMapper.model2dtoResp(itemService.findById(requestorId, itemId));
     }
 
     @GetMapping
-    public ArrayList<ItemDtoResp> findByOwner(@RequestHeader(HEADER_USER_ID) int requesterId) {
-        log.info("requesterId={} GET /items", requesterId);
-        return itemMapper.bulkModel2dtoResp(itemService.findByOwner(requesterId));
+    public ArrayList<ItemDtoResp> findByOwner(@RequestHeader(HEADER_USER_ID) int requestorId) {
+        log.info("requestorId={} GET /items", requestorId);
+        return itemMapper.bulkModel2dtoResp(itemService.findByOwner(requestorId));
     }
 
     @GetMapping("/search")
-    public ArrayList<ItemDtoResp> findByText(@RequestHeader(HEADER_USER_ID) @NotNull int requesterId,
+    public ArrayList<ItemDtoResp> findByText(@RequestHeader(HEADER_USER_ID) @NotNull int requestorId,
                                              @RequestParam(value = "text") String text) {
-        log.info("requesterId={}, GET /search?text={}", requesterId, text);
-        return itemMapper.bulkModel2dtoResp(itemService.findByText(requesterId, text));
+        log.info("requestorId={}, GET /search?text={}", requestorId, text);
+        return itemMapper.bulkModel2dtoResp(itemService.findByText(requestorId, text));
     }
 }

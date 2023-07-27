@@ -50,16 +50,16 @@ public class BookingController {
     }
 
     @GetMapping
-    public List<BookingDtoResp> findByBookerAndState(@RequestHeader(HEADER_USER_ID) @NotNull Integer requesterId,
+    public List<BookingDtoResp> findByBookerAndState(@RequestHeader(HEADER_USER_ID) @NotNull Integer requestorId,
                                                           @RequestParam(required = false, defaultValue = "ALL") @ValueOfEnumConstraint(enumClass = BookingState.class) String state) {
-        log.info("GET /bookings/?state={} requesterId={}", state, requesterId);
-        return bookingMapper.bulkModel2dtoResp(bookingService.findByBookerAndState(requesterId, state));
+        log.info("GET /bookings/?state={} requestorId={}", state, requestorId);
+        return bookingMapper.bulkModel2dtoResp(bookingService.findByBookerAndState(requestorId, state));
     }
 
     @GetMapping("/owner")
-    public List<BookingDtoResp> findByOwnerAndState(@RequestHeader(HEADER_USER_ID) @NotNull Integer requesterId,
+    public List<BookingDtoResp> findByOwnerAndState(@RequestHeader(HEADER_USER_ID) @NotNull Integer requestorId,
                                                     @RequestParam(required = false, defaultValue = "ALL") @ValueOfEnumConstraint(enumClass = BookingState.class) String state) {
-        log.info("GET /bookings/owner?state={} requesterId={}", state, requesterId);
-        return bookingMapper.bulkModel2dtoResp(bookingService.findByOwnerAndState(requesterId, state));
+        log.info("GET /bookings/owner?state={} requestorId={}", state, requestorId);
+        return bookingMapper.bulkModel2dtoResp(bookingService.findByOwnerAndState(requestorId, state));
     }
 }

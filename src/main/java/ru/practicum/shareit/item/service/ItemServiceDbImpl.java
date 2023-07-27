@@ -79,29 +79,29 @@ public class ItemServiceDbImpl implements ItemService, CommentService {
 
     @Override
     @Transactional(readOnly = true)
-    public ArrayList<Item> findByOwner(int requesterId) {
-        return itemRepository.findAllByOwnerIdOrderById(requesterId).stream()
-                .map(itemEntity -> setLastNextBookingsAndCommentsAndMapToItem(itemEntity, requesterId))
+    public ArrayList<Item> findByOwner(int requestorId) {
+        return itemRepository.findAllByOwnerIdOrderById(requestorId).stream()
+                .map(itemEntity -> setLastNextBookingsAndCommentsAndMapToItem(itemEntity, requestorId))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public ArrayList<Item> findByText(int requesterId, String text) {
+    public ArrayList<Item> findByText(int requestorId, String text) {
         return !text.isBlank() ? itemMapper.bulkEntity2model(itemRepository.search(text)) : new ArrayList<>();
     }
 
-    private Item setLastNextBookingsAndCommentsAndMapToItem(ItemEntity itemEntity, Integer requesterId) {
+    private Item setLastNextBookingsAndCommentsAndMapToItem(ItemEntity itemEntity, Integer requestorId) {
         var item = itemMapper.entity2model(itemEntity);
 
-        item.setLastBooking(Optional.ofNullable(bookingRepository.getLastBooking(requesterId, item.getId()))
+        item.setLastBooking(Optional.ofNullable(bookingRepository.getLastBooking(requestorId, item.getId()))
                 .map(bookingEntity -> ItemBooking.builder()
                         .id(bookingEntity.getId())
                         .bookerId(bookingEntity.getBooker().getId())
                         .build())
                 .orElse(null));
 
-        item.setNextBooking(Optional.ofNullable(bookingRepository.getNextBooking(requesterId, item.getId()))
+        item.setNextBooking(Optional.ofNullable(bookingRepository.getNextBooking(requestorId, item.getId()))
                 .map(bookingEntity -> ItemBooking.builder()
                         .id(bookingEntity.getId())
                         .bookerId(bookingEntity.getBooker().getId())

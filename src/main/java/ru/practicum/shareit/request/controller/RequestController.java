@@ -39,17 +39,17 @@ public class RequestController {
     }
 
     @GetMapping("/all")
-    public List<RequestDtoResp> findAllByOthers(@RequestHeader(HEADER_USER_ID) @NotNull Integer requesterId,
+    public List<RequestDtoResp> findAllByOthers(@RequestHeader(HEADER_USER_ID) @NotNull Integer requestorId,
                                                 @RequestParam(required = false, name = "from") @Min(0) Integer offset,
                                                 @RequestParam(required = false, name = "size") @Min(1) Integer pageSize) {
-        log.info("requesterId={}, GET /requests/all?from={},size={}", requesterId, offset, pageSize);
-        return requestService.findAllByOthers(requesterId, offset, pageSize);
+        log.info("requestorId={}, GET /requests/all?from={},size={}", requestorId, offset, pageSize);
+        return requestService.findAllByOthers(requestorId, offset, pageSize);
     }
 
     @GetMapping("/{requestId}")
-    public RequestDtoResp findById(@RequestHeader(HEADER_USER_ID) @NotNull Integer requesterId,
+    public RequestDtoResp findById(@RequestHeader(HEADER_USER_ID) @NotNull Integer requestorId,
                                    @PathVariable @NotNull Integer requestId) {
-        log.info("requesterId={}, GET /requests/{}", requesterId, requestId);
-        return requestService.findById(requesterId, requestId);
+        log.info("requestorId={}, GET /requests/{}", requestorId, requestId);
+        return requestService.findById(requestorId, requestId);
     }
 }
