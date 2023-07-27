@@ -57,7 +57,7 @@ public class RequestServiceImpl implements RequestService {
             return Collections.emptyList();
 
         List<RequestEntity> entityList = requestRepository
-                .findAllByRequestorIdNotOrderByCreatedDesc(requestorId, PageRequest.of(offset, pageSize))
+                .findAllByRequestorIdNotOrderByCreatedDesc(requestorId, PageRequest.of(offset / pageSize, pageSize))
                 .toList();
 
         return requestMapper.bulkEntity2dtoResp(entityList);
