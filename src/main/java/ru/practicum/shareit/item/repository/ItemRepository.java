@@ -25,7 +25,7 @@ public interface ItemRepository extends JpaRepository<ItemEntity, Integer> {
                     "FROM requests r " +
                     "JOIN items i ON i.request_id = r.id " +
                     "WHERE r.requestor_id = ?1"
-            , nativeQuery = true)
+            ,nativeQuery = true)
     List<ItemForRequestView> findAllByRequesterId(Integer requestorId);
 
     @Query("SELECT ie FROM ItemEntity ie WHERE requestId IN ?1")
