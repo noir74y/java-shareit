@@ -2,7 +2,6 @@ package ru.practicum.shareit.item.model;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import ru.practicum.shareit.request.model.RequestEntity;
 import ru.practicum.shareit.user.model.UserEntity;
 
 import javax.persistence.*;
@@ -14,23 +13,18 @@ import java.util.regex.Pattern;
 @Entity
 @Table(name = "items")
 public class ItemEntity {
+    // code below is for InMemory only
+    private static Integer itemId = 0;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     private String name;
     private String description;
     private Boolean available;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
     private UserEntity owner;
-
     private Integer requestId;
-
-    // code below is for InMemory only
-    private static Integer itemId = 0;
-
     @Transient
     private Integer ownerUserId;
 
