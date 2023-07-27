@@ -12,11 +12,11 @@ import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.utils.validation.ValueOfEnumConstraint;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.List;
 
-import static ru.practicum.shareit.utils.AppConstants.HEADER_USER_ID;
+import static ru.practicum.shareit.utils.AppConstants.*;
 
 @Slf4j
 @RestController
@@ -30,7 +30,7 @@ public class BookingController {
     @PostMapping
     public BookingDtoResp create(@RequestHeader(HEADER_USER_ID) @NotNull Integer requestorId,
                                  @Valid @RequestBody BookingDtoReq dtoReq) throws Throwable {
-        log.info("POST /bookings/ requestorId={}, {}", requestorId, dtoReq);
+        log.info("requestorId={}, POST /bookings {}", requestorId, dtoReq);
         return bookingMapper.model2dtoResp(bookingService.create(requestorId, bookingMapper.dtoReq2model(dtoReq)));
     }
 
@@ -38,28 +38,32 @@ public class BookingController {
     public BookingDtoResp update(@RequestHeader(HEADER_USER_ID) @NotNull Integer requestorId,
                                  @PathVariable Integer bookingId,
                                  @RequestParam Boolean approved) throws Throwable {
-        log.info("PATCH /bookings/ requestorId={}, approved={}, {}", requestorId, bookingId, approved);
+        log.info("requestorId={}, PATCH /bookings/{}  approved={}", requestorId, bookingId, approved);
         return bookingMapper.model2dtoResp(bookingService.update(requestorId, bookingId, approved));
     }
 
     @GetMapping("/{bookingId}")
     public BookingDtoResp findById(@RequestHeader(HEADER_USER_ID) @NotNull Integer requestorId,
                                    @PathVariable Integer bookingId) throws Throwable {
-        log.info("GET /bookings/{} requestorId={}", bookingId, requestorId);
+        log.info("requestorId={}, GET /bookings/{}", requestorId, bookingId);
         return bookingMapper.model2dtoResp(bookingService.findById(requestorId, bookingId));
     }
 
     @GetMapping
     public List<BookingDtoResp> findByBookerAndState(@RequestHeader(HEADER_USER_ID) @NotNull Integer requestorId,
-                                                          @RequestParam(required = false, defaultValue = "ALL") @ValueOfEnumConstraint(enumClass = BookingState.class) String state) {
-        log.info("GET /bookings/?state={} requestorId={}", state, requestorId);
-        return bookingMapper.bulkModel2dtoResp(bookingService.findByBookerAndState(requestorId, state));
+                                                     @RequestParam(required = false, defaultValue = "ALL") @ValueOfEnumConstraint(enumClass = BookingState.class) String state,
+                                                     @RequestParam(defaultValue = OFFSET_DEFAULT, required = false, name = "from") @Min(0) Integer offset,
+                                                     @RequestParam(defaultValue = PAGE_SIZE_MAX, required = false, name = "size") @Min(1) Integer pageSize) {
+        log.info("requestorId={}, GET /bookings/?state={}", requestorId, state);
+        return bookingMapper.bulkModel2dtoResp(bookingService.findByBookerAndState(requestorId, state, offset, pageSize));
     }
 
     @GetMapping("/owner")
     public List<BookingDtoResp> findByOwnerAndState(@RequestHeader(HEADER_USER_ID) @NotNull Integer requestorId,
-                                                    @RequestParam(required = false, defaultValue = "ALL") @ValueOfEnumConstraint(enumClass = BookingState.class) String state) {
-        log.info("GET /bookings/owner?state={} requestorId={}", state, requestorId);
-        return bookingMapper.bulkModel2dtoResp(bookingService.findByOwnerAndState(requestorId, state));
+                                                    @RequestParam(required = false, defaultValue = "ALL") @ValueOfEnumConstraint(enumClass = BookingState.class) String state,
+                                                    @RequestParam(defaultValue = OFFSET_DEFAULT, required = false, name = "from") @Min(0) Integer offset,
+                                                    @RequestParam(defaultValue = PAGE_SIZE_MAX, required = false, name = "size") @Min(1) Integer pageSize) {
+        log.info("requestorId, GET /bookings/owner?state={} requestorId={}", requestorId, state);
+        return bookingMapper.bulkModel2dtoResp(bookingService.findByOwnerAndState(requestorId, state, offset, pageSize));
     }
 }

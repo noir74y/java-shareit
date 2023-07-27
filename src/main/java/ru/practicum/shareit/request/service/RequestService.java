@@ -10,7 +10,7 @@ public interface RequestService {
 
     List<RequestDtoResp> findAllByUser(Integer requestorId);
 
-    List<RequestDtoResp> findAllByOthers(Integer requestorId, Integer offset, Integer pageSIze);
+    List<RequestDtoResp> findAllByOthers(Integer requestorId, Integer offset, Integer pageSize);
 
     RequestDtoResp findById(Integer requestorId, Integer requestId);
 

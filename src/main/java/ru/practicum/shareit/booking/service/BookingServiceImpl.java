@@ -1,6 +1,8 @@
 package ru.practicum.shareit.booking.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.model.*;
@@ -76,7 +78,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Booking> findByBookerAndState(Integer requestorId, String state) {
+    public List<Booking> findByBookerAndState(Integer requestorId, String state, Integer offset, Integer pageSize) {
         List<BookingEntity> entities = new LinkedList<>();
         var userEntity = userRepository.findById(requestorId).orElseThrow(() -> new WrongUserException(requestorId));
         switch (BookingState.valueOf(state)) {
@@ -96,14 +98,14 @@ public class BookingServiceImpl implements BookingService {
                 entities = bookingRepository.findAllByBookerIdAndStatusOrderByStartDateDesc(requestorId, BookingStatus.REJECTED);
                 break;
             case ALL:
-                entities = bookingRepository.findAllByBookerIdOrderByStartDateDesc(requestorId);
+                entities = bookingRepository.findAllByBookerIdOrderByStartDateDesc(requestorId, PageRequest.of(offset / pageSize, pageSize));
         }
         return bookingMapper.bulkEntity2model(entities);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Booking> findByOwnerAndState(Integer requestorId, String state) {
+    public List<Booking> findByOwnerAndState(Integer requestorId, String state, Integer offset, Integer pageSize) {
         List<BookingEntity> entities = new LinkedList<>();
         var userEntity = userRepository.findById(requestorId).orElseThrow(() -> new WrongUserException(requestorId));
         switch (BookingState.valueOf(state)) {
@@ -123,7 +125,7 @@ public class BookingServiceImpl implements BookingService {
                 entities = bookingRepository.findAllByItemOwnerIdAndStatusOrderByStartDateDesc(requestorId, BookingStatus.REJECTED);
                 break;
             case ALL:
-                entities = bookingRepository.findAllByItemOwnerIdOrderByStartDateDesc(requestorId);
+                entities = bookingRepository.findAllByItemOwnerIdOrderByStartDateDesc(requestorId, PageRequest.of(offset / pageSize, pageSize));
         }
         return bookingMapper.bulkEntity2model(entities);
     }
