@@ -15,7 +15,7 @@ import java.nio.charset.StandardCharsets;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Component("GenericMock")
+@Component
 public class GenericControllerMock<Input, Output> {
     @Autowired
     private MockMvc mockMvc;
