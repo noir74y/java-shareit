@@ -16,13 +16,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Component
-public class GenericControllerMock<Input, Output> {
+public class GenericRestMock<Input, Output> {
     @Autowired
     private MockMvc mockMvc;
     private static ObjectMapper objectMapper;
     private String dtoRespJsonString;
 
-    public GenericControllerMock() {
+    public GenericRestMock() {
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
