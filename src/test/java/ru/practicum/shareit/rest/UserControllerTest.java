@@ -4,10 +4,13 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import ru.practicum.shareit.mock.GenericTest;
+import org.springframework.context.annotation.Import;
+import ru.practicum.shareit.mock.MapperMock;
 import ru.practicum.shareit.mock.RestMock;
 import ru.practicum.shareit.mock.RestMockGeneric;
+import ru.practicum.shareit.mock.ServiceMock;
 import ru.practicum.shareit.user.controller.UserController;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.model.UserDtoReq;
@@ -22,7 +25,14 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.when;
 
 @WebMvcTest(controllers = UserController.class)
-public class UserTests extends GenericTest {
+@Import({RestMock.class, ServiceMock.class, MapperMock.class})
+public class UserControllerTest {
+    @Autowired
+    protected RestMock restMock;
+    @Autowired
+    protected ServiceMock serviceMock;
+    @Autowired
+    protected MapperMock mapperMock;
     private final String baseUrl = "/users/";
     RestMockGeneric<UserDtoReq, UserDtoResp> rest;
     int userId = 1;
@@ -57,8 +67,7 @@ public class UserTests extends GenericTest {
         Mockito.verify(mapper, Mockito.times(1)).model2dtoResp(referenceModel);
         Mockito.verify(service, Mockito.times(1)).create(referenceModel);
 
-        Mockito.verifyNoMoreInteractions(mapper);
-        Mockito.verifyNoMoreInteractions(service);
+        Mockito.verifyNoMoreInteractions(mapper, service);
     }
 
     @Test
@@ -76,8 +85,7 @@ public class UserTests extends GenericTest {
         Mockito.verify(mapper, Mockito.times(1)).model2dtoResp(referenceModel);
         Mockito.verify(service, Mockito.times(1)).update(referenceModel, userId);
 
-        Mockito.verifyNoMoreInteractions(mapper);
-        Mockito.verifyNoMoreInteractions(service);
+        Mockito.verifyNoMoreInteractions(mapper, service);
     }
 
     @Test
@@ -86,8 +94,7 @@ public class UserTests extends GenericTest {
 
         Mockito.verify(service, Mockito.times(1)).delete(userId);
 
-        Mockito.verifyNoMoreInteractions(mapper);
-        Mockito.verifyNoMoreInteractions(service);
+        Mockito.verifyNoMoreInteractions(mapper, service);
     }
 
     @Test
@@ -104,8 +111,7 @@ public class UserTests extends GenericTest {
         Mockito.verify(mapper, Mockito.times(1)).model2dtoResp(referenceModel);
         Mockito.verify(service, Mockito.times(1)).findById(userId);
 
-        Mockito.verifyNoMoreInteractions(mapper);
-        Mockito.verifyNoMoreInteractions(service);
+        Mockito.verifyNoMoreInteractions(mapper, service);
     }
 
     @Test
@@ -131,8 +137,7 @@ public class UserTests extends GenericTest {
         Mockito.verify(mapper, Mockito.times(1)).bulkModel2dtoResp(referenceModelList);
         Mockito.verify(service, Mockito.times(1)).findAll();
 
-        Mockito.verifyNoMoreInteractions(mapper);
-        Mockito.verifyNoMoreInteractions(service);
+        Mockito.verifyNoMoreInteractions(mapper, service);
     }
 
 }
