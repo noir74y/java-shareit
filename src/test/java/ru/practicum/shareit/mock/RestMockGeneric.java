@@ -3,6 +3,7 @@ package ru.practicum.shareit.mock;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,6 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Component
 public class RestMockGeneric<Input, Output> {
+    @Getter
     private static ObjectMapper objectMapper;
     @Autowired
     private MockMvc mockMvc;
@@ -44,8 +46,8 @@ public class RestMockGeneric<Input, Output> {
         return objectMapper.readValue(dtoRespJsonString, outputClass);
     }
 
-    public void deleteEntity(String url) throws Exception {
-        mockMvc.perform(delete(url));
+    public void delete(String url) throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete(url));
     }
 
     public Output get(String url, Class<Output> outputClass) throws Exception {
@@ -56,18 +58,18 @@ public class RestMockGeneric<Input, Output> {
         return objectMapper.readValue(dtoRespJsonString, outputClass);
     }
 
+    public String get(String url) throws Exception {
+        return mockMvc.perform(MockMvcRequestBuilders.get(url)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(HttpStatus.OK.value()))
+                .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
+    }
+
     public Output get(String url, int httpResponseCode, Class<Output> outputClass) throws Exception {
         dtoRespJsonString = mockMvc.perform(MockMvcRequestBuilders.get(url)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(httpResponseCode))
                 .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
         return objectMapper.readValue(dtoRespJsonString, outputClass);
-    }
-
-    public String list(String url) throws Exception {
-        return mockMvc.perform(MockMvcRequestBuilders.get(url)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is(HttpStatus.OK.value()))
-                .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
     }
 }
