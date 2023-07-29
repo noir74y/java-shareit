@@ -11,7 +11,6 @@ import ru.practicum.shareit.user.service.UserService;
 import ru.practicum.shareit.utils.validation.OnCreate;
 import ru.practicum.shareit.utils.validation.OnUpdate;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
