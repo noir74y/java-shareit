@@ -8,16 +8,17 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import ru.practicum.shareit.mock.MapperMock;
 import ru.practicum.shareit.mock.RepositoryMock;
-import ru.practicum.shareit.mock.RestMock;
-import ru.practicum.shareit.mock.ServiceMock;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.model.UserEntity;
 import ru.practicum.shareit.user.model.UserMapper;
 import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.user.service.UserServiceImpl;
 
+import java.util.Optional;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @SpringJUnitConfig(UserServiceImpl.class)
@@ -45,9 +46,9 @@ public class UserServiceTest {
 
     @Test
     void create() throws Throwable {
-        when(mapper.model2entity(referenceModel)).thenReturn(referenceEntity);
-        when(mapper.entity2model(referenceEntity)).thenReturn(referenceModel);
-        when(repository.save(referenceEntity)).thenReturn(referenceEntity);
+        when(mapper.model2entity(any())).thenReturn(referenceEntity);
+        when(mapper.entity2model(any())).thenReturn(referenceModel);
+        when(repository.save(any())).thenReturn(referenceEntity);
 
         assertThat(
                 service.create(referenceModel),
@@ -60,4 +61,24 @@ public class UserServiceTest {
 
         Mockito.verifyNoMoreInteractions(mapper, repository);
     }
+
+    @Test
+    void update() throws Throwable {
+        when(mapper.model2entity(any())).thenReturn(referenceEntity);
+        when(mapper.entity2model(any())).thenReturn(referenceModel);
+        when(repository.save(any())).thenReturn(referenceEntity);
+        when(repository.findById(any())).thenReturn(Optional.ofNullable(referenceEntity));
+
+        assertThat(
+                service.update(referenceModel, userId),
+                equalTo(referenceModel)
+        );
+
+        Mockito.verify(mapper, Mockito.times(1)).model2entity(referenceModel);
+        Mockito.verify(mapper, Mockito.times(2)).entity2model(referenceEntity);
+        Mockito.verify(repository, Mockito.times(1)).save(referenceEntity);
+        Mockito.verify(repository, Mockito.times(1)).findById(userId);
+    }
+
+
 }
