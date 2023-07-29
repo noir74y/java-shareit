@@ -4,10 +4,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
-import ru.practicum.shareit.mock.MapperMock;
 import ru.practicum.shareit.mock.RestMock;
 import ru.practicum.shareit.mock.RestMockGeneric;
 import ru.practicum.shareit.mock.ServiceMock;
@@ -22,70 +22,58 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 @WebMvcTest(controllers = UserController.class)
-@Import({RestMock.class, ServiceMock.class, MapperMock.class})
+@Import({RestMock.class, ServiceMock.class, UserMapper.class, ModelMapper.class})
 public class UserControllerTest {
     @Autowired
     protected RestMock restMock;
     @Autowired
     protected ServiceMock serviceMock;
-    @Autowired
-    protected MapperMock mapperMock;
     private final String baseUrl = "/users/";
     RestMockGeneric<UserDtoReq, UserDtoResp> rest;
     int userId = 1;
     private UserService service;
-    private UserMapper mapper;
-    private UserDtoReq referenceDtoReq;
-    private User referenceModel;
-    private UserDtoResp referenceDtoResp;
+    private UserDtoReq dtoReq;
+    private User model;
+    private UserDtoResp dtoResp;
 
     @BeforeEach
     void setUp() {
-        mapper = mapperMock.getUserMapper();
         service = serviceMock.getUserService();
         rest = restMock.getUserRest();
-        referenceDtoReq = UserDtoReq.builder().name("user").email("user@user.com").build();
-        referenceModel = User.builder().id(userId).name("user").email("user@user.com").build();
-        referenceDtoResp = UserDtoResp.builder().id(userId).name("user").email("user@user.com").build();
+        dtoReq = UserDtoReq.builder().name("user").email("user@user.com").build();
+        model = User.builder().id(userId).name("user").email("user@user.com").build();
+        dtoResp = UserDtoResp.builder().id(userId).name("user").email("user@user.com").build();
     }
 
     @Test
     void create() throws Throwable {
-        when(mapper.dtoReq2model(referenceDtoReq)).thenReturn(referenceModel);
-        when(mapper.model2dtoResp(referenceModel)).thenReturn(referenceDtoResp);
-        when(service.create(mapper.dtoReq2model(referenceDtoReq))).thenReturn(referenceModel);
+        when(service.create(any())).thenReturn(model);
 
         assertThat(
-                rest.post(baseUrl, referenceDtoReq, UserDtoResp.class),
-                equalTo(referenceDtoResp)
+                rest.post(baseUrl, dtoReq, UserDtoResp.class),
+                equalTo(dtoResp)
         );
 
-        Mockito.verify(mapper, Mockito.times(2)).dtoReq2model(referenceDtoReq);
-        Mockito.verify(mapper, Mockito.times(1)).model2dtoResp(referenceModel);
-        Mockito.verify(service, Mockito.times(1)).create(referenceModel);
-
-        Mockito.verifyNoMoreInteractions(mapper, service);
+        Mockito.verify(service, Mockito.times(1)).create(any());
+        Mockito.verifyNoMoreInteractions(service);
     }
 
     @Test
     void update() throws Throwable {
-        when(mapper.dtoReq2model(referenceDtoReq)).thenReturn(referenceModel);
-        when(mapper.model2dtoResp(referenceModel)).thenReturn(referenceDtoResp);
-        when(service.update(mapper.dtoReq2model(referenceDtoReq), userId)).thenReturn(referenceModel);
+        when(service.update(any(), anyInt())).thenReturn(model);
 
         assertThat(
-                rest.patch(baseUrl + userId, referenceDtoReq, UserDtoResp.class),
-                equalTo(referenceDtoResp)
+                rest.patch(baseUrl + userId, dtoReq, UserDtoResp.class),
+                equalTo(dtoResp)
         );
 
-        Mockito.verify(mapper, Mockito.times(2)).dtoReq2model(referenceDtoReq);
-        Mockito.verify(mapper, Mockito.times(1)).model2dtoResp(referenceModel);
-        Mockito.verify(service, Mockito.times(1)).update(referenceModel, userId);
-
-        Mockito.verifyNoMoreInteractions(mapper, service);
+        Mockito.verify(service, Mockito.times(1)).update(any(), anyInt());
+        Mockito.verifyNoMoreInteractions(service);
     }
 
     @Test
@@ -93,33 +81,28 @@ public class UserControllerTest {
         rest.delete(baseUrl + userId);
 
         Mockito.verify(service, Mockito.times(1)).delete(userId);
-
-        Mockito.verifyNoMoreInteractions(mapper, service);
+        Mockito.verifyNoMoreInteractions(service);
     }
 
     @Test
     void find() throws Throwable {
-        when(mapper.model2dtoResp(referenceModel)).thenReturn(referenceDtoResp);
-        when(service.findById(userId)).thenReturn(referenceModel);
+        when(service.findById(userId)).thenReturn(model);
 
         assertThat(
                 rest.get(baseUrl + userId, UserDtoResp.class),
-                equalTo(referenceDtoResp)
+                equalTo(dtoResp)
 
         );
 
-        Mockito.verify(mapper, Mockito.times(1)).model2dtoResp(referenceModel);
         Mockito.verify(service, Mockito.times(1)).findById(userId);
-
-        Mockito.verifyNoMoreInteractions(mapper, service);
+        Mockito.verifyNoMoreInteractions(service);
     }
 
     @Test
     void findAll() throws Exception {
-        List<User> referenceModelList = List.of(referenceModel, referenceModel);
-        List<UserDtoResp> referenceUserDtoRespList = List.of(referenceDtoResp, referenceDtoResp);
+        List<User> referenceModelList = List.of(model, model);
+        List<UserDtoResp> referenceUserDtoRespList = List.of(dtoResp, dtoResp);
 
-        when(mapper.bulkModel2dtoResp(referenceModelList)).thenReturn(referenceUserDtoRespList);
         when(service.findAll()).thenReturn(referenceModelList);
 
         List<UserDtoResp> dtoRespList = RestMockGeneric.getObjectMapper()
@@ -134,10 +117,8 @@ public class UserControllerTest {
 
         );
 
-        Mockito.verify(mapper, Mockito.times(1)).bulkModel2dtoResp(referenceModelList);
         Mockito.verify(service, Mockito.times(1)).findAll();
-
-        Mockito.verifyNoMoreInteractions(mapper, service);
+        Mockito.verifyNoMoreInteractions(service);
     }
 
 }

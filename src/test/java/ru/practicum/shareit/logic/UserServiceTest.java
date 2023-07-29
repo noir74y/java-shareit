@@ -30,26 +30,26 @@ public class UserServiceTest {
     @Autowired
     private UserServiceImpl service;
     private UserRepository repository;
-    private User user;
-    private UserEntity userEntity;
+    private User model;
+    private UserEntity entity;
 
     @BeforeEach
     void setUp() {
         repository = repositoryMock.getUserRepository();
-        user = User.builder().id(userId).name("user").email("user@user.com").build();
-        userEntity = UserEntity.builder().id(userId).name("user").email("user@user.com").build();
+        model = User.builder().id(userId).name("user").email("user@user.com").build();
+        entity = UserEntity.builder().id(userId).name("user").email("user@user.com").build();
     }
 
     @Test
     void create() throws Throwable {
-        when(repository.save(any())).thenReturn(userEntity);
+        when(repository.save(any())).thenReturn(entity);
 
         assertThat(
-                service.create(user),
-                equalTo(user)
+                service.create(model),
+                equalTo(model)
         );
 
-        Mockito.verify(repository, Mockito.times(1)).save(userEntity);
+        Mockito.verify(repository, Mockito.times(1)).save(entity);
         Mockito.verifyNoMoreInteractions(repository);
     }
 
@@ -58,7 +58,7 @@ public class UserServiceTest {
         var changedUser = User.builder().id(userId).name("user2").email("user2@user.com").build();
         var changedUserEntity = UserEntity.builder().id(userId).name("user2").email("user2@user.com").build();
 
-        when(repository.findById(any())).thenReturn(Optional.ofNullable(userEntity));
+        when(repository.findById(any())).thenReturn(Optional.ofNullable(entity));
         when(repository.save(any())).thenReturn(changedUserEntity);
 
         var returnValue = service.update(changedUser, userId);
