@@ -13,8 +13,6 @@ import java.util.regex.Pattern;
 @Entity
 @Table(name = "items")
 public class ItemEntity {
-    // code below is for InMemory only
-    private static Integer itemId = 0;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -27,14 +25,6 @@ public class ItemEntity {
     private Integer requestId;
     @Transient
     private Integer ownerUserId;
-
-    private static Integer getNewId() {
-        return ++itemId;
-    }
-
-    public void setNewId() {
-        this.id = ItemEntity.getNewId();
-    }
 
     public boolean isItemRelevantForText(Pattern pattern) {
         Matcher matcherName = pattern.matcher(name);

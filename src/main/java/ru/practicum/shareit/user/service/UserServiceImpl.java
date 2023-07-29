@@ -10,7 +10,6 @@ import ru.practicum.shareit.user.model.UserMapper;
 import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.utils.exception.NotFoundException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +17,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Primary
-public class UserServiceDbImpl implements UserService {
+public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
