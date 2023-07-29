@@ -117,8 +117,8 @@ public class UserTests {
         List<User> referenceModelList = List.of(referenceModel, referenceModel);
         List<UserDtoResp> referenceUserDtoRespList = List.of(referenceDtoResp, referenceDtoResp);
 
-        when(mapperMock.getUserMapper().bulkModel2dtoResp(referenceModelList)).thenReturn((ArrayList<UserDtoResp>) referenceUserDtoRespList);
-        when(serviceMock.getUserService().findAll()).thenReturn((ArrayList<User>) referenceModelList);
+        when(mapperMock.getUserMapper().bulkModel2dtoResp(referenceModelList)).thenReturn(referenceUserDtoRespList);
+        when(serviceMock.getUserService().findAll()).thenReturn(referenceModelList);
 
         List<UserDtoResp> dtoRespList = RestMockGeneric.getObjectMapper()
                 .readValue(
@@ -131,6 +131,12 @@ public class UserTests {
                 equalTo(referenceUserDtoRespList)
 
         );
+
+        Mockito.verify(mapperMock.getUserMapper(), Mockito.times(1)).bulkModel2dtoResp(referenceModelList);
+        Mockito.verify(serviceMock.getUserService(), Mockito.times(1)).findAll();
+
+        Mockito.verifyNoMoreInteractions(mapperMock.getUserMapper());
+        Mockito.verifyNoMoreInteractions(serviceMock.getUserService());
     }
 
 }
