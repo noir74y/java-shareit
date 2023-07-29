@@ -1,4 +1,4 @@
-package ru.practicum.shareit.generic;
+package ru.practicum.shareit.mock;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,16 +16,36 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Component
-public class GenericRestMock<Input, Output> {
+public class RestMockGeneric<Input, Output> {
+    private static ObjectMapper objectMapper;
     @Autowired
     private MockMvc mockMvc;
-    private static ObjectMapper objectMapper;
     private String dtoRespJsonString;
 
-    public GenericRestMock() {
+    public RestMockGeneric() {
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    }
+
+    public Output post(String url, Input dtoReq, Class<Output> outputClass) throws Exception {
+        dtoRespJsonString = mockMvc.perform(MockMvcRequestBuilders.post(url).contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dtoReq)))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
+        return objectMapper.readValue(dtoRespJsonString, outputClass);
+    }
+
+    public Output patch(String url, Input dtoReq, Class<Output> outputClass) throws Exception {
+        dtoRespJsonString = mockMvc.perform(MockMvcRequestBuilders.patch(url).contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dtoReq)))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
+        return objectMapper.readValue(dtoRespJsonString, outputClass);
+    }
+
+    public void deleteEntity(String url) throws Exception {
+        mockMvc.perform(delete(url));
     }
 
     public Output get(String url, Class<Output> outputClass) throws Exception {
@@ -49,25 +69,5 @@ public class GenericRestMock<Input, Output> {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(HttpStatus.OK.value()))
                 .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
-    }
-
-    public Output post(String url, Input dtoReq, Class<Output> outputClass) throws Exception {
-        dtoRespJsonString = mockMvc.perform(MockMvcRequestBuilders.post(url).contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(dtoReq)))
-                .andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
-        return objectMapper.readValue(dtoRespJsonString, outputClass);
-    }
-
-    public Output patch(String url, Input dtoReq, Class<Output> outputClass) throws Exception {
-        dtoRespJsonString = mockMvc.perform(MockMvcRequestBuilders.patch(url).contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(dtoReq)))
-                .andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
-        return objectMapper.readValue(dtoRespJsonString, outputClass);
-    }
-
-    public void deleteEntity(String url) throws Exception {
-        mockMvc.perform(delete(url));
     }
 }

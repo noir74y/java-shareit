@@ -1,12 +1,13 @@
 package ru.practicum.shareit.item.model;
 
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
 @Data
-@RequiredArgsConstructor
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Item {
     private Integer id;
     private String name;
