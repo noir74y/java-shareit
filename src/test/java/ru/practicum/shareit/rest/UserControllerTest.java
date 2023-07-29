@@ -24,6 +24,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @WebMvcTest(controllers = UserController.class)
@@ -78,8 +79,8 @@ public class UserControllerTest {
 
     @Test
     void delete() throws Exception {
+        doNothing().when(service).delete(userId);
         rest.delete(baseUrl + userId);
-
         Mockito.verify(service, Mockito.times(1)).delete(userId);
         Mockito.verifyNoMoreInteractions(service);
     }
@@ -91,7 +92,6 @@ public class UserControllerTest {
         assertThat(
                 rest.get(baseUrl + userId, UserDtoResp.class),
                 equalTo(dtoResp)
-
         );
 
         Mockito.verify(service, Mockito.times(1)).findById(userId);
@@ -100,8 +100,8 @@ public class UserControllerTest {
 
     @Test
     void findAll() throws Exception {
-        List<User> referenceModelList = List.of(model, model);
-        List<UserDtoResp> referenceUserDtoRespList = List.of(dtoResp, dtoResp);
+        List<User> referenceModelList = List.of(model);
+        List<UserDtoResp> referenceDtoRespList = List.of(dtoResp);
 
         when(service.findAll()).thenReturn(referenceModelList);
 
@@ -113,8 +113,7 @@ public class UserControllerTest {
 
         assertThat(
                 dtoRespList,
-                equalTo(referenceUserDtoRespList)
-
+                equalTo(referenceDtoRespList)
         );
 
         Mockito.verify(service, Mockito.times(1)).findAll();
