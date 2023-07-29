@@ -4,13 +4,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.Import;
-import ru.practicum.shareit.mock.MapperMock;
+import ru.practicum.shareit.mock.GenericTest;
 import ru.practicum.shareit.mock.RestMock;
 import ru.practicum.shareit.mock.RestMockGeneric;
-import ru.practicum.shareit.mock.ServiceMock;
 import ru.practicum.shareit.user.controller.UserController;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.model.UserDtoReq;
@@ -25,22 +22,15 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.when;
 
 @WebMvcTest(controllers = UserController.class)
-@Import({ServiceMock.class, MapperMock.class, RestMock.class})
-public class UserTests {
-    @Autowired
-    private RestMock restMock;
-    @Autowired
-    private ServiceMock serviceMock;
-    @Autowired
-    private MapperMock mapperMock;
-    RestMockGeneric<UserDtoReq,UserDtoResp> rest;
+public class UserTests extends GenericTest {
+    private final String baseUrl = "/users/";
+    RestMockGeneric<UserDtoReq, UserDtoResp> rest;
+    int userId = 1;
     private UserService service;
     private UserMapper mapper;
     private UserDtoReq referenceDtoReq;
     private User referenceModel;
     private UserDtoResp referenceDtoResp;
-    private final String baseUrl = "/users/";
-    int userId = 1;
 
     @BeforeEach
     void setUp() {
