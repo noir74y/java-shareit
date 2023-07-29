@@ -52,7 +52,7 @@ public class UserServiceDbImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public ArrayList<User> findAll() {
+    public List<User> findAll() {
         return userMapper.bulkEntity2model(userRepository.findAll());
     }
 }

@@ -8,6 +8,7 @@ import ru.practicum.shareit.user.model.UserMapper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -40,7 +41,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public ArrayList<User> findAll() {
+    public List<User> findAll() {
         return userMapper.bulkEntity2model(userEntities.values());
     }
 }

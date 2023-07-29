@@ -3,6 +3,7 @@ package ru.practicum.shareit.user.repository;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface UserDao {
     User create(User user);
@@ -13,5 +14,5 @@ public interface UserDao {
 
     User findById(int userId);
 
-    ArrayList<User> findAll();
+    List<User> findAll();
 }

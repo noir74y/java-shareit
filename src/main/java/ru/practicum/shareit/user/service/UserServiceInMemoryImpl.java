@@ -7,6 +7,7 @@ import ru.practicum.shareit.user.repository.UserDao;
 import ru.practicum.shareit.utils.exception.DuplicateEmailException;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -41,7 +42,7 @@ public class UserServiceInMemoryImpl implements ru.practicum.shareit.user.servic
     }
 
     @Override
-    public ArrayList<User> findAll() {
+    public List<User> findAll() {
         return userDao.findAll();
     }
 
