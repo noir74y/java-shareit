@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import ru.practicum.shareit.mock.RepositoryMock;
@@ -26,20 +27,18 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
 @SpringJUnitConfig(UserServiceImpl.class)
-@Import({UserMapper.class, ModelMapper.class, RepositoryMock.class})
+@Import({UserMapper.class, ModelMapper.class})
 public class UserServiceTest {
     int userId = 1;
     @Autowired
-    protected RepositoryMock repositoryMock;
-    @Autowired
     private UserServiceImpl service;
+    @MockBean
     private UserRepository repository;
     private User model;
     private UserEntity entity;
 
     @BeforeEach
     void setUp() {
-        repository = repositoryMock.getUserRepository();
         model = User.builder().id(userId).name("user").email("user@user.com").build();
         entity = UserEntity.builder().id(userId).name("user").email("user@user.com").build();
     }
