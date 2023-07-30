@@ -21,15 +21,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @JsonTest
 public class UserJsonTest {
-    @Autowired
-    private JacksonTester<UserDtoReq> dtoReqTester;
     UserDtoReq dtoReqObject;
     JsonContent<UserDtoReq> dtoReqJsonContent;
-
-    @Autowired
-    private JacksonTester<UserDtoResp> dtoRespTester;
     UserDtoResp dtoRespObject;
     JsonContent<UserDtoResp> dtoRespJsonContent;
+    @Autowired
+    private JacksonTester<UserDtoReq> dtoReqTester;
+    @Autowired
+    private JacksonTester<UserDtoResp> dtoRespTester;
 
     @Test
     void testDtoReq() throws IOException {

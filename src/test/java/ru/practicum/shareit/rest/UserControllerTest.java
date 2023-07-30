@@ -1,7 +1,6 @@
 package ru.practicum.shareit.rest;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -10,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
-import ru.practicum.shareit.mock.RestMock;
-import ru.practicum.shareit.mock.RestMockGeneric;
-import ru.practicum.shareit.mock.ServiceMock;
+import ru.practicum.shareit.generic.RestMockGeneric;
 import ru.practicum.shareit.user.controller.UserController;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.model.UserDtoReq;
@@ -32,12 +29,12 @@ import static org.mockito.Mockito.when;
 @WebMvcTest(controllers = UserController.class)
 @Import({RestMockGeneric.class, UserMapper.class, ModelMapper.class})
 public class UserControllerTest {
-    @MockBean
-    private UserService service;
     private final String baseUrl = "/users/";
     @Autowired
-    RestMockGeneric<UserDtoReq, UserDtoResp> rest;
+    RestMockGeneric<UserDtoReq, UserDtoResp> restMock;
     int userId = 1;
+    @MockBean
+    private UserService service;
     private UserDtoReq dtoReq;
     private User model;
     private UserDtoResp dtoResp;
@@ -54,7 +51,7 @@ public class UserControllerTest {
         when(service.create(any())).thenReturn(model);
 
         assertThat(
-                rest.post(baseUrl, dtoReq, UserDtoResp.class),
+                restMock.post(baseUrl, dtoReq, UserDtoResp.class),
                 equalTo(dtoResp)
         );
 
@@ -67,7 +64,7 @@ public class UserControllerTest {
         when(service.update(any(), anyInt())).thenReturn(model);
 
         assertThat(
-                rest.patch(baseUrl + userId, dtoReq, UserDtoResp.class),
+                restMock.patch(baseUrl + userId, dtoReq, UserDtoResp.class),
                 equalTo(dtoResp)
         );
 
@@ -78,7 +75,7 @@ public class UserControllerTest {
     @Test
     void delete() throws Exception {
         doNothing().when(service).delete(userId);
-        rest.delete(baseUrl + userId);
+        restMock.delete(baseUrl + userId);
         Mockito.verify(service, Mockito.times(1)).delete(userId);
         Mockito.verifyNoMoreInteractions(service);
     }
@@ -88,7 +85,7 @@ public class UserControllerTest {
         when(service.findById(userId)).thenReturn(model);
 
         assertThat(
-                rest.get(baseUrl + userId, UserDtoResp.class),
+                restMock.get(baseUrl + userId, UserDtoResp.class),
                 equalTo(dtoResp)
         );
 
@@ -105,7 +102,7 @@ public class UserControllerTest {
 
         List<UserDtoResp> dtoRespList = RestMockGeneric.getObjectMapper()
                 .readValue(
-                        rest.get(baseUrl),
+                        restMock.get(baseUrl),
                         new TypeReference<>() {
                         });
 

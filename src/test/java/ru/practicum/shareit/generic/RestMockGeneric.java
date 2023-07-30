@@ -1,4 +1,4 @@
-package ru.practicum.shareit.mock;
+package ru.practicum.shareit.generic;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
