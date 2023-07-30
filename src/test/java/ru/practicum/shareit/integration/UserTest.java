@@ -30,7 +30,10 @@ public class UserTest {
 
         assertThat(
                 rest.post(baseUrl, dtoReq, UserDtoResp.class),
-                equalTo(UserDtoResp.builder().id(1).name("user").email("user@user.com").build())
+                equalTo(UserDtoResp.builder()
+                        .id(1)
+                        .name(dtoReq.getName())
+                        .email(dtoReq.getEmail()).build())
         );
     }
 
@@ -44,7 +47,10 @@ public class UserTest {
 
         assertThat(
                 rest.patch(baseUrl + dtoResp.getId(), dtoReq, UserDtoResp.class),
-                equalTo(UserDtoResp.builder().id(dtoResp.getId()).name("update").email("update@user.com").build())
+                equalTo(UserDtoResp.builder()
+                        .id(dtoResp.getId())
+                        .name(dtoReq.getName())
+                        .email(dtoReq.getEmail()).build())
         );
     }
 
