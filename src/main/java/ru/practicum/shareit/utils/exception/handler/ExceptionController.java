@@ -19,8 +19,6 @@ public class ExceptionController {
 
         if (exception instanceof NotFoundException)
             appException = (NotFoundException) exception;
-        else if (exception instanceof DuplicateEmailException)
-            appException = (DuplicateEmailException) exception;
         else if (exception instanceof ForbiddenException)
             appException = (ForbiddenException) exception;
         else if (exception instanceof CustomValidationException)
