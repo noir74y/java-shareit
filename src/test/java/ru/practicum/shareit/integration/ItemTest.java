@@ -1,5 +1,6 @@
 package ru.practicum.shareit.integration;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,10 @@ import org.springframework.test.context.jdbc.Sql;
 import ru.practicum.shareit.generic.RestMockGeneric;
 import ru.practicum.shareit.item.model.ItemDtoReq;
 import ru.practicum.shareit.item.model.ItemDtoResp;
+import ru.practicum.shareit.user.model.UserDtoResp;
 
 import java.util.Collections;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -79,18 +82,26 @@ public class ItemTest {
     }
 
 
-//    @Test
-//    @Sql(scripts = "/populate-users.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-//    void findByOwner() throws Exception {
-//        var dtoReq = ItemDtoReq.builder().name("Дрель").description("Простая дрель").available(true).build();
-//        var dtoResp = rest.post(baseUrl, dtoReq, ItemDtoResp.class, requestorId);
-//        dtoResp.setComments(Collections.emptyList());
-//
-//        assertThat(
-//                rest.get(baseUrl + dtoResp.getId(), ItemDtoResp.class, requestorId),
-//                equalTo(dtoResp)
-//        );
-//    }
+    @Test
+    @Sql(scripts = "/populate-users.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    void findByOwner() throws Exception {
+        var dtoReq = ItemDtoReq.builder().name("Дрель").description("Простая дрель").available(true).build();
+        var dtoResp = rest.post(baseUrl, dtoReq, ItemDtoResp.class, requestorId);
+        dtoResp.setComments(Collections.emptyList());
+
+        requestorId = 2;
+
+        List<ItemDtoResp> dtoRespList = RestMockGeneric.getObjectMapper()
+                .readValue(
+                        rest.get(baseUrl, requestorId),
+                        new TypeReference<>() {
+                        });
+
+        assertThat(
+                dtoRespList,
+                equalTo(Collections.emptyList())
+        );
+    }
 
 //
 //    @Test
