@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @JsonTest
-public class UserJsonTest {
+public class UserDtoTest {
     UserDtoReq dtoReqObject;
     JsonContent<UserDtoReq> dtoReqJsonContent;
     UserDtoResp dtoRespObject;

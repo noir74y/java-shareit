@@ -27,23 +27,24 @@ public class UserTest {
     @Test
     void create() throws Exception {
         var dtoReq = UserDtoReq.builder().name("user").email("user@user.com").build();
-        var dtoRespReference = UserDtoResp.builder().id(1).name("user").email("user@user.com").build();
-        var dtoRespToCheck = rest.post(baseUrl, dtoReq, UserDtoResp.class);
-        assertThat(dtoRespToCheck, equalTo(dtoRespReference));
+
+        assertThat(
+                rest.post(baseUrl, dtoReq, UserDtoResp.class),
+                equalTo(UserDtoResp.builder().id(1).name("user").email("user@user.com").build())
+        );
     }
 
     @Test
     void update() throws Exception {
         var dtoReq = UserDtoReq.builder().name("user").email("user@user.com").build();
-        rest.post(baseUrl, dtoReq, UserDtoResp.class);
+        var dtoResp = rest.post(baseUrl, dtoReq, UserDtoResp.class);
 
         dtoReq.setName("update");
         dtoReq.setEmail("update@user.com");
-        var dtoResp = UserDtoResp.builder().id(1).name("update").email("update@user.com").build();
 
         assertThat(
                 rest.patch(baseUrl + dtoResp.getId(), dtoReq, UserDtoResp.class),
-                equalTo(dtoResp)
+                equalTo(UserDtoResp.builder().id(dtoResp.getId()).name("update").email("update@user.com").build())
         );
     }
 
