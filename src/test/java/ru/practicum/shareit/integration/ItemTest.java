@@ -11,7 +11,6 @@ import org.springframework.test.context.jdbc.Sql;
 import ru.practicum.shareit.generic.RestMockGeneric;
 import ru.practicum.shareit.item.model.ItemDtoReq;
 import ru.practicum.shareit.item.model.ItemDtoResp;
-import ru.practicum.shareit.user.model.UserDtoResp;
 
 import java.util.Collections;
 import java.util.List;
@@ -81,13 +80,11 @@ public class ItemTest {
         );
     }
 
-
     @Test
     @Sql(scripts = "/populate-users.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void findByOwner() throws Exception {
         var dtoReq = ItemDtoReq.builder().name("Дрель").description("Простая дрель").available(true).build();
-        var dtoResp = rest.post(baseUrl, dtoReq, ItemDtoResp.class, requestorId);
-        dtoResp.setComments(Collections.emptyList());
+        rest.post(baseUrl, dtoReq, ItemDtoResp.class, requestorId);
 
         requestorId = 2;
 
@@ -103,23 +100,28 @@ public class ItemTest {
         );
     }
 
-//
-//    @Test
-//    void findAll() throws Exception {
-//        var dtoReq1 = UserDtoReq.builder().name("user1").email("use1r@user.com").build();
-//        var dtoResp1 = rest.post(baseUrl, dtoReq1, UserDtoResp.class);
-//        var dtoReq2 = UserDtoReq.builder().name("user2").email("user2@user.com").build();
-//        var dtoResp2 = rest.post(baseUrl, dtoReq2, UserDtoResp.class);
-//
-//        List<UserDtoResp> dtoRespList = RestMockGeneric.getObjectMapper()
-//                .readValue(
-//                        rest.get(baseUrl),
-//                        new TypeReference<>() {
-//                        });
-//
-//        assertThat(
-//                dtoRespList,
-//                equalTo(List.of(dtoResp1, dtoResp2))
-//        );
-//    }
+    @Test
+    @Sql(scripts = "/populate-users.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    void findByText() throws Exception {
+        var dtoReq = ItemDtoReq.builder().name("Дрель").description("Простая дрель").available(true).build();
+        rest.post(baseUrl, dtoReq, ItemDtoResp.class, requestorId);
+
+        dtoReq.setDescription("Сложная дрель");
+        var dtoResp = rest.post(baseUrl, dtoReq, ItemDtoResp.class, requestorId);
+
+        List<ItemDtoResp> dtoRespList = RestMockGeneric.getObjectMapper()
+                .readValue(
+                        rest.get(baseUrl + "search?text=Сложная", requestorId),
+                        new TypeReference<>() {
+                        });
+
+        assertThat(
+                dtoRespList,
+                equalTo(List.of(ItemDtoResp.builder()
+                        .id(dtoResp.getId())
+                        .name(dtoResp.getName())
+                        .description(dtoResp.getDescription())
+                        .available(dtoResp.getAvailable()).build()))
+        );
+    }
 }
