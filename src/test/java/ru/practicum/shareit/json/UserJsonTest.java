@@ -7,6 +7,7 @@ import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.json.JsonContent;
 import ru.practicum.shareit.user.model.UserDtoReq;
 import ru.practicum.shareit.user.model.UserDtoResp;
+import ru.practicum.shareit.utils.validation.OnCreate;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -48,7 +49,7 @@ public class UserJsonTest {
 
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
-        Set<ConstraintViolation<UserDtoReq>> violations = validator.validate(dtoReqObject);
+        Set<ConstraintViolation<UserDtoReq>> violations = validator.validate(dtoReqObject, OnCreate.class);
         assertFalse(violations.isEmpty());
     }
 
