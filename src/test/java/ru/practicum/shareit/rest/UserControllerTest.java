@@ -8,6 +8,7 @@ import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import ru.practicum.shareit.mock.RestMock;
 import ru.practicum.shareit.mock.RestMockGeneric;
@@ -29,24 +30,20 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @WebMvcTest(controllers = UserController.class)
-@Import({RestMock.class, ServiceMock.class, UserMapper.class, ModelMapper.class})
+@Import({RestMockGeneric.class, UserMapper.class, ModelMapper.class})
 public class UserControllerTest {
-    @Autowired
-    protected RestMock restMock;
-    @Autowired
-    protected ServiceMock serviceMock;
+    @MockBean
+    private UserService service;
     private final String baseUrl = "/users/";
+    @Autowired
     RestMockGeneric<UserDtoReq, UserDtoResp> rest;
     int userId = 1;
-    private UserService service;
     private UserDtoReq dtoReq;
     private User model;
     private UserDtoResp dtoResp;
 
     @BeforeEach
     void setUp() {
-        service = serviceMock.getUserService();
-        rest = restMock.getUserRest();
         dtoReq = UserDtoReq.builder().name("user").email("user@user.com").build();
         model = User.builder().id(userId).name("user").email("user@user.com").build();
         dtoResp = UserDtoResp.builder().id(userId).name("user").email("user@user.com").build();
