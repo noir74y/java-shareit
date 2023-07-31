@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlGroup;
 import ru.practicum.shareit.user.model.UserEntity;
 import ru.practicum.shareit.user.repository.UserRepository;
 
@@ -27,12 +28,10 @@ public class UserRepositoryTest {
     void setUp() {
         entity1 = UserEntity.builder().id(1).name("user1").email("user1@user.com").build();
         entity2 = UserEntity.builder().id(2).name("user2").email("user2@user.com").build();
-        repository.save(entity1);
-        repository.save(entity2);
     }
 
     @Test
-    @Sql({"/schema.sql"})
+    @Sql({"/schema.sql", "/user_repository_test.sql"})
     void update() {
         entity2.setName("user3");
         repository.save(entity2);
@@ -43,7 +42,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    @Sql({"/schema.sql"})
+    @Sql({"/schema.sql", "/user_repository_test.sql"})
     void delete() {
         repository.deleteById(entity1.getId());
         repository.delete(entity2);
@@ -54,7 +53,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    @Sql({"/schema.sql"})
+    @Sql({"/schema.sql", "/user_repository_test.sql"})
     void findById() {
         assertThat(
                 repository.findById(entity1.getId()).orElse(null),
@@ -63,7 +62,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    @Sql({"/schema.sql"})
+    @Sql({"/schema.sql", "/user_repository_test.sql"})
     void findAll() {
         assertThat(
                 repository.findAll(),
