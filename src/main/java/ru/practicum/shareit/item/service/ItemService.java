@@ -5,6 +5,7 @@ import ru.practicum.shareit.item.model.CommentEntity;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface ItemService {
     Item create(int requestorId, Item item) throws Throwable;
@@ -13,9 +14,9 @@ public interface ItemService {
 
     Item findById(int requestorId, int itemId);
 
-    ArrayList<Item> findByOwner(int requestorId);
+    List<Item> findByOwner(int requestorId);
 
-    ArrayList<Item> findByText(int requestorId, String text);
+    List<Item> findByText(int requestorId, String text);
 
     CommentEntity create(Integer requestorId, Integer itemId, CommentDtoReq dtoReq) throws Throwable;
 }

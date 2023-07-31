@@ -11,6 +11,7 @@ import ru.practicum.shareit.utils.validation.OnCreate;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.List;
 
 import static ru.practicum.shareit.utils.AppConstants.HEADER_USER_ID;
 
@@ -56,13 +57,13 @@ public class ItemController {
     }
 
     @GetMapping
-    public ArrayList<ItemDtoResp> findByOwner(@RequestHeader(HEADER_USER_ID) int requestorId) {
+    public List<ItemDtoResp> findByOwner(@RequestHeader(HEADER_USER_ID) int requestorId) {
         log.info("requestorId={} GET /items", requestorId);
         return itemMapper.bulkModel2dtoResp(itemService.findByOwner(requestorId));
     }
 
     @GetMapping("/search")
-    public ArrayList<ItemDtoResp> findByText(@RequestHeader(HEADER_USER_ID) @NotNull int requestorId,
+    public List<ItemDtoResp> findByText(@RequestHeader(HEADER_USER_ID) @NotNull int requestorId,
                                              @RequestParam(value = "text") String text) {
         log.info("requestorId={}, GET /search?text={}", requestorId, text);
         return itemMapper.bulkModel2dtoResp(itemService.findByText(requestorId, text));

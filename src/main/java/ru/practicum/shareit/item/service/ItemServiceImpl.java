@@ -16,6 +16,7 @@ import ru.practicum.shareit.utils.exception.NotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -79,7 +80,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional(readOnly = true)
-    public ArrayList<Item> findByOwner(int requestorId) {
+    public List<Item> findByOwner(int requestorId) {
         return itemRepository.findAllByOwnerIdOrderById(requestorId).stream()
                 .map(itemEntity -> setLastNextBookingsAndCommentsAndMapToItem(itemEntity, requestorId))
                 .collect(Collectors.toCollection(ArrayList::new));
@@ -87,7 +88,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional(readOnly = true)
-    public ArrayList<Item> findByText(int requestorId, String text) {
+    public List<Item> findByText(int requestorId, String text) {
         return !text.isBlank() ? itemMapper.bulkEntity2model(itemRepository.search(text)) : new ArrayList<>();
     }
 
