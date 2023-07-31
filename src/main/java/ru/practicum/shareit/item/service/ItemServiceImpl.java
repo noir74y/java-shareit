@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Primary
-public class ItemServiceImpl implements ItemService, CommentService {
+public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final ItemMapper itemMapper;
     private final UserService userService;

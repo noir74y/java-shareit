@@ -1,4 +1,4 @@
-package ru.practicum.shareit.generic;
+package ru.practicum.shareit.rest;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;

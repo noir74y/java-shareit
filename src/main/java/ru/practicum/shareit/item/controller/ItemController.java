@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.model.*;
-import ru.practicum.shareit.item.service.CommentService;
 import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.utils.validation.OnCreate;
 
@@ -22,7 +21,6 @@ import static ru.practicum.shareit.utils.AppConstants.HEADER_USER_ID;
 public class ItemController {
     private final ItemService itemService;
     private final ItemMapper itemMapper;
-    private final CommentService commentService;
     private final CommentMapper commentMapper;
 
     @PostMapping
@@ -39,7 +37,7 @@ public class ItemController {
                                  @Valid @RequestBody CommentDtoReq dtoReq
     ) throws Throwable {
         log.info("requestorId={}, POST /items/{}/comment {}", requestorId, itemId, dtoReq);
-        return commentMapper.entity2dtoResp(commentService.create(requestorId, itemId, dtoReq));
+        return commentMapper.entity2dtoResp(itemService.create(requestorId, itemId, dtoReq));
     }
 
     @PatchMapping("/{itemId}")

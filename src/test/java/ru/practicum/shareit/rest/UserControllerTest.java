@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
-import ru.practicum.shareit.generic.RestMockGeneric;
 import ru.practicum.shareit.user.controller.UserController;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.model.UserDtoReq;

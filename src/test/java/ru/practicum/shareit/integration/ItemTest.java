@@ -8,7 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
-import ru.practicum.shareit.generic.RestMockGeneric;
+import ru.practicum.shareit.rest.RestMockGeneric;
 import ru.practicum.shareit.item.model.ItemDtoReq;
 import ru.practicum.shareit.item.model.ItemDtoResp;
 
