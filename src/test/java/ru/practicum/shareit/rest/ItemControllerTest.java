@@ -65,19 +65,19 @@ public class ItemControllerTest {
         Mockito.verifyNoMoreInteractions(service);
     }
 
-//
-//    @Test
-//    void find() throws Throwable {
-//        when(service.findById(userId)).thenReturn(model);
-//
-//        assertThat(
-//                restMock.get(baseUrl + userId, UserDtoResp.class),
-//                equalTo(dtoResp)
-//        );
-//
-//        Mockito.verify(service, Mockito.times(1)).findById(userId);
-//        Mockito.verifyNoMoreInteractions(service);
-//    }
+    @Test
+    void findById() throws Throwable {
+        when(service.findById(anyInt(), anyInt())).thenReturn(model);
+
+        assertThat(
+                restMock.get(baseUrl + dtoResp.getId(), ItemDtoResp.class, requestorId),
+                equalTo(dtoResp)
+        );
+
+        Mockito.verify(service, Mockito.times(1)).findById(anyInt(), anyInt());
+        Mockito.verifyNoMoreInteractions(service);
+    }
+
 //
 //    @Test
 //    void findAll() throws Exception {
