@@ -85,7 +85,12 @@ public class UserServiceTest {
     @Test
     void findById() throws Throwable {
         when(repository.findById(any())).thenReturn(Optional.ofNullable(entity));
-        service.findById(userId);
+
+        assertThat(
+                service.findById(userId),
+                equalTo(model)
+        );
+
         Mockito.verify(repository, Mockito.times(1)).findById(userId);
         Mockito.verifyNoMoreInteractions(repository);
     }
@@ -105,8 +110,8 @@ public class UserServiceTest {
 
     @Test
     void findAll() {
-        List<User> referenceModelList = List.of(model);
-        List<UserEntity> referenceEntityList = List.of(entity);
+        var referenceModelList = List.of(model);
+        var referenceEntityList = List.of(entity);
         when(repository.findAll()).thenReturn(referenceEntityList);
 
         assertThat(

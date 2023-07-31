@@ -24,6 +24,8 @@ import ru.practicum.shareit.user.service.UserServiceImpl;
 import ru.practicum.shareit.utils.exception.ForbiddenException;
 import ru.practicum.shareit.utils.exception.NotFoundException;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -54,7 +56,7 @@ public class ItemServiceTest {
     @BeforeEach
     void setUp() {
         owner = UserEntity.builder().id(1).name("user").email("user@user.com").build();
-        model = Item.builder().id(1).name("Дрель").description("Простая дрель").available(true).ownerId(1).build();
+        model = Item.builder().id(1).name("Дрель").description("Простая дрель").available(true).comments(Collections.emptyList()).ownerId(1).build();
         entity = ItemEntity.builder().id(model.getId()).name(model.getName()).description(model.getDescription()).available(model.getAvailable()).owner(owner).build();
     }
 
@@ -62,6 +64,7 @@ public class ItemServiceTest {
     void create() throws Throwable {
         when(userRepository.findById(anyInt())).thenReturn(Optional.ofNullable(owner));
         when(itemRepository.save(any())).thenReturn(entity);
+        model.setComments(null);
 
         assertThat(
                 service.create(requestorId, model),
@@ -130,16 +133,32 @@ public class ItemServiceTest {
         Mockito.verifyNoMoreInteractions(itemRepository);
     }
 
+    @Test
+    void findById() throws Throwable {
+        when(itemRepository.findById(anyInt())).thenReturn(Optional.ofNullable(entity));
 
-//
-//    @Test
-//    void findById() throws Throwable {
-//        when(repository.findById(any())).thenReturn(Optional.ofNullable(entity));
-//        service.findById(userId);
-//        Mockito.verify(repository, Mockito.times(1)).findById(userId);
-//        Mockito.verifyNoMoreInteractions(repository);
-//    }
-//
+        assertThat(
+                service.findById(requestorId, model.getId()),
+                equalTo(model)
+        );
+
+        Mockito.verify(itemRepository, Mockito.times(1)).findById(model.getId());
+        Mockito.verifyNoMoreInteractions(itemRepository);
+    }
+
+    @Test
+    void findByOwner() throws Throwable {
+        when(itemRepository.findAllByOwnerIdOrderById(anyInt())).thenReturn(List.of(entity));
+
+        assertThat(
+                service.findByOwner(requestorId),
+                equalTo(List.of(model))
+        );
+
+        Mockito.verify(itemRepository, Mockito.times(1)).findAllByOwnerIdOrderById(model.getId());
+        Mockito.verifyNoMoreInteractions(itemRepository);
+    }
+
 //    @Test
 //    void findById_NotFound() throws Throwable {
 //        int wrongUserId = 2;
