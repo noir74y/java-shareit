@@ -1,5 +1,6 @@
 package ru.practicum.shareit.rest;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -13,10 +14,11 @@ import ru.practicum.shareit.item.model.*;
 import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.user.model.UserMapper;
 
+import java.util.List;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @WebMvcTest(controllers = ItemController.class)
@@ -78,27 +80,48 @@ public class ItemControllerTest {
         Mockito.verifyNoMoreInteractions(service);
     }
 
-//
-//    @Test
-//    void findAll() throws Exception {
-//        List<User> referenceModelList = List.of(model);
-//        List<UserDtoResp> referenceDtoRespList = List.of(dtoResp);
-//
-//        when(service.findAll()).thenReturn(referenceModelList);
-//
-//        List<UserDtoResp> dtoRespList = RestMockGeneric.getObjectMapper()
-//                .readValue(
-//                        restMock.get(baseUrl),
-//                        new TypeReference<>() {
-//                        });
-//
-//        assertThat(
-//                dtoRespList,
-//                equalTo(referenceDtoRespList)
-//        );
-//
-//        Mockito.verify(service, Mockito.times(1)).findAll();
-//        Mockito.verifyNoMoreInteractions(service);
-//    }
+    @Test
+    void findByOwner() throws Exception {
+        var referenceModelList = List.of(model);
+        var referenceDtoRespList = List.of(dtoResp);
+
+        when(service.findByOwner(anyInt())).thenReturn(referenceModelList);
+
+        List<ItemDtoResp> dtoRespList = RestMockGeneric.getObjectMapper()
+                .readValue(
+                        restMock.get(baseUrl, requestorId),
+                        new TypeReference<>() {
+                        });
+
+        assertThat(
+                dtoRespList,
+                equalTo(referenceDtoRespList)
+        );
+
+        Mockito.verify(service, Mockito.times(1)).findByOwner(anyInt());
+        Mockito.verifyNoMoreInteractions(service);
+    }
+
+    @Test
+    void findByText() throws Exception {
+        var referenceModelList = List.of(model);
+        var referenceDtoRespList = List.of(dtoResp);
+
+        when(service.findByText(anyInt(), anyString())).thenReturn(referenceModelList);
+
+        List<ItemDtoResp> dtoRespList = RestMockGeneric.getObjectMapper()
+                .readValue(
+                        restMock.get(baseUrl + "search?text=SomePattern", requestorId),
+                        new TypeReference<>() {
+                        });
+
+        assertThat(
+                dtoRespList,
+                equalTo(referenceDtoRespList)
+        );
+
+        Mockito.verify(service, Mockito.times(1)).findByText(anyInt(), anyString());
+        Mockito.verifyNoMoreInteractions(service);
+    }
 
 }
