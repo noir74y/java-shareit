@@ -85,34 +85,25 @@ public class ItemServiceTest {
         Mockito.verifyNoMoreInteractions(userRepository,itemRepository);
     }
 
-//
-//    @Test
-//    void update() throws Throwable {
-//        var changedUser = User.builder().id(userId).name("user2").email("user2@user.com").build();
-//        var changedUserEntity = UserEntity.builder().id(userId).name("user2").email("user2@user.com").build();
-//
-//        when(repository.findById(any())).thenReturn(Optional.ofNullable(entity));
-//        when(repository.save(any())).thenReturn(changedUserEntity);
-//
-//        var returnValue = service.update(changedUser, userId);
-//
-//        assertThat(
-//                returnValue,
-//                equalTo(changedUser)
-//        );
-//
-//        Mockito.verify(repository, Mockito.times(1)).save(changedUserEntity);
-//        Mockito.verify(repository, Mockito.times(1)).findById(userId);
-//        Mockito.verifyNoMoreInteractions(repository);
-//    }
-//
-//    @Test
-//    void delete() {
-//        doNothing().when(repository).deleteById(anyInt());
-//        service.delete(userId);
-//        Mockito.verify(repository, Mockito.times(1)).deleteAllById(any());
-//        Mockito.verifyNoMoreInteractions(repository);
-//    }
+    @Test
+    void update() throws Throwable {
+        var changedModel = Item.builder().id(model.getId()).name(model.getName()).description("Сложная дрель").available(model.getAvailable()).ownerId(model.getOwnerId()).build();
+        var changedEntity = ItemEntity.builder().id(changedModel.getId()).name(changedModel.getName()).description(changedModel.getDescription()).available(changedModel.getAvailable()).owner(owner).build();
+
+        when(itemRepository.findById(any())).thenReturn(Optional.ofNullable(entity));
+        when(itemRepository.save(any())).thenReturn(changedEntity);
+
+        assertThat(
+                service.update(requestorId, changedModel, model.getId()),
+                equalTo(changedModel)
+        );
+
+        Mockito.verify(itemRepository, Mockito.times(1)).findById(model.getId());
+        Mockito.verify(itemRepository, Mockito.times(1)).save(changedEntity);
+        Mockito.verifyNoMoreInteractions(itemRepository);
+    }
+
+
 //
 //    @Test
 //    void findById() throws Throwable {

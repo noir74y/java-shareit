@@ -27,8 +27,6 @@ public class ItemEntity {
     @JoinColumn(name = "owner_id")
     private UserEntity owner;
     private Integer requestId;
-    @Transient
-    private Integer ownerUserId;
 
     public boolean isItemRelevantForText(Pattern pattern) {
         Matcher matcherName = pattern.matcher(name);

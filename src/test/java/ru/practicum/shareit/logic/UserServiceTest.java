@@ -58,20 +58,18 @@ public class UserServiceTest {
 
     @Test
     void update() throws Throwable {
-        var changedUser = User.builder().id(userId).name("user2").email("user2@user.com").build();
-        var changedUserEntity = UserEntity.builder().id(userId).name("user2").email("user2@user.com").build();
+        var changedModel = User.builder().id(userId).name("user2").email("user2@user.com").build();
+        var changedEntity = UserEntity.builder().id(userId).name("user2").email("user2@user.com").build();
 
         when(repository.findById(any())).thenReturn(Optional.ofNullable(entity));
-        when(repository.save(any())).thenReturn(changedUserEntity);
-
-        var returnValue = service.update(changedUser, userId);
+        when(repository.save(any())).thenReturn(changedEntity);
 
         assertThat(
-                returnValue,
-                equalTo(changedUser)
+                service.update(changedModel, userId),
+                equalTo(changedModel)
         );
 
-        Mockito.verify(repository, Mockito.times(1)).save(changedUserEntity);
+        Mockito.verify(repository, Mockito.times(1)).save(changedEntity);
         Mockito.verify(repository, Mockito.times(1)).findById(userId);
         Mockito.verifyNoMoreInteractions(repository);
     }
