@@ -17,7 +17,7 @@ import java.nio.charset.StandardCharsets;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Component
-public class RestMockGeneric<Input, Output> {
+public class RestMockGeneric<DtoIn, DtoOut> {
     @Getter
     private static ObjectMapper objectMapper;
     @Autowired
@@ -30,7 +30,7 @@ public class RestMockGeneric<Input, Output> {
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
-    public Output post(String url, Input dtoReq, Class<Output> outputClass, Integer... requestorId) throws Exception {
+    public DtoOut post(String url, DtoIn dtoReq, Class<DtoOut> outputClass, Integer... requestorId) throws Exception {
         dtoRespJsonString = mockMvc.perform(
                         MockMvcRequestBuilders.post(url)
                                 .header(AppConstants.HEADER_USER_ID, requestorId.length != 0 ? requestorId[0] : "")
@@ -43,7 +43,7 @@ public class RestMockGeneric<Input, Output> {
         return objectMapper.readValue(dtoRespJsonString, outputClass);
     }
 
-    public Output patch(String url, Input dtoReq, Class<Output> outputClass, Integer... requestorId) throws Exception {
+    public DtoOut patch(String url, DtoIn dtoReq, Class<DtoOut> outputClass, Integer... requestorId) throws Exception {
         dtoRespJsonString = mockMvc.perform(MockMvcRequestBuilders.patch(url)
                         .header(AppConstants.HEADER_USER_ID, requestorId.length != 0 ? requestorId[0] : "")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -60,7 +60,7 @@ public class RestMockGeneric<Input, Output> {
                 .header(AppConstants.HEADER_USER_ID, requestorId.length != 0 ? requestorId[0] : ""));
     }
 
-    public Output get(String url, Class<Output> outputClass, Integer... requestorId) throws Exception {
+    public DtoOut get(String url, Class<DtoOut> outputClass, Integer... requestorId) throws Exception {
         dtoRespJsonString = mockMvc.perform(MockMvcRequestBuilders.get(url)
                         .header(AppConstants.HEADER_USER_ID, requestorId.length != 0 ? requestorId[0] : "")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -79,7 +79,7 @@ public class RestMockGeneric<Input, Output> {
                 .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
     }
 
-    public Output get(String url, int httpResponseCode, Class<Output> outputClass) throws Exception {
+    public DtoOut get(String url, int httpResponseCode, Class<DtoOut> outputClass) throws Exception {
         dtoRespJsonString = mockMvc.perform(MockMvcRequestBuilders.get(url)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(httpResponseCode))
