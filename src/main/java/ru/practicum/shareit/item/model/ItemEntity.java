@@ -27,10 +27,4 @@ public class ItemEntity {
     @JoinColumn(name = "owner_id")
     private UserEntity owner;
     private Integer requestId;
-
-    public boolean isItemRelevantForText(Pattern pattern) {
-        Matcher matcherName = pattern.matcher(name);
-        Matcher matcherDescription = pattern.matcher(description);
-        return matcherName.matches() || matcherDescription.matches();
-    }
 }

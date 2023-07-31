@@ -15,7 +15,9 @@ import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.model.UserEntity;
 import ru.practicum.shareit.user.model.UserMapper;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -59,6 +61,15 @@ public class ItemRepositoryTest {
                         .map(ItemForRequestView::getItemDtoResp)
                         .collect(Collectors.toList()),
                 equalTo(List.of(itemMapper.model2dtoResp(itemMapper.entity2model(entity2))))
+        );
+    }
+
+    @Test
+    @Sql({"/schema.sql", "/populate_data.sql"})
+    void findAllByRequestIdIn() {
+        assertThat(
+                new ArrayList<>(repository.findAllByRequestIdIn(Set.of(1))),
+                equalTo(List.of(entity1))
         );
     }
 }

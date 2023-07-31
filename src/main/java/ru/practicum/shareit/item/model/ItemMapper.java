@@ -26,10 +26,6 @@ public class ItemMapper {
         return Optional.ofNullable(model).map(obj -> modelMapper.map(obj, ItemDtoResp.class)).orElse(null);
     }
 
-    public ItemEntity model2entity(Item model) {
-        return Optional.ofNullable(model).map(obj -> modelMapper.map(obj, ItemEntity.class)).orElse(null);
-    }
-
     public ItemEntity model2entity(Item model, UserEntity userEntity) {
         ItemEntity entity;
         try {
