@@ -30,8 +30,7 @@ import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @SpringJUnitConfig(ItemServiceImpl.class)
@@ -73,7 +72,7 @@ public class ItemServiceTest {
 
         Mockito.verify(userRepository, Mockito.times(1)).findById(anyInt());
         Mockito.verify(itemRepository, Mockito.times(1)).save(entity);
-        Mockito.verifyNoMoreInteractions(userRepository,itemRepository);
+        Mockito.verifyNoMoreInteractions(userRepository, itemRepository);
     }
 
     @Test
@@ -159,32 +158,17 @@ public class ItemServiceTest {
         Mockito.verifyNoMoreInteractions(itemRepository);
     }
 
-//    @Test
-//    void findById_NotFound() throws Throwable {
-//        int wrongUserId = 2;
-//        when(repository.findById(any())).thenThrow(new NotFoundException("no user with such id", String.valueOf(wrongUserId)));
-//
-//        NotFoundException exception = Assertions.assertThrows(
-//                NotFoundException.class,
-//                () -> service.findById(wrongUserId));
-//
-//        Mockito.verify(repository, Mockito.times(1)).findById(wrongUserId);
-//        Mockito.verifyNoMoreInteractions(repository);
-//    }
-//
-//    @Test
-//    void findAll() {
-//        List<User> referenceModelList = List.of(model);
-//        List<UserEntity> referenceEntityList = List.of(entity);
-//        when(repository.findAll()).thenReturn(referenceEntityList);
-//
-//        assertThat(
-//                service.findAll(),
-//                equalTo(referenceModelList)
-//        );
-//
-//        Mockito.verify(repository, Mockito.times(1)).findAll();
-//        Mockito.verifyNoMoreInteractions(repository);
-//    }
+    @Test
+    void findByText() throws Throwable {
+        when(itemRepository.search(anyString())).thenReturn(List.of(entity));
+        model.setComments(null);
 
+        assertThat(
+                service.findByText(requestorId, "SearchPattern"),
+                equalTo(List.of(model))
+        );
+
+        Mockito.verify(itemRepository, Mockito.times(1)).search("SearchPattern");
+        Mockito.verifyNoMoreInteractions(itemRepository);
+    }
 }
