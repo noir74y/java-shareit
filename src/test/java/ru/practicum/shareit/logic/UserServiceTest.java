@@ -40,7 +40,7 @@ public class UserServiceTest {
     @BeforeEach
     void setUp() {
         model = User.builder().id(userId).name("user").email("user@user.com").build();
-        entity = UserEntity.builder().id(userId).name("user").email("user@user.com").build();
+        entity = UserEntity.builder().id(model.getId()).name(model.getName()).email(model.getEmail()).build();
     }
 
     @Test

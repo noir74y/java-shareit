@@ -1,6 +1,5 @@
 package ru.practicum.shareit.logic;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -17,27 +16,23 @@ import ru.practicum.shareit.item.model.ItemMapper;
 import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.item.service.ItemServiceImpl;
-import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.model.UserEntity;
 import ru.practicum.shareit.user.model.UserMapper;
 import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.user.service.UserServiceImpl;
-import ru.practicum.shareit.utils.exception.NotFoundException;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @SpringJUnitConfig(ItemServiceImpl.class)
 @Import({ItemMapper.class, ModelMapper.class, UserMapper.class, UserServiceImpl.class, CommentMapper.class})
 public class ItemServiceTest {
-    int userId = 1;
+    int requestorId = 1;
     @Autowired
     private ItemServiceImpl service;
     @MockBean
@@ -48,27 +43,31 @@ public class ItemServiceTest {
     private BookingRepository bookingRepository;
     @MockBean
     private CommentRepository commentRepository;
-
     private Item model;
     private ItemEntity entity;
 
-//    @BeforeEach
-//    void setUp() {
-//        model = User.builder().id(userId).name("user").email("user@user.com").build();
-//        entity = UserEntity.builder().id(userId).name("user").email("user@user.com").build();
-//    }
-//
+    private UserEntity owner;
+
+    @BeforeEach
+    void setUp() {
+        owner = UserEntity.builder().id(1).name("user").email("user@user.com").build();
+        model = Item.builder().id(1).name("Дрель").description("Простая дрель").available(true).ownerId(1).build();
+        entity = ItemEntity.builder().id(model.getId()).name(model.getName()).description(model.getDescription()).available(model.getAvailable()).owner(owner).build();
+    }
+
     @Test
     void create() throws Throwable {
-//        when(repository.save(any())).thenReturn(entity);
-//
-//        assertThat(
-//                service.create(model),
-//                equalTo(model)
-//        );
-//
-//        Mockito.verify(repository, Mockito.times(1)).save(entity);
-//        Mockito.verifyNoMoreInteractions(repository);
+        when(userRepository.findById(anyInt())).thenReturn(Optional.ofNullable(owner));
+        when(itemRepository.save(any())).thenReturn(entity);
+
+
+        assertThat(
+                service.create(requestorId, model),
+                equalTo(model)
+        );
+
+        Mockito.verify(itemRepository, Mockito.times(1)).save(entity);
+        Mockito.verifyNoMoreInteractions(itemRepository);
     }
 //
 //    @Test
