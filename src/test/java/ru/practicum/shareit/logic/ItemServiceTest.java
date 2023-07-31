@@ -1,5 +1,6 @@
 package ru.practicum.shareit.logic;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -20,6 +21,7 @@ import ru.practicum.shareit.user.model.UserEntity;
 import ru.practicum.shareit.user.model.UserMapper;
 import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.user.service.UserServiceImpl;
+import ru.practicum.shareit.utils.exception.NotFoundException;
 
 import java.util.Optional;
 
@@ -60,15 +62,29 @@ public class ItemServiceTest {
         when(userRepository.findById(anyInt())).thenReturn(Optional.ofNullable(owner));
         when(itemRepository.save(any())).thenReturn(entity);
 
-
         assertThat(
                 service.create(requestorId, model),
                 equalTo(model)
         );
 
+        Mockito.verify(userRepository, Mockito.times(1)).findById(anyInt());
         Mockito.verify(itemRepository, Mockito.times(1)).save(entity);
-        Mockito.verifyNoMoreInteractions(itemRepository);
+        Mockito.verifyNoMoreInteractions(userRepository,itemRepository);
     }
+
+    @Test
+    void create_WrongUser() throws Throwable {
+        when(userRepository.findById(anyInt())).thenThrow(new NotFoundException("no such user", String.valueOf(requestorId)));
+        when(itemRepository.save(any())).thenReturn(entity);
+
+        NotFoundException exception = Assertions.assertThrows(
+                NotFoundException.class,
+                () -> service.create(requestorId, model));
+
+        Mockito.verify(userRepository, Mockito.times(1)).findById(anyInt());
+        Mockito.verifyNoMoreInteractions(userRepository,itemRepository);
+    }
+
 //
 //    @Test
 //    void update() throws Throwable {
