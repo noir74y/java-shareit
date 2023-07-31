@@ -74,8 +74,8 @@ public class ItemServiceTest {
 
     @Test
     void create_WrongUser() throws Throwable {
+        requestorId = 2;
         when(userRepository.findById(anyInt())).thenThrow(new NotFoundException("no such user", String.valueOf(requestorId)));
-        when(itemRepository.save(any())).thenReturn(entity);
 
         NotFoundException exception = Assertions.assertThrows(
                 NotFoundException.class,
@@ -94,12 +94,24 @@ public class ItemServiceTest {
         when(itemRepository.save(any())).thenReturn(changedEntity);
 
         assertThat(
-                service.update(requestorId, changedModel, model.getId()),
+                service.update(requestorId, changedModel, changedModel.getId()),
                 equalTo(changedModel)
         );
 
         Mockito.verify(itemRepository, Mockito.times(1)).findById(model.getId());
         Mockito.verify(itemRepository, Mockito.times(1)).save(changedEntity);
+        Mockito.verifyNoMoreInteractions(itemRepository);
+    }
+
+    @Test
+    void update_ItemNotFound() throws Throwable {
+        when(itemRepository.findById(any())).thenThrow(new NotFoundException("no such item", String.valueOf(model.getId())));
+
+        NotFoundException exception = Assertions.assertThrows(
+                NotFoundException.class,
+                () -> service.update(requestorId, model, model.getId()));
+
+        Mockito.verify(itemRepository, Mockito.times(1)).findById(model.getId());
         Mockito.verifyNoMoreInteractions(itemRepository);
     }
 

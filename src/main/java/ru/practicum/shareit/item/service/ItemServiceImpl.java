@@ -58,7 +58,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public Item update(int requestorId, Item item, int itemId) {
-        var itemEntity = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("no item with such id", String.valueOf(itemId)));
+        var itemEntity = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("no such item", String.valueOf(itemId)));
 
         if (!itemEntity.getOwner().getId().equals(requestorId))
             throw new ForbiddenException("это item другого юзера", itemEntity.getOwner().getId() + " != " + requestorId);
