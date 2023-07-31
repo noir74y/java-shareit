@@ -21,6 +21,7 @@ import ru.practicum.shareit.user.model.UserEntity;
 import ru.practicum.shareit.user.model.UserMapper;
 import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.user.service.UserServiceImpl;
+import ru.practicum.shareit.utils.exception.ForbiddenException;
 import ru.practicum.shareit.utils.exception.NotFoundException;
 
 import java.util.Optional;
@@ -82,7 +83,8 @@ public class ItemServiceTest {
                 () -> service.create(requestorId, model));
 
         Mockito.verify(userRepository, Mockito.times(1)).findById(anyInt());
-        Mockito.verifyNoMoreInteractions(userRepository,itemRepository);
+        Mockito.verifyNoMoreInteractions(userRepository);
+        Mockito.verifyNoInteractions(itemRepository);
     }
 
     @Test
@@ -109,6 +111,19 @@ public class ItemServiceTest {
 
         NotFoundException exception = Assertions.assertThrows(
                 NotFoundException.class,
+                () -> service.update(requestorId, model, model.getId()));
+
+        Mockito.verify(itemRepository, Mockito.times(1)).findById(model.getId());
+        Mockito.verifyNoMoreInteractions(itemRepository);
+    }
+
+    @Test
+    void update_WrongItem() throws Throwable {
+        requestorId = 2;
+        when(itemRepository.findById(any())).thenReturn(Optional.ofNullable(entity));
+
+        ForbiddenException exception = Assertions.assertThrows(
+                ForbiddenException.class,
                 () -> service.update(requestorId, model, model.getId()));
 
         Mockito.verify(itemRepository, Mockito.times(1)).findById(model.getId());
