@@ -94,8 +94,8 @@ public class UserControllerTest {
 
     @Test
     void findAll() throws Exception {
-        List<User> referenceModelList = List.of(model);
-        List<UserDtoResp> referenceDtoRespList = List.of(dtoResp);
+        var referenceModelList = List.of(model);
+        var referenceDtoRespList = List.of(dtoResp);
 
         when(service.findAll()).thenReturn(referenceModelList);
 
