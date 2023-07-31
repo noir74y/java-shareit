@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS requests
     requestor_id    INTEGER NOT NULL,
     created         TIMESTAMP WITHOUT TIME ZONE,
     CONSTRAINT pk_requests PRIMARY KEY (id),
-    CONSTRAINT fk_requests_requestor FOREIGN KEY (requestor_id) REFERENCES users (id)
+    CONSTRAINT fk_requests_requestor FOREIGN KEY (requestor_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS items
@@ -25,8 +25,8 @@ CREATE TABLE IF NOT EXISTS items
     owner_id    INTEGER      NOT NULL,
     request_id  INTEGER,
     CONSTRAINT  pk_item PRIMARY KEY (id),
-    CONSTRAINT  fk_item_owner FOREIGN KEY (owner_id) REFERENCES users (id),
-    CONSTRAINT  fk_item_request FOREIGN KEY (request_id) REFERENCES requests (id)
+    CONSTRAINT  fk_item_owner FOREIGN KEY (owner_id) REFERENCES users (id) ON DELETE CASCADE,
+    CONSTRAINT  fk_item_request FOREIGN KEY (request_id) REFERENCES requests (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS bookings
@@ -38,8 +38,8 @@ CREATE TABLE IF NOT EXISTS bookings
     end_date   TIMESTAMP WITHOUT TIME ZONE,
     status     VARCHAR(255),
     CONSTRAINT pk_booking PRIMARY KEY (id),
-    CONSTRAINT fk_booking_item FOREIGN KEY (item_id) REFERENCES items (id),
-    CONSTRAINT fk_booking_booker FOREIGN KEY (booker_id) REFERENCES users (id)
+    CONSTRAINT fk_booking_item FOREIGN KEY (item_id) REFERENCES items (id) ON DELETE CASCADE,
+    CONSTRAINT fk_booking_booker FOREIGN KEY (booker_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS comments
@@ -50,6 +50,6 @@ CREATE TABLE IF NOT EXISTS comments
     author_id   INTEGER,
     created     TIMESTAMP WITHOUT TIME ZONE,
     CONSTRAINT pk_comments PRIMARY KEY (id),
-    CONSTRAINT fk_comment_item FOREIGN KEY (item_id) REFERENCES items (id),
-    CONSTRAINT fk_comment_author FOREIGN KEY (author_id) REFERENCES users (id)
+    CONSTRAINT fk_comment_item FOREIGN KEY (item_id) REFERENCES items (id) ON DELETE CASCADE,
+    CONSTRAINT fk_comment_author FOREIGN KEY (author_id) REFERENCES users (id) ON DELETE CASCADE
 );

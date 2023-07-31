@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlGroup;
 import ru.practicum.shareit.user.model.UserEntity;
 import ru.practicum.shareit.user.repository.UserRepository;
 
@@ -31,7 +30,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    @Sql({"/schema.sql", "/user_repository_test.sql"})
+    @Sql({"/schema.sql", "/populate_data.sql"})
     void update() {
         entity2.setName("user3");
         repository.save(entity2);
@@ -42,7 +41,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    @Sql({"/schema.sql", "/user_repository_test.sql"})
+    @Sql({"/schema.sql", "/populate_data.sql"})
     void delete() {
         repository.deleteById(entity1.getId());
         repository.delete(entity2);
@@ -53,7 +52,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    @Sql({"/schema.sql", "/user_repository_test.sql"})
+    @Sql({"/schema.sql", "/populate_data.sql"})
     void findById() {
         assertThat(
                 repository.findById(entity1.getId()).orElse(null),
@@ -62,7 +61,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    @Sql({"/schema.sql", "/user_repository_test.sql"})
+    @Sql({"/schema.sql", "/populate_data.sql"})
     void findAll() {
         assertThat(
                 repository.findAll(),
