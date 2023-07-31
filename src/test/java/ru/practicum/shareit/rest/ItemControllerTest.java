@@ -1,16 +1,25 @@
 package ru.practicum.shareit.rest;
 
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
+import ru.practicum.shareit.item.controller.ItemController;
+import ru.practicum.shareit.item.model.CommentMapper;
+import ru.practicum.shareit.item.model.ItemMapper;
+import ru.practicum.shareit.item.service.ItemService;
+import ru.practicum.shareit.user.model.UserMapper;
 
-//@WebMvcTest(controllers = ItemController.class)
-//@Import({ItemMapper.class, ModelMapper.class, UserMapper.class, ItemServiceImpl.class, CommentService.class})
+@WebMvcTest(controllers = ItemController.class)
+@Import({ItemMapper.class, ModelMapper.class, UserMapper.class, CommentMapper.class})
 public class ItemControllerTest {
     private final String baseUrl = "/items/";
 //    @Autowired
 //    RestMockGeneric<ItemDtoReq, ItemDtoResp> restMock;
 //    int requestorId = 1;
-//    @MockBean
-//    private ItemService service;
+    @MockBean
+    private ItemService service;
 //    private ItemDtoReq dtoReq;
 //    private Item model;
 //    private ItemDtoResp dtoResp;
