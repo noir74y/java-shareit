@@ -1,5 +1,6 @@
 package ru.practicum.shareit.integration;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,10 +9,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
 import ru.practicum.shareit.booking.model.*;
+import ru.practicum.shareit.item.model.ItemDtoResp;
 import ru.practicum.shareit.rest.RestMockGeneric;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -78,11 +81,11 @@ public class BookingTest {
     @Test
     @Sql({"/schema.sql", "/populate_users.sql", "/populate_requests.sql", "/populate_items.sql"})
     void findById() throws Exception {
-        var bookingIdToFind = 1;
         var itemToBoBookedId = 2;
         var dtoReq = BookingDtoReq.builder().itemId(itemToBoBookedId).startDate(tomorrow).endDate(theDayAfterTomorrow).build();
         var dtoResp = rest.post(baseUrl, dtoReq, BookingDtoResp.class, requestorId);
 
+        var bookingIdToFind = 1;
         assertThat(
                 rest.get(baseUrl + bookingIdToFind, BookingDtoResp.class, requestorId),
                 equalTo(BookingDtoResp.builder()
@@ -98,49 +101,33 @@ public class BookingTest {
         );
     }
 
-//
-//    @Test
-//    @Sql(scripts = "/populate_users.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-//    void findByOwner() throws Exception {
-//        var dtoReq = ItemDtoReq.builder().name("Дрель").description("Простая дрель").available(true).build();
-//        rest.post(baseUrl, dtoReq, ItemDtoResp.class, requestorId);
-//
-//        requestorId = 2;
-//
-//        List<ItemDtoResp> dtoRespList = RestMockGeneric.getObjectMapper()
-//                .readValue(
-//                        rest.get(baseUrl, requestorId),
-//                        new TypeReference<>() {
-//                        });
-//
-//        assertThat(
-//                dtoRespList,
-//                equalTo(Collections.emptyList())
-//        );
-//    }
-//
-//    @Test
-//    @Sql(scripts = "/populate_users.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-//    void findByText() throws Exception {
-//        var dtoReq = ItemDtoReq.builder().name("Дрель").description("Простая дрель").available(true).build();
-//        rest.post(baseUrl, dtoReq, ItemDtoResp.class, requestorId);
-//
-//        dtoReq.setDescription("Сложная дрель");
-//        var dtoResp = rest.post(baseUrl, dtoReq, ItemDtoResp.class, requestorId);
-//
-//        List<ItemDtoResp> dtoRespList = RestMockGeneric.getObjectMapper()
-//                .readValue(
-//                        rest.get(baseUrl + "search?text=Сложная", requestorId),
-//                        new TypeReference<>() {
-//                        });
-//
-//        assertThat(
-//                dtoRespList,
-//                equalTo(List.of(ItemDtoResp.builder()
-//                        .id(dtoResp.getId())
-//                        .name(dtoResp.getName())
-//                        .description(dtoResp.getDescription())
-//                        .available(dtoResp.getAvailable()).build()))
-//        );
-//    }
+
+    @Test
+    @Sql({"/schema.sql", "/populate_users.sql", "/populate_requests.sql", "/populate_items.sql"})
+    void findByBookerAndState() throws Exception {
+        var itemToBoBookedId = 2;
+        var dtoReq = BookingDtoReq.builder().itemId(itemToBoBookedId).startDate(tomorrow).endDate(theDayAfterTomorrow).build();
+        var dtoResp = rest.post(baseUrl, dtoReq, BookingDtoResp.class, requestorId);
+
+        List<BookingDtoResp> dtoRespList = RestMockGeneric.getObjectMapper()
+                .readValue(
+                        rest.get(baseUrl, requestorId),
+                        new TypeReference<>() {
+                        });
+
+        var bookingIdToFind = 1;
+        assertThat(
+                dtoRespList,
+                equalTo(List.of(BookingDtoResp.builder()
+                        .id(bookingIdToFind)
+                        .startDate(dtoResp.getStartDate())
+                        .endDate(dtoResp.getEndDate())
+                        .status(dtoResp.getStatus())
+                        .booker(BookingDtoRespBooker.builder()
+                                .id(requestorId).build())
+                        .item(BookingDtoRespItem.builder()
+                                .id(itemToBoBookedId)
+                                .name(dtoResp.getItem().getName()).build()).build()))
+        );
+    }
 }
