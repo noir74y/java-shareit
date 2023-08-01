@@ -133,27 +133,28 @@ public class BookingControllerTest {
                 .findByBookerAndState(requestorId, BookingState.ALL.name(), Integer.valueOf(OFFSET_DEFAULT), Integer.valueOf(PAGE_SIZE_MAX));
         Mockito.verifyNoMoreInteractions(service);
     }
-//
-//    @Test
-//    void findByText() throws Exception {
-//        var referenceModelList = List.of(model);
-//        var referenceDtoRespList = List.of(dtoResp);
-//
-//        when(service.findByText(anyInt(), anyString())).thenReturn(referenceModelList);
-//
-//        List<ItemDtoResp> dtoRespList = RestMockGeneric.getObjectMapper()
-//                .readValue(
-//                        restMock.get(baseUrl + "search?text=SomePattern", requestorId),
-//                        new TypeReference<>() {
-//                        });
-//
-//        assertThat(
-//                dtoRespList,
-//                equalTo(referenceDtoRespList)
-//        );
-//
-//        Mockito.verify(service, Mockito.times(1)).findByText(anyInt(), anyString());
-//        Mockito.verifyNoMoreInteractions(service);
-//    }
 
+    @Test
+    void findByOwnerAndState() throws Exception {
+        var referenceModelList = List.of(model);
+        var referenceDtoRespList = List.of(dtoResp);
+
+        when(service.findByOwnerAndState(anyInt(), any(), anyInt(), anyInt())).thenReturn(referenceModelList);
+
+        var ownerOfItem = 2;
+        List<BookingDtoResp> dtoRespList = RestMockGeneric.getObjectMapper()
+                .readValue(
+                        restMock.get(baseUrl + "owner", ownerOfItem),
+                        new TypeReference<>() {
+                        });
+
+        assertThat(
+                dtoRespList,
+                equalTo(referenceDtoRespList)
+        );
+
+        Mockito.verify(service, Mockito.times(1))
+                .findByOwnerAndState(ownerOfItem, BookingState.ALL.name(), Integer.valueOf(OFFSET_DEFAULT), Integer.valueOf(PAGE_SIZE_MAX));
+        Mockito.verifyNoMoreInteractions(service);
+    }
 }
