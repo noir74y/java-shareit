@@ -81,7 +81,6 @@ public class BookingControllerTest {
         Mockito.verifyNoMoreInteractions(service);
     }
 
-
     @Test
     void update() throws Throwable {
         when(service.update(anyInt(), any(), anyBoolean())).thenReturn(model);
@@ -95,19 +94,18 @@ public class BookingControllerTest {
         Mockito.verifyNoMoreInteractions(service);
     }
 
-//
-//    @Test
-//    void findById() throws Throwable {
-//        when(service.findById(anyInt(), anyInt())).thenReturn(model);
-//
-//        assertThat(
-//                restMock.get(baseUrl + dtoResp.getId(), ItemDtoResp.class, requestorId),
-//                equalTo(dtoResp)
-//        );
-//
-//        Mockito.verify(service, Mockito.times(1)).findById(anyInt(), anyInt());
-//        Mockito.verifyNoMoreInteractions(service);
-//    }
+    @Test
+    void findById() throws Throwable {
+        when(service.findById(anyInt(), anyInt())).thenReturn(model);
+
+        assertThat(
+                restMock.get(baseUrl + dtoResp.getId(), BookingDtoResp.class, requestorId),
+                equalTo(dtoResp)
+        );
+
+        Mockito.verify(service, Mockito.times(1)).findById(anyInt(), anyInt());
+        Mockito.verifyNoMoreInteractions(service);
+    }
 //
 //    @Test
 //    void findByOwner() throws Exception {
