@@ -27,7 +27,9 @@ import static org.hamcrest.Matchers.equalTo;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @Import({ItemMapper.class, ModelMapper.class, UserMapper.class})
 public class ItemRepositoryTest {
-    UserEntity owner;
+    UserEntity owner1;
+    UserEntity owner2;
+
     ItemEntity entity1;
     ItemEntity entity2;
     @Autowired
@@ -38,9 +40,10 @@ public class ItemRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        owner = UserEntity.builder().id(1).name("user1").email("user1@user.com").build();
-        entity1 = ItemEntity.builder().id(1).name("Дрель").description("Простая дрель").available(true).owner(owner).requestId(1).build();
-        entity2 = ItemEntity.builder().id(2).name("Дрель").description("Сложная дрель").available(true).owner(owner).requestId(2).build();
+        owner1 = UserEntity.builder().id(1).name("user1").email("user1@user.com").build();
+        owner2 = UserEntity.builder().id(2).name("user2").email("user2@user.com").build();
+        entity1 = ItemEntity.builder().id(1).name("Дрель").description("Простая дрель").available(true).owner(owner1).requestId(1).build();
+        entity2 = ItemEntity.builder().id(2).name("Дрель").description("Сложная дрель").available(true).owner(owner2).requestId(2).build();
     }
 
     @Test
@@ -60,7 +63,7 @@ public class ItemRepositoryTest {
                         .stream()
                         .map(ItemForRequestView::getItemDtoResp)
                         .collect(Collectors.toList()),
-                equalTo(List.of(itemMapper.model2dtoResp(itemMapper.entity2model(entity2))))
+                equalTo(List.of(itemMapper.model2dtoResp(itemMapper.entity2model(entity1))))
         );
     }
 
