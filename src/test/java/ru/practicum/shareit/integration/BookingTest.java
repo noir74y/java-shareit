@@ -85,71 +85,35 @@ public class BookingTest {
     @Test
     @Sql({"/schema.sql", "/populate_users.sql", "/populate_requests.sql", "/populate_items.sql", "/populate_bookings.sql"})
     void findByBookerAndState() throws Exception {
-        List<BookingDtoResp> dtoRespList;
-
-        dtoRespList = RestMockGeneric.getObjectMapper()
-                .readValue(
-                        rest.get(baseUrl + "?state=FUTURE", requestorId),
-                        new TypeReference<>() {
-                        });
+        var bookerOfItem = 1;
 
         assertThat(
-                dtoRespList,
+                getDtoRespList("?state=FUTURE", bookerOfItem),
                 equalTo(List.of(rest.get(baseUrl + 2, BookingDtoResp.class, requestorId)))
         );
 
-        dtoRespList = RestMockGeneric.getObjectMapper()
-                .readValue(
-                        rest.get(baseUrl + "?state=CURRENT", requestorId),
-                        new TypeReference<>() {
-                        });
-
         assertThat(
-                dtoRespList,
+                getDtoRespList("?state=CURRENT", bookerOfItem),
                 equalTo(List.of(rest.get(baseUrl + 4, BookingDtoResp.class, requestorId)))
         );
 
-        dtoRespList = RestMockGeneric.getObjectMapper()
-                .readValue(
-                        rest.get(baseUrl + "?state=PAST", requestorId),
-                        new TypeReference<>() {
-                        });
-
         assertThat(
-                dtoRespList,
+                getDtoRespList("?state=PAST", bookerOfItem),
                 equalTo(List.of(rest.get(baseUrl + 6, BookingDtoResp.class, requestorId)))
         );
 
-        dtoRespList = RestMockGeneric.getObjectMapper()
-                .readValue(
-                        rest.get(baseUrl + "?state=WAITING", requestorId),
-                        new TypeReference<>() {
-                        });
-
         assertThat(
-                dtoRespList,
+                getDtoRespList("?state=WAITING", bookerOfItem),
                 equalTo(List.of(rest.get(baseUrl + 2, BookingDtoResp.class, requestorId)))
         );
 
-        dtoRespList = RestMockGeneric.getObjectMapper()
-                .readValue(
-                        rest.get(baseUrl + "?state=REJECTED", requestorId),
-                        new TypeReference<>() {
-                        });
-
         assertThat(
-                dtoRespList,
+                getDtoRespList("?state=REJECTED", bookerOfItem),
                 equalTo(List.of(rest.get(baseUrl + 6, BookingDtoResp.class, requestorId)))
         );
 
-        dtoRespList = RestMockGeneric.getObjectMapper()
-                .readValue(
-                        rest.get(baseUrl + "?state=ALL", requestorId),
-                        new TypeReference<>() {
-                        });
-
         assertThat(
-                dtoRespList,
+                getDtoRespList("?state=ALL", bookerOfItem),
                 equalTo(List.of
                         (
                                 rest.get(baseUrl + 2, BookingDtoResp.class, requestorId),
@@ -166,69 +130,33 @@ public class BookingTest {
         List<BookingDtoResp> dtoRespList;
         var ownerOfItem = 2;
 
-        dtoRespList = RestMockGeneric.getObjectMapper()
-                .readValue(
-                        rest.get(baseUrl + "owner?state=FUTURE", ownerOfItem),
-                        new TypeReference<>() {
-                        });
-
         assertThat(
-                dtoRespList,
+                getDtoRespList("owner?state=FUTURE", ownerOfItem),
                 equalTo(List.of(rest.get(baseUrl + 2, BookingDtoResp.class, requestorId)))
         );
 
-        dtoRespList = RestMockGeneric.getObjectMapper()
-                .readValue(
-                        rest.get(baseUrl + "owner?state=CURRENT", ownerOfItem),
-                        new TypeReference<>() {
-                        });
-
         assertThat(
-                dtoRespList,
+                getDtoRespList("owner?state=CURRENT", ownerOfItem),
                 equalTo(List.of(rest.get(baseUrl + 4, BookingDtoResp.class, requestorId)))
         );
 
-        dtoRespList = RestMockGeneric.getObjectMapper()
-                .readValue(
-                        rest.get(baseUrl + "owner?state=PAST", ownerOfItem),
-                        new TypeReference<>() {
-                        });
-
         assertThat(
-                dtoRespList,
+                getDtoRespList("owner?state=PAST", ownerOfItem),
                 equalTo(List.of(rest.get(baseUrl + 6, BookingDtoResp.class, requestorId)))
         );
 
-        dtoRespList = RestMockGeneric.getObjectMapper()
-                .readValue(
-                        rest.get(baseUrl + "owner?state=WAITING", ownerOfItem),
-                        new TypeReference<>() {
-                        });
-
         assertThat(
-                dtoRespList,
+                getDtoRespList("owner?state=WAITING", ownerOfItem),
                 equalTo(List.of(rest.get(baseUrl + 2, BookingDtoResp.class, requestorId)))
         );
 
-        dtoRespList = RestMockGeneric.getObjectMapper()
-                .readValue(
-                        rest.get(baseUrl + "owner?state=REJECTED", ownerOfItem),
-                        new TypeReference<>() {
-                        });
-
         assertThat(
-                dtoRespList,
+                getDtoRespList("owner?state=REJECTED", ownerOfItem),
                 equalTo(List.of(rest.get(baseUrl + 6, BookingDtoResp.class, requestorId)))
         );
 
-        dtoRespList = RestMockGeneric.getObjectMapper()
-                .readValue(
-                        rest.get(baseUrl + "owner?state=ALL", ownerOfItem),
-                        new TypeReference<>() {
-                        });
-
         assertThat(
-                dtoRespList,
+                getDtoRespList("owner?state=ALL", ownerOfItem),
                 equalTo(List.of
                         (
                                 rest.get(baseUrl + 2, BookingDtoResp.class, requestorId),
@@ -237,5 +165,14 @@ public class BookingTest {
                         )
                 )
         );
+    }
+
+    private List<BookingDtoResp> getDtoRespList(String suffix, Integer userId) throws Exception {
+        List<BookingDtoResp> dtoRespList = RestMockGeneric.getObjectMapper()
+                .readValue(
+                        rest.get(baseUrl + suffix, userId),
+                        new TypeReference<>() {
+                        });
+        return dtoRespList;
     }
 }
