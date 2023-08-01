@@ -1,6 +1,5 @@
 package ru.practicum.shareit.rest;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -10,21 +9,16 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import ru.practicum.shareit.booking.controller.BookingController;
-import ru.practicum.shareit.booking.model.Booking;
-import ru.practicum.shareit.booking.model.BookingDtoReq;
-import ru.practicum.shareit.booking.model.BookingDtoResp;
-import ru.practicum.shareit.booking.model.BookingMapper;
+import ru.practicum.shareit.booking.model.*;
 import ru.practicum.shareit.booking.service.BookingService;
-import ru.practicum.shareit.item.controller.ItemController;
-import ru.practicum.shareit.item.model.*;
-import ru.practicum.shareit.item.service.ItemService;
-import ru.practicum.shareit.user.model.UserMapper;
 
-import java.util.List;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 @WebMvcTest(controllers = BookingController.class)
@@ -33,32 +27,61 @@ public class BookingControllerTest {
     private final String baseUrl = "/bookings/";
     @Autowired
     RestMockGeneric<BookingDtoReq, BookingDtoResp> restMock;
-    int requestorId = 1;
+    int requestorId;
     @MockBean
     private BookingService service;
     private BookingDtoReq dtoReq;
     private Booking model;
     private BookingDtoResp dtoResp;
+    LocalDateTime tomorrow;
+    LocalDateTime theDayAfterTomorrow;
 
-//    @BeforeEach
-//    void setUp() {
-//        dtoReq = ItemDtoReq.builder().name("Дрель").description("Простая дрель").available(true).build();
-//        model = Item.builder().id(1).name(dtoReq.getName()).description(dtoReq.getDescription()).available(dtoReq.getAvailable()).build();
-//        dtoResp = ItemDtoResp.builder().id(1).name(dtoReq.getName()).description(dtoReq.getDescription()).available(dtoReq.getAvailable()).build();
-//    }
-//
+    @BeforeEach
+    void setUp() {
+        requestorId = 1;
+        var itemToBoBookedId = 2;
+        tomorrow = LocalDateTime.now().plusDays(1).truncatedTo(ChronoUnit.SECONDS);
+        theDayAfterTomorrow = tomorrow.plusDays(1);
+
+        dtoReq = BookingDtoReq.builder()
+                .itemId(itemToBoBookedId)
+                .startDate(tomorrow)
+                .endDate(theDayAfterTomorrow).build();
+
+        model = Booking.builder()
+                .id(1)
+                .itemId(itemToBoBookedId)
+                .startDate(tomorrow)
+                .endDate(theDayAfterTomorrow)
+                .itemName("Дрель")
+                .bookerId(requestorId)
+                .status(BookingStatus.WAITING).build();
+
+        dtoResp = BookingDtoResp.builder()
+                .id(model.getId())
+                .startDate(model.getStartDate())
+                .endDate(model.getEndDate())
+                .status(model.getStatus().name())
+                .booker(BookingDtoRespBooker.builder()
+                        .id(model.getBookerId()).build())
+                .item(BookingDtoRespItem.builder()
+                        .id(itemToBoBookedId)
+                        .name(model.getItemName()).build()).build();
+    }
+
     @Test
     void create() throws Throwable {
-//        when(service.create(anyInt(), any())).thenReturn(model);
-//
-//        assertThat(
-//                restMock.post(baseUrl, dtoReq, ItemDtoResp.class, requestorId),
-//                equalTo(dtoResp)
-//        );
-//
-//        Mockito.verify(service, Mockito.times(1)).create(anyInt(), any());
-//        Mockito.verifyNoMoreInteractions(service);
+        when(service.create(anyInt(), any())).thenReturn(model);
+
+        assertThat(
+                restMock.post(baseUrl, dtoReq, BookingDtoResp.class, requestorId),
+                equalTo(dtoResp)
+        );
+
+        Mockito.verify(service, Mockito.times(1)).create(anyInt(), any());
+        Mockito.verifyNoMoreInteractions(service);
     }
+
 //
 //    @Test
 //    void update() throws Throwable {
