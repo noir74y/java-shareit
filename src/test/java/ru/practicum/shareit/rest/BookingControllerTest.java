@@ -17,8 +17,7 @@ import java.time.temporal.ChronoUnit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @WebMvcTest(controllers = BookingController.class)
@@ -82,19 +81,20 @@ public class BookingControllerTest {
         Mockito.verifyNoMoreInteractions(service);
     }
 
-//
-//    @Test
-//    void update() throws Throwable {
-//        when(service.update(anyInt(), any(), anyInt())).thenReturn(model);
-//
-//        assertThat(
-//                restMock.patch(baseUrl + dtoResp.getId(), dtoReq, ItemDtoResp.class, requestorId),
-//                equalTo(dtoResp)
-//        );
-//
-//        Mockito.verify(service, Mockito.times(1)).update(anyInt(), any(), anyInt());
-//        Mockito.verifyNoMoreInteractions(service);
-//    }
+
+    @Test
+    void update() throws Throwable {
+        when(service.update(anyInt(), any(), anyBoolean())).thenReturn(model);
+
+        assertThat(
+                restMock.patch(baseUrl + dtoResp.getId() + "?approved=true", BookingDtoResp.class, requestorId),
+                equalTo(dtoResp)
+        );
+
+        Mockito.verify(service, Mockito.times(1)).update(anyInt(), any(), anyBoolean());
+        Mockito.verifyNoMoreInteractions(service);
+    }
+
 //
 //    @Test
 //    void findById() throws Throwable {
