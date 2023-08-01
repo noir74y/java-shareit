@@ -101,7 +101,6 @@ public class BookingTest {
         );
     }
 
-
     @Test
     @Sql({"/schema.sql", "/populate_users.sql", "/populate_requests.sql", "/populate_items.sql"})
     void findByBookerAndState() throws Exception {
@@ -112,6 +111,36 @@ public class BookingTest {
         List<BookingDtoResp> dtoRespList = RestMockGeneric.getObjectMapper()
                 .readValue(
                         rest.get(baseUrl, requestorId),
+                        new TypeReference<>() {
+                        });
+
+        var bookingIdToFind = 1;
+        assertThat(
+                dtoRespList,
+                equalTo(List.of(BookingDtoResp.builder()
+                        .id(bookingIdToFind)
+                        .startDate(dtoResp.getStartDate())
+                        .endDate(dtoResp.getEndDate())
+                        .status(dtoResp.getStatus())
+                        .booker(BookingDtoRespBooker.builder()
+                                .id(requestorId).build())
+                        .item(BookingDtoRespItem.builder()
+                                .id(itemToBoBookedId)
+                                .name(dtoResp.getItem().getName()).build()).build()))
+        );
+    }
+
+    @Test
+    @Sql({"/schema.sql", "/populate_users.sql", "/populate_requests.sql", "/populate_items.sql"})
+    void findByOwnerAndState() throws Exception {
+        var itemToBoBookedId = 2;
+        var dtoReq = BookingDtoReq.builder().itemId(itemToBoBookedId).startDate(tomorrow).endDate(theDayAfterTomorrow).build();
+        var dtoResp = rest.post(baseUrl, dtoReq, BookingDtoResp.class, requestorId);
+
+        var ownerOfItem = 2;
+        List<BookingDtoResp> dtoRespList = RestMockGeneric.getObjectMapper()
+                .readValue(
+                        rest.get(baseUrl + "owner", ownerOfItem),
                         new TypeReference<>() {
                         });
 
