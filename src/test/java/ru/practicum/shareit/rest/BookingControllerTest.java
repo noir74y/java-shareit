@@ -1,5 +1,6 @@
 package ru.practicum.shareit.rest;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -14,11 +15,14 @@ import ru.practicum.shareit.booking.service.BookingService;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
+import static ru.practicum.shareit.utils.AppConstants.OFFSET_DEFAULT;
+import static ru.practicum.shareit.utils.AppConstants.PAGE_SIZE_MAX;
 
 @WebMvcTest(controllers = BookingController.class)
 @Import({RestMockGeneric.class, BookingMapper.class, ModelMapper.class})
@@ -106,28 +110,29 @@ public class BookingControllerTest {
         Mockito.verify(service, Mockito.times(1)).findById(anyInt(), anyInt());
         Mockito.verifyNoMoreInteractions(service);
     }
-//
-//    @Test
-//    void findByOwner() throws Exception {
-//        var referenceModelList = List.of(model);
-//        var referenceDtoRespList = List.of(dtoResp);
-//
-//        when(service.findByOwner(anyInt())).thenReturn(referenceModelList);
-//
-//        List<ItemDtoResp> dtoRespList = RestMockGeneric.getObjectMapper()
-//                .readValue(
-//                        restMock.get(baseUrl, requestorId),
-//                        new TypeReference<>() {
-//                        });
-//
-//        assertThat(
-//                dtoRespList,
-//                equalTo(referenceDtoRespList)
-//        );
-//
-//        Mockito.verify(service, Mockito.times(1)).findByOwner(anyInt());
-//        Mockito.verifyNoMoreInteractions(service);
-//    }
+
+    @Test
+    void findByBookerAndState() throws Exception {
+        var referenceModelList = List.of(model);
+        var referenceDtoRespList = List.of(dtoResp);
+
+        when(service.findByBookerAndState(anyInt(), any(), anyInt(), anyInt())).thenReturn(referenceModelList);
+
+        List<BookingDtoResp> dtoRespList = RestMockGeneric.getObjectMapper()
+                .readValue(
+                        restMock.get(baseUrl, requestorId),
+                        new TypeReference<>() {
+                        });
+
+        assertThat(
+                dtoRespList,
+                equalTo(referenceDtoRespList)
+        );
+
+        Mockito.verify(service, Mockito.times(1))
+                .findByBookerAndState(requestorId, BookingState.ALL.name(), Integer.valueOf(OFFSET_DEFAULT), Integer.valueOf(PAGE_SIZE_MAX));
+        Mockito.verifyNoMoreInteractions(service);
+    }
 //
 //    @Test
 //    void findByText() throws Exception {
