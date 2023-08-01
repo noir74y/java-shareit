@@ -30,7 +30,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    @Sql({"/schema.sql", "/populate_data.sql"})
+    @Sql({"/schema.sql", "/populate_users.sql", "/populate_requests.sql", "/populate_items.sql",})
     void update() {
         entity2.setName("user3");
         repository.save(entity2);
@@ -41,7 +41,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    @Sql({"/schema.sql", "/populate_data.sql"})
+    @Sql({"/schema.sql", "/populate_users.sql", "/populate_requests.sql", "/populate_items.sql",})
     void delete() {
         repository.deleteById(entity1.getId());
         repository.delete(entity2);
@@ -52,7 +52,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    @Sql({"/schema.sql", "/populate_data.sql"})
+    @Sql({"/schema.sql", "/populate_users.sql", "/populate_requests.sql", "/populate_items.sql",})
     void findById() {
         assertThat(
                 repository.findById(entity1.getId()).orElse(null),
@@ -61,7 +61,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    @Sql({"/schema.sql", "/populate_data.sql"})
+    @Sql({"/schema.sql", "/populate_users.sql", "/populate_requests.sql", "/populate_items.sql",})
     void findAll() {
         assertThat(
                 repository.findAll(),

@@ -33,7 +33,7 @@ public class ItemTest {
     }
 
     @Test
-    @Sql(scripts = "/populate_data_for_item_test.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = "/populate_users.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void create() throws Exception {
         var dtoReq = ItemDtoReq.builder().name("Дрель").description("Простая дрель").available(true).build();
 
@@ -48,7 +48,7 @@ public class ItemTest {
     }
 
     @Test
-    @Sql(scripts = "/populate_data_for_item_test.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = "/populate_users.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void update() throws Exception {
         var dtoReq = ItemDtoReq.builder().name("Дрель").description("Простая дрель").available(true).build();
         var dtoResp = rest.post(baseUrl, dtoReq, ItemDtoResp.class, requestorId);
@@ -68,7 +68,7 @@ public class ItemTest {
     }
 
     @Test
-    @Sql(scripts = "/populate_data_for_item_test.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = "/populate_users.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void findById() throws Exception {
         var dtoReq = ItemDtoReq.builder().name("Дрель").description("Простая дрель").available(true).build();
         var dtoResp = rest.post(baseUrl, dtoReq, ItemDtoResp.class, requestorId);
@@ -81,7 +81,7 @@ public class ItemTest {
     }
 
     @Test
-    @Sql(scripts = "/populate_data_for_item_test.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = "/populate_users.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void findByOwner() throws Exception {
         var dtoReq = ItemDtoReq.builder().name("Дрель").description("Простая дрель").available(true).build();
         rest.post(baseUrl, dtoReq, ItemDtoResp.class, requestorId);
@@ -101,7 +101,7 @@ public class ItemTest {
     }
 
     @Test
-    @Sql(scripts = "/populate_data_for_item_test.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = "/populate_users.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void findByText() throws Exception {
         var dtoReq = ItemDtoReq.builder().name("Дрель").description("Простая дрель").available(true).build();
         rest.post(baseUrl, dtoReq, ItemDtoResp.class, requestorId);

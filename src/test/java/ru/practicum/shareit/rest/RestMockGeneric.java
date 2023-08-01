@@ -55,6 +55,17 @@ public class RestMockGeneric<DtoIn, DtoOut> {
         return objectMapper.readValue(dtoRespJsonString, outputClass);
     }
 
+    public DtoOut patch(String url, Class<DtoOut> outputClass, Integer... requestorId) throws Exception {
+        dtoRespJsonString = mockMvc.perform(MockMvcRequestBuilders.patch(url)
+                        .header(AppConstants.HEADER_USER_ID, requestorId.length != 0 ? requestorId[0] : "")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString(StandardCharsets.UTF_8);
+        return objectMapper.readValue(dtoRespJsonString, outputClass);
+    }
+
     public void delete(String url, Integer... requestorId) throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete(url)
                 .header(AppConstants.HEADER_USER_ID, requestorId.length != 0 ? requestorId[0] : ""));

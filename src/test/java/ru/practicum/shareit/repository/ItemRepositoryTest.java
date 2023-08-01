@@ -44,7 +44,7 @@ public class ItemRepositoryTest {
     }
 
     @Test
-    @Sql({"/schema.sql", "/populate_data.sql"})
+    @Sql({"/schema.sql", "/populate_users.sql", "/populate_requests.sql", "/populate_items.sql",})
     void search() {
         assertThat(
                 repository.search("Сложная"),
@@ -53,7 +53,7 @@ public class ItemRepositoryTest {
     }
 
     @Test
-    @Sql({"/schema.sql", "/populate_data.sql"})
+    @Sql({"/schema.sql", "/populate_users.sql", "/populate_requests.sql", "/populate_items.sql",})
     void findAllByRequesterId() {
         assertThat(
                 repository.findAllByRequesterId(2)
@@ -65,7 +65,7 @@ public class ItemRepositoryTest {
     }
 
     @Test
-    @Sql({"/schema.sql", "/populate_data.sql"})
+    @Sql({"/schema.sql", "/populate_users.sql", "/populate_requests.sql", "/populate_items.sql",})
     void findAllByRequestIdIn() {
         assertThat(
                 new ArrayList<>(repository.findAllByRequestIdIn(Set.of(1))),

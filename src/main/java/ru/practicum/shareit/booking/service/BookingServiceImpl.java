@@ -59,7 +59,7 @@ public class BookingServiceImpl implements BookingService {
             bookingEntity.setStatus(approved ? BookingStatus.APPROVED : BookingStatus.REJECTED);
             return bookingMapper.entity2model(bookingRepository.save(bookingEntity));
         } else
-            throw new NotFoundException("wrong user", String.valueOf(requestorId));
+            throw new NotFoundException("Approver is not a owner of the item to be booked", String.valueOf(requestorId));
     }
 
     @Override

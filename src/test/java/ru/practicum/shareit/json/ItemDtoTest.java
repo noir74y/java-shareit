@@ -1,14 +1,10 @@
 package ru.practicum.shareit.json;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.json.JsonContent;
-import ru.practicum.shareit.item.model.CommentDtoResp;
-import ru.practicum.shareit.item.model.ItemBooking;
 import ru.practicum.shareit.item.model.ItemDtoReq;
 import ru.practicum.shareit.item.model.ItemDtoResp;
 import ru.practicum.shareit.utils.validation.OnCreate;
@@ -18,8 +14,6 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -53,7 +47,7 @@ public class ItemDtoTest {
     }
 
     @Test
-    void testDtoReq_IncorrectMail() throws IOException {
+    void testDtoReq_EmptyName_NoDescription_NoAvailable() throws IOException {
         dtoReqObject =  ItemDtoReq.builder().name("").build();
 
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
