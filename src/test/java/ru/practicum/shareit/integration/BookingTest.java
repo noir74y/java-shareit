@@ -60,8 +60,6 @@ public class BookingTest {
         var dtoReq = BookingDtoReq.builder().itemId(itemToBoBookedId).startDate(tomorrow).endDate(theDayAfterTomorrow).build();
         var dtoResp = rest.post(baseUrl, dtoReq, BookingDtoResp.class, requestorId);
 
-       // var dtoResp2 = rest.patch(baseUrl + dtoResp.getId() + "?approved=true", BookingDtoResp.class, OwnerOfItem);
-
         assertThat(
                 rest.patch(baseUrl + dtoResp.getId() + "?approved=true", BookingDtoResp.class, OwnerOfItem),
                 equalTo(BookingDtoResp.builder()
@@ -77,18 +75,29 @@ public class BookingTest {
         );
     }
 
-//    @Test
-//    @Sql(scripts = "/populate_users.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-//    void findById() throws Exception {
-//        var dtoReq = ItemDtoReq.builder().name("Дрель").description("Простая дрель").available(true).build();
-//        var dtoResp = rest.post(baseUrl, dtoReq, ItemDtoResp.class, requestorId);
-//        dtoResp.setComments(Collections.emptyList());
-//
-//        assertThat(
-//                rest.get(baseUrl + dtoResp.getId(), ItemDtoResp.class, requestorId),
-//                equalTo(dtoResp)
-//        );
-//    }
+    @Test
+    @Sql({"/schema.sql", "/populate_users.sql", "/populate_requests.sql", "/populate_items.sql"})
+    void findById() throws Exception {
+        var bookingIdToFind = 1;
+        var itemToBoBookedId = 2;
+        var dtoReq = BookingDtoReq.builder().itemId(itemToBoBookedId).startDate(tomorrow).endDate(theDayAfterTomorrow).build();
+        var dtoResp = rest.post(baseUrl, dtoReq, BookingDtoResp.class, requestorId);
+
+        assertThat(
+                rest.get(baseUrl + bookingIdToFind, BookingDtoResp.class, requestorId),
+                equalTo(BookingDtoResp.builder()
+                        .id(bookingIdToFind)
+                        .startDate(dtoResp.getStartDate())
+                        .endDate(dtoResp.getEndDate())
+                        .status(dtoResp.getStatus())
+                        .booker(BookingDtoRespBooker.builder()
+                                .id(requestorId).build())
+                        .item(BookingDtoRespItem.builder()
+                                .id(itemToBoBookedId)
+                                .name(dtoResp.getItem().getName()).build()).build())
+        );
+    }
+
 //
 //    @Test
 //    @Sql(scripts = "/populate_users.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
