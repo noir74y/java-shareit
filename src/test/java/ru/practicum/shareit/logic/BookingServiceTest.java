@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-import ru.practicum.shareit.booking.model.Booking;
-import ru.practicum.shareit.booking.model.BookingEntity;
-import ru.practicum.shareit.booking.model.BookingMapper;
-import ru.practicum.shareit.booking.model.BookingStatus;
+import ru.practicum.shareit.booking.model.*;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.booking.service.BookingServiceImpl;
 import ru.practicum.shareit.item.model.ItemEntity;
@@ -24,12 +21,16 @@ import ru.practicum.shareit.utils.exception.NotFoundException;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
+import static ru.practicum.shareit.utils.AppConstants.OFFSET_DEFAULT;
+import static ru.practicum.shareit.utils.AppConstants.PAGE_SIZE_MAX;
 
 @SpringJUnitConfig(BookingServiceImpl.class)
 @Import({BookingMapper.class, ModelMapper.class})
@@ -92,7 +93,7 @@ public class BookingServiceTest {
                 CustomValidationException.class,
                 () -> service.create(1, model));
 
-        Mockito.verifyNoInteractions (userRepository, itemRepository, bookingRepository);
+        Mockito.verifyNoInteractions(userRepository, itemRepository, bookingRepository);
     }
 
     @Test
@@ -110,7 +111,7 @@ public class BookingServiceTest {
         Mockito.verify(userRepository, Mockito.times(1)).findById(requestorId);
         Mockito.verify(itemRepository, Mockito.times(1)).findById(item.getId());
         Mockito.verifyNoMoreInteractions(userRepository, bookingRepository);
-        Mockito.verifyNoInteractions (bookingRepository);
+        Mockito.verifyNoInteractions(bookingRepository);
     }
 
     @Test
@@ -129,7 +130,7 @@ public class BookingServiceTest {
         Mockito.verify(userRepository, Mockito.times(1)).findById(requestorId);
         Mockito.verify(itemRepository, Mockito.times(1)).findById(item.getId());
         Mockito.verifyNoMoreInteractions(userRepository, bookingRepository);
-        Mockito.verifyNoInteractions (bookingRepository);
+        Mockito.verifyNoInteractions(bookingRepository);
     }
 
     @Test
@@ -145,7 +146,7 @@ public class BookingServiceTest {
 
         Mockito.verify(bookingRepository, Mockito.times(1)).findById(model.getId());
         Mockito.verifyNoMoreInteractions(bookingRepository);
-        Mockito.verifyNoInteractions (userRepository, itemRepository);
+        Mockito.verifyNoInteractions(userRepository, itemRepository);
     }
 
     @Test
@@ -160,11 +161,11 @@ public class BookingServiceTest {
 
         Mockito.verify(bookingRepository, Mockito.times(1)).findById(model.getId());
         Mockito.verifyNoMoreInteractions(bookingRepository);
-        Mockito.verifyNoInteractions (userRepository, itemRepository);
+        Mockito.verifyNoInteractions(userRepository, itemRepository);
     }
 
     @Test
-    void update_UserIsNeitherBookerNorOwner() throws Throwable {
+    void findById_UserIsNeitherBookerNorOwner() throws Throwable {
         requestorId = 3;
         model.setBookerId(2);
         entity = bookingMapper.model2entity(model, booker, item);
@@ -173,10 +174,53 @@ public class BookingServiceTest {
 
         NotFoundException exception = Assertions.assertThrows(
                 NotFoundException.class,
-                () -> service.update(requestorId, model.getId(), true));
+                () -> service.findById(requestorId, model.getId()));
 
         Mockito.verify(bookingRepository, Mockito.times(1)).findById(model.getId());
         Mockito.verifyNoMoreInteractions(bookingRepository);
-        Mockito.verifyNoInteractions (userRepository, itemRepository);
+        Mockito.verifyNoInteractions(userRepository, itemRepository);
+    }
+
+    @Test
+    void findByBookerAndState() throws Throwable {
+        when(userRepository.findById(anyInt())).thenReturn(Optional.of(booker));
+
+        when(bookingRepository.findAllByBookerIdAndStartDateIsAfterOrderByStartDateDesc(anyInt(), any())).thenReturn(List.of(entity));
+        when(bookingRepository.findAllByBookerIdAndStartDateIsBeforeAndEndDateIsAfterOrderByStartDateDesc(anyInt(), any(), any())).thenReturn(List.of(entity));
+        when(bookingRepository.findAllByBookerIdAndEndDateIsBeforeOrderByStartDateDesc(anyInt(), any())).thenReturn(List.of(entity));
+        when(bookingRepository.findAllByBookerIdAndStatusOrderByStartDateDesc(anyInt(), any())).thenReturn(List.of(entity));
+        when(bookingRepository.findAllByBookerIdAndStatusOrderByStartDateDesc(anyInt(), any())).thenReturn(List.of(entity));
+
+//        case FUTURE:
+//        entities = bookingRepository.findAllByBookerIdAndStartDateIsAfterOrderByStartDateDesc(requestorId, LocalDateTime.now());
+//        break;
+//        case CURRENT:
+//        entities = bookingRepository.findAllByBookerIdAndStartDateIsBeforeAndEndDateIsAfterOrderByStartDateDesc(requestorId, LocalDateTime.now(), LocalDateTime.now());
+//        break;
+//        case PAST:
+//        entities = bookingRepository.findAllByBookerIdAndEndDateIsBeforeOrderByStartDateDesc(requestorId, LocalDateTime.now());
+//        break;
+//        case WAITING:
+//        entities = bookingRepository.findAllByBookerIdAndStatusOrderByStartDateDesc(requestorId, BookingStatus.WAITING);
+//        break;
+//        case REJECTED:
+//        entities = bookingRepository.findAllByBookerIdAndStatusOrderByStartDateDesc(requestorId, BookingStatus.REJECTED);
+//        break;
+
+
+        assertThat(
+                service.findByBookerAndState(requestorId, BookingState.FUTURE.name(), Integer.valueOf(OFFSET_DEFAULT), Integer.valueOf(PAGE_SIZE_MAX)),
+                equalTo(model)
+        );
+
+        when(bookingRepository.findById(anyInt())).thenReturn(Optional.of(entity));
+
+        NotFoundException exception = Assertions.assertThrows(
+                NotFoundException.class,
+                () -> service.findById(requestorId, model.getId()));
+
+        Mockito.verify(bookingRepository, Mockito.times(1)).findById(model.getId());
+        Mockito.verifyNoMoreInteractions(bookingRepository);
+        Mockito.verifyNoInteractions(userRepository, itemRepository);
     }
 }
