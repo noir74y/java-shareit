@@ -71,7 +71,7 @@ public class BookingServiceImpl implements BookingService {
         if (requestorId.equals(bookingEntity.getItem().getOwner().getId()) || requestorId.equals(bookingEntity.getBooker().getId()))
             return bookingMapper.entity2model(bookingEntity);
         else
-            throw new NotFoundException("user is neither booker nor owner", String.valueOf(requestorId));
+            throw new NotFoundException("Requestor is neither booker nor owner", String.valueOf(requestorId));
     }
 
     @Override

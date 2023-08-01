@@ -73,7 +73,7 @@ public class BookingServiceTest {
 
         model = Booking.builder()
                 .id(1)
-                .itemId(1)
+                .itemId(item.getId())
                 .startDate(tomorrow)
                 .endDate(theDayAfterTomorrow)
                 .itemName(item.getName())
@@ -148,101 +148,35 @@ public class BookingServiceTest {
         Mockito.verifyNoInteractions (userRepository, itemRepository);
     }
 
-//
-//    @Test
-//    void create_WrongUser() throws Throwable {
-//        requestorId = 2;
-//        when(userRepository.findById(anyInt())).thenThrow(new NotFoundException("no such user", String.valueOf(requestorId)));
-//
-//        NotFoundException exception = Assertions.assertThrows(
-//                NotFoundException.class,
-//                () -> service.create(requestorId, model));
-//
-//        Mockito.verify(userRepository, Mockito.times(1)).findById(anyInt());
-//        Mockito.verifyNoMoreInteractions(userRepository);
-//        Mockito.verifyNoInteractions(itemRepository);
-//    }
-//
-//    @Test
-//    void update() throws Throwable {
-//        var changedModel = Item.builder().id(model.getId()).name(model.getName()).description("Сложная дрель").available(model.getAvailable()).ownerId(model.getOwnerId()).build();
-//        var changedEntity = ItemEntity.builder().id(changedModel.getId()).name(changedModel.getName()).description(changedModel.getDescription()).available(changedModel.getAvailable()).owner(owner).build();
-//
-//        when(itemRepository.findById(any())).thenReturn(Optional.ofNullable(entity));
-//        when(itemRepository.save(any())).thenReturn(changedEntity);
-//
-//        assertThat(
-//                service.update(requestorId, changedModel, changedModel.getId()),
-//                equalTo(changedModel)
-//        );
-//
-//        Mockito.verify(itemRepository, Mockito.times(1)).findById(model.getId());
-//        Mockito.verify(itemRepository, Mockito.times(1)).save(changedEntity);
-//        Mockito.verifyNoMoreInteractions(itemRepository);
-//    }
-//
-//    @Test
-//    void update_ItemNotFound() throws Throwable {
-//        when(itemRepository.findById(any())).thenThrow(new NotFoundException("no such item", String.valueOf(model.getId())));
-//
-//        NotFoundException exception = Assertions.assertThrows(
-//                NotFoundException.class,
-//                () -> service.update(requestorId, model, model.getId()));
-//
-//        Mockito.verify(itemRepository, Mockito.times(1)).findById(model.getId());
-//        Mockito.verifyNoMoreInteractions(itemRepository);
-//    }
-//
-//    @Test
-//    void update_WrongItem() throws Throwable {
-//        requestorId = 2;
-//        when(itemRepository.findById(any())).thenReturn(Optional.ofNullable(entity));
-//
-//        ForbiddenException exception = Assertions.assertThrows(
-//                ForbiddenException.class,
-//                () -> service.update(requestorId, model, model.getId()));
-//
-//        Mockito.verify(itemRepository, Mockito.times(1)).findById(model.getId());
-//        Mockito.verifyNoMoreInteractions(itemRepository);
-//    }
-//
-//    @Test
-//    void findById() throws Throwable {
-//        when(itemRepository.findById(anyInt())).thenReturn(Optional.ofNullable(entity));
-//
-//        assertThat(
-//                service.findById(requestorId, model.getId()),
-//                equalTo(model)
-//        );
-//
-//        Mockito.verify(itemRepository, Mockito.times(1)).findById(model.getId());
-//        Mockito.verifyNoMoreInteractions(itemRepository);
-//    }
-//
-//    @Test
-//    void findByOwner() throws Throwable {
-//        when(itemRepository.findAllByOwnerIdOrderById(anyInt())).thenReturn(List.of(entity));
-//
-//        assertThat(
-//                service.findByOwner(requestorId),
-//                equalTo(List.of(model))
-//        );
-//
-//        Mockito.verify(itemRepository, Mockito.times(1)).findAllByOwnerIdOrderById(model.getId());
-//        Mockito.verifyNoMoreInteractions(itemRepository);
-//    }
-//
-//    @Test
-//    void findByText() throws Throwable {
-//        when(itemRepository.search(anyString())).thenReturn(List.of(entity));
-//        model.setComments(null);
-//
-//        assertThat(
-//                service.findByText(requestorId, "SearchPattern"),
-//                equalTo(List.of(model))
-//        );
-//
-//        Mockito.verify(itemRepository, Mockito.times(1)).search("SearchPattern");
-//        Mockito.verifyNoMoreInteractions(itemRepository);
-//    }
+    @Test
+    void update_ApproverIsNotAnOwnerOfItem() throws Throwable {
+        requestorId = 2;
+
+        when(bookingRepository.findById(anyInt())).thenReturn(Optional.of(entity));
+
+        NotFoundException exception = Assertions.assertThrows(
+                NotFoundException.class,
+                () -> service.update(requestorId, model.getId(), true));
+
+        Mockito.verify(bookingRepository, Mockito.times(1)).findById(model.getId());
+        Mockito.verifyNoMoreInteractions(bookingRepository);
+        Mockito.verifyNoInteractions (userRepository, itemRepository);
+    }
+
+    @Test
+    void update_UserIsNeitherBookerNorOwner() throws Throwable {
+        requestorId = 3;
+        model.setBookerId(2);
+        entity = bookingMapper.model2entity(model, booker, item);
+
+        when(bookingRepository.findById(anyInt())).thenReturn(Optional.of(entity));
+
+        NotFoundException exception = Assertions.assertThrows(
+                NotFoundException.class,
+                () -> service.update(requestorId, model.getId(), true));
+
+        Mockito.verify(bookingRepository, Mockito.times(1)).findById(model.getId());
+        Mockito.verifyNoMoreInteractions(bookingRepository);
+        Mockito.verifyNoInteractions (userRepository, itemRepository);
+    }
 }
