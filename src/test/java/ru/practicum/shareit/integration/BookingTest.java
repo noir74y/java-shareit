@@ -56,25 +56,16 @@ public class BookingTest {
     }
 
     @Test
-    @Sql({"/schema.sql", "/populate_users.sql", "/populate_requests.sql", "/populate_items.sql"})
+    @Sql({"/schema.sql", "/populate_users.sql", "/populate_requests.sql", "/populate_items.sql", "/populate_bookings.sql"})
     void update() throws Exception {
         var itemToBoBookedId = 2;
         var OwnerOfItem = 2;
-        var dtoReq = BookingDtoReq.builder().itemId(itemToBoBookedId).startDate(tomorrow).endDate(theDayAfterTomorrow).build();
-        var dtoResp = rest.post(baseUrl, dtoReq, BookingDtoResp.class, requestorId);
+        var dtoResp = rest.get(baseUrl + itemToBoBookedId, BookingDtoResp.class, requestorId);
+        dtoResp.setStatus(BookingStatus.APPROVED.name());
 
         assertThat(
                 rest.patch(baseUrl + dtoResp.getId() + "?approved=true", BookingDtoResp.class, OwnerOfItem),
-                equalTo(BookingDtoResp.builder()
-                        .id(dtoResp.getId())
-                        .startDate(dtoResp.getStartDate())
-                        .endDate(dtoResp.getEndDate())
-                        .status(BookingStatus.APPROVED.name())
-                        .booker(BookingDtoRespBooker.builder()
-                                .id(requestorId).build())
-                        .item(BookingDtoRespItem.builder()
-                                .id(itemToBoBookedId)
-                                .name(dtoResp.getItem().getName()).build()).build())
+                equalTo(dtoResp)
         );
     }
 
@@ -88,25 +79,15 @@ public class BookingTest {
         var bookingIdToFind = 1;
         assertThat(
                 rest.get(baseUrl + bookingIdToFind, BookingDtoResp.class, requestorId),
-                equalTo(BookingDtoResp.builder()
-                        .id(bookingIdToFind)
-                        .startDate(dtoResp.getStartDate())
-                        .endDate(dtoResp.getEndDate())
-                        .status(dtoResp.getStatus())
-                        .booker(BookingDtoRespBooker.builder()
-                                .id(requestorId).build())
-                        .item(BookingDtoRespItem.builder()
-                                .id(itemToBoBookedId)
-                                .name(dtoResp.getItem().getName()).build()).build())
+                equalTo(dtoResp)
         );
     }
 
     @Test
-    @Sql({"/schema.sql", "/populate_users.sql", "/populate_requests.sql", "/populate_items.sql"})
+    @Sql({"/schema.sql", "/populate_users.sql", "/populate_requests.sql", "/populate_items.sql", "/populate_bookings.sql"})
     void findByBookerAndState() throws Exception {
-        var itemToBoBookedId = 2;
-        var dtoReq = BookingDtoReq.builder().itemId(itemToBoBookedId).startDate(tomorrow).endDate(theDayAfterTomorrow).build();
-        var dtoResp = rest.post(baseUrl, dtoReq, BookingDtoResp.class, requestorId);
+        var bookingIdToFind = 2;
+        var dtoResp = rest.get(baseUrl + bookingIdToFind, BookingDtoResp.class, requestorId);
 
         List<BookingDtoResp> dtoRespList = RestMockGeneric.getObjectMapper()
                 .readValue(
@@ -114,28 +95,17 @@ public class BookingTest {
                         new TypeReference<>() {
                         });
 
-        var bookingIdToFind = 1;
         assertThat(
                 dtoRespList,
-                equalTo(List.of(BookingDtoResp.builder()
-                        .id(bookingIdToFind)
-                        .startDate(dtoResp.getStartDate())
-                        .endDate(dtoResp.getEndDate())
-                        .status(dtoResp.getStatus())
-                        .booker(BookingDtoRespBooker.builder()
-                                .id(requestorId).build())
-                        .item(BookingDtoRespItem.builder()
-                                .id(itemToBoBookedId)
-                                .name(dtoResp.getItem().getName()).build()).build()))
+                equalTo(List.of(dtoResp))
         );
     }
 
     @Test
-    @Sql({"/schema.sql", "/populate_users.sql", "/populate_requests.sql", "/populate_items.sql"})
+    @Sql({"/schema.sql", "/populate_users.sql", "/populate_requests.sql", "/populate_items.sql", "/populate_bookings.sql"})
     void findByOwnerAndState() throws Exception {
-        var itemToBoBookedId = 2;
-        var dtoReq = BookingDtoReq.builder().itemId(itemToBoBookedId).startDate(tomorrow).endDate(theDayAfterTomorrow).build();
-        var dtoResp = rest.post(baseUrl, dtoReq, BookingDtoResp.class, requestorId);
+        var bookingIdToFind = 2;
+        var dtoResp = rest.get(baseUrl + bookingIdToFind, BookingDtoResp.class, requestorId);
 
         var ownerOfItem = 2;
         List<BookingDtoResp> dtoRespList = RestMockGeneric.getObjectMapper()
@@ -144,19 +114,9 @@ public class BookingTest {
                         new TypeReference<>() {
                         });
 
-        var bookingIdToFind = 1;
         assertThat(
                 dtoRespList,
-                equalTo(List.of(BookingDtoResp.builder()
-                        .id(bookingIdToFind)
-                        .startDate(dtoResp.getStartDate())
-                        .endDate(dtoResp.getEndDate())
-                        .status(dtoResp.getStatus())
-                        .booker(BookingDtoRespBooker.builder()
-                                .id(requestorId).build())
-                        .item(BookingDtoRespItem.builder()
-                                .id(itemToBoBookedId)
-                                .name(dtoResp.getItem().getName()).build()).build()))
+                equalTo(List.of(dtoResp))
         );
     }
 }
