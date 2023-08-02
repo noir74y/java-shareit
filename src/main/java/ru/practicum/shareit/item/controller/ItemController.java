@@ -63,7 +63,7 @@ public class ItemController {
 
     @GetMapping("/search")
     public List<ItemDtoResp> findByText(@RequestHeader(HEADER_USER_ID) @NotNull int requestorId,
-                                             @RequestParam(value = "text") String text) {
+                                        @RequestParam(value = "text") String text) {
         log.info("requestorId={}, GET /search?text={}", requestorId, text);
         return itemMapper.bulkModel2dtoResp(itemService.findByText(requestorId, text));
     }

@@ -4,7 +4,6 @@ import ru.practicum.shareit.item.model.CommentDtoReq;
 import ru.practicum.shareit.item.model.CommentEntity;
 import ru.practicum.shareit.item.model.Item;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface ItemService {

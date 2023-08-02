@@ -6,7 +6,10 @@ import org.springframework.stereotype.Component;
 import ru.practicum.shareit.user.model.UserEntity;
 import ru.practicum.shareit.user.model.UserMapper;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component

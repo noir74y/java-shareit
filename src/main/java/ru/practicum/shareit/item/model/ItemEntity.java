@@ -7,8 +7,6 @@ import lombok.RequiredArgsConstructor;
 import ru.practicum.shareit.user.model.UserEntity;
 
 import javax.persistence.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Data
 @Builder
@@ -26,4 +24,5 @@ public class ItemEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
     private UserEntity owner;
-    private Integer requestId;}
+    private Integer requestId;
+}

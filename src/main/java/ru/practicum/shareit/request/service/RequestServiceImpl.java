@@ -14,9 +14,7 @@ import ru.practicum.shareit.request.repository.RequestRepository;
 import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.utils.exception.NotFoundException;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
