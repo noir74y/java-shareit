@@ -10,7 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.practicum.shareit.utils.AppConstants;
+import ru.practicum.shareit.utils.AppConfiguration;
 
 import java.nio.charset.StandardCharsets;
 
@@ -33,7 +33,7 @@ public class RestMockGeneric<DtoIn, DtoOut> {
     public DtoOut post(String url, DtoIn dtoReq, Class<DtoOut> outputClass, Integer... requestorId) throws Exception {
         dtoRespJsonString = mockMvc.perform(
                         MockMvcRequestBuilders.post(url)
-                                .header(AppConstants.HEADER_USER_ID, requestorId.length != 0 ? requestorId[0] : "")
+                                .header(AppConfiguration.HEADER_USER_ID, requestorId.length != 0 ? requestorId[0] : "")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(dtoReq)))
                 .andExpect(status().isOk())
@@ -45,7 +45,7 @@ public class RestMockGeneric<DtoIn, DtoOut> {
 
     public DtoOut patch(String url, DtoIn dtoReq, Class<DtoOut> outputClass, Integer... requestorId) throws Exception {
         dtoRespJsonString = mockMvc.perform(MockMvcRequestBuilders.patch(url)
-                        .header(AppConstants.HEADER_USER_ID, requestorId.length != 0 ? requestorId[0] : "")
+                        .header(AppConfiguration.HEADER_USER_ID, requestorId.length != 0 ? requestorId[0] : "")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dtoReq)))
                 .andExpect(status().isOk())
@@ -57,7 +57,7 @@ public class RestMockGeneric<DtoIn, DtoOut> {
 
     public DtoOut patch(String url, Class<DtoOut> outputClass, Integer... requestorId) throws Exception {
         dtoRespJsonString = mockMvc.perform(MockMvcRequestBuilders.patch(url)
-                        .header(AppConstants.HEADER_USER_ID, requestorId.length != 0 ? requestorId[0] : "")
+                        .header(AppConfiguration.HEADER_USER_ID, requestorId.length != 0 ? requestorId[0] : "")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn()
@@ -68,12 +68,12 @@ public class RestMockGeneric<DtoIn, DtoOut> {
 
     public void delete(String url, Integer... requestorId) throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete(url)
-                .header(AppConstants.HEADER_USER_ID, requestorId.length != 0 ? requestorId[0] : ""));
+                .header(AppConfiguration.HEADER_USER_ID, requestorId.length != 0 ? requestorId[0] : ""));
     }
 
     public DtoOut get(String url, Class<DtoOut> outputClass, Integer... requestorId) throws Exception {
         dtoRespJsonString = mockMvc.perform(MockMvcRequestBuilders.get(url)
-                        .header(AppConstants.HEADER_USER_ID, requestorId.length != 0 ? requestorId[0] : "")
+                        .header(AppConfiguration.HEADER_USER_ID, requestorId.length != 0 ? requestorId[0] : "")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(HttpStatus.OK.value()))
                 .andReturn()
@@ -84,7 +84,7 @@ public class RestMockGeneric<DtoIn, DtoOut> {
 
     public String get(String url, Integer... requestorId) throws Exception {
         return mockMvc.perform(MockMvcRequestBuilders.get(url)
-                        .header(AppConstants.HEADER_USER_ID, requestorId.length != 0 ? requestorId[0] : "")
+                        .header(AppConfiguration.HEADER_USER_ID, requestorId.length != 0 ? requestorId[0] : "")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(HttpStatus.OK.value()))
                 .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);

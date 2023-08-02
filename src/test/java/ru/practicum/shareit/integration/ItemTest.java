@@ -15,6 +15,7 @@ import ru.practicum.shareit.item.model.CommentDtoResp;
 import ru.practicum.shareit.item.model.ItemDtoReq;
 import ru.practicum.shareit.item.model.ItemDtoResp;
 import ru.practicum.shareit.rest.RestMockGeneric;
+import ru.practicum.shareit.utils.exception.ForbiddenException;
 
 import java.util.Collections;
 import java.util.List;
@@ -125,6 +126,21 @@ public class ItemTest {
                         .description(dtoReq.getDescription())
                         .available(dtoReq.getAvailable()).build())
         );
+    }
+
+    @Test
+    @Sql(scripts = "/populate_users.sql")
+    void updateWrongItem() throws Exception {
+        var dtoReq = ItemDtoReq.builder().name("Дрель").description("Простая дрель").available(true).build();
+        var dtoResp = itemRest.post(baseUrl, dtoReq, ItemDtoResp.class, requestorId);
+
+        dtoReq.setName("Дрель+");
+        dtoReq.setDescription("Аккумуляторная дрель");
+        dtoReq.setAvailable(false);
+
+        AssertionError exception = Assertions.assertThrows(
+                AssertionError.class,
+                () -> itemRest.patch(baseUrl + dtoResp.getId(), dtoReq, ItemDtoResp.class, 2));
     }
 
     @Test

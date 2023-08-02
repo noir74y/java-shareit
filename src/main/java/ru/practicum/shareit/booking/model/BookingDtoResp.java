@@ -9,7 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
-import static ru.practicum.shareit.utils.AppConstants.DATE_TIME_FORMAT;
+import static ru.practicum.shareit.utils.AppConfiguration.DATE_TIME_FORMAT;
 
 @Data
 @Builder

@@ -21,16 +21,12 @@ import ru.practicum.shareit.utils.exception.NotFoundException;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
-import static ru.practicum.shareit.utils.AppConstants.OFFSET_DEFAULT;
-import static ru.practicum.shareit.utils.AppConstants.PAGE_SIZE_MAX;
 
 @SpringJUnitConfig(BookingServiceImpl.class)
 @Import({BookingMapper.class, ModelMapper.class})

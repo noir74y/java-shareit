@@ -12,7 +12,7 @@ import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-import static ru.practicum.shareit.utils.AppConstants.DATE_TIME_FORMAT;
+import static ru.practicum.shareit.utils.AppConfiguration.DATE_TIME_FORMAT;
 
 @Data
 @Builder

@@ -8,14 +8,14 @@ import ru.practicum.shareit.request.model.RequestDtoReq;
 import ru.practicum.shareit.request.model.RequestDtoResp;
 import ru.practicum.shareit.request.model.RequestMapper;
 import ru.practicum.shareit.request.service.RequestService;
+import ru.practicum.shareit.utils.AppConfiguration;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-import static ru.practicum.shareit.utils.AppConstants.HEADER_USER_ID;
-import static ru.practicum.shareit.utils.AppConstants.*;
+import static ru.practicum.shareit.utils.AppConfiguration.HEADER_USER_ID;
 
 
 @Slf4j
@@ -42,8 +42,8 @@ public class RequestController {
 
     @GetMapping("/all")
     public List<RequestDtoResp> findAllByOthers(@RequestHeader(HEADER_USER_ID) @NotNull Integer requestorId,
-                                                @RequestParam(defaultValue = OFFSET_DEFAULT, required = false, name = "from") @Min(0) Integer offset,
-                                                @RequestParam(defaultValue = PAGE_SIZE_MAX, required = false, name = "size") @Min(1) Integer pageSize) {
+                                                @RequestParam(defaultValue = AppConfiguration.OFFSET_DEFAULT, required = false, name = "from") @Min(0) Integer offset,
+                                                @RequestParam(defaultValue = AppConfiguration.PAGE_SIZE_MAX, required = false, name = "size") @Min(1) Integer pageSize) {
         log.info("requestorId={}, GET /requests/all?from={},size={}", requestorId, offset, pageSize);
         return requestService.findAllByOthers(requestorId, offset, pageSize);
     }

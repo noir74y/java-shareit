@@ -10,10 +10,9 @@ import ru.practicum.shareit.utils.validation.OnCreate;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.List;
 
-import static ru.practicum.shareit.utils.AppConstants.HEADER_USER_ID;
+import static ru.practicum.shareit.utils.AppConfiguration.HEADER_USER_ID;
 
 @Slf4j
 @RestController

@@ -21,8 +21,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
-import static ru.practicum.shareit.utils.AppConstants.OFFSET_DEFAULT;
-import static ru.practicum.shareit.utils.AppConstants.PAGE_SIZE_MAX;
+import static ru.practicum.shareit.utils.AppConfiguration.OFFSET_DEFAULT;
+import static ru.practicum.shareit.utils.AppConfiguration.PAGE_SIZE_MAX;
 
 @WebMvcTest(controllers = BookingController.class)
 @Import({RestMockGeneric.class, BookingMapper.class, ModelMapper.class})
