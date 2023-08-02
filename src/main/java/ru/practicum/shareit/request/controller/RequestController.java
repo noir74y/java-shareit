@@ -15,6 +15,8 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 import static ru.practicum.shareit.utils.AppConstants.HEADER_USER_ID;
+import static ru.practicum.shareit.utils.AppConstants.*;
+
 
 @Slf4j
 @RestController
@@ -40,8 +42,8 @@ public class RequestController {
 
     @GetMapping("/all")
     public List<RequestDtoResp> findAllByOthers(@RequestHeader(HEADER_USER_ID) @NotNull Integer requestorId,
-                                                @RequestParam(required = false, name = "from") @Min(0) Integer offset,
-                                                @RequestParam(required = false, name = "size") @Min(1) Integer pageSize) {
+                                                @RequestParam(defaultValue = OFFSET_DEFAULT, required = false, name = "from") @Min(0) Integer offset,
+                                                @RequestParam(defaultValue = PAGE_SIZE_MAX, required = false, name = "size") @Min(1) Integer pageSize) {
         log.info("requestorId={}, GET /requests/all?from={},size={}", requestorId, offset, pageSize);
         return requestService.findAllByOthers(requestorId, offset, pageSize);
     }

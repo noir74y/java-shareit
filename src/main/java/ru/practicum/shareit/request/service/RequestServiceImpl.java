@@ -53,9 +53,6 @@ public class RequestServiceImpl implements RequestService {
     public List<RequestDtoResp> findAllByOthers(Integer requestorId, Integer offset, Integer pageSize) {
         checkUser(requestorId);
 
-        if (Objects.isNull(offset) || Objects.isNull(pageSize))
-            return Collections.emptyList();
-
         List<RequestEntity> entityList = requestRepository
                 .findAllByRequestorIdNotOrderByCreatedDesc(requestorId, PageRequest.of(offset / pageSize, pageSize))
                 .toList();
