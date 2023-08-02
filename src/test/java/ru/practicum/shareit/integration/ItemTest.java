@@ -1,16 +1,20 @@
 package ru.practicum.shareit.integration;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
-import ru.practicum.shareit.rest.RestMockGeneric;
+import ru.practicum.shareit.item.model.CommentDtoReq;
+import ru.practicum.shareit.item.model.CommentDtoResp;
 import ru.practicum.shareit.item.model.ItemDtoReq;
 import ru.practicum.shareit.item.model.ItemDtoResp;
+import ru.practicum.shareit.rest.RestMockGeneric;
 
 import java.util.Collections;
 import java.util.List;
@@ -24,7 +28,10 @@ import static org.hamcrest.Matchers.equalTo;
 public class ItemTest {
     private final String baseUrl = "/items/";
     @Autowired
-    RestMockGeneric<ItemDtoReq, ItemDtoResp> rest;
+    RestMockGeneric<ItemDtoReq, ItemDtoResp> itemRest;
+    @Autowired
+    RestMockGeneric<CommentDtoReq, CommentDtoResp> commentRest;
+
     Integer requestorId;
 
     @BeforeEach
@@ -33,12 +40,12 @@ public class ItemTest {
     }
 
     @Test
-    @Sql(scripts = "/populate_users.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    void create() throws Exception {
+    @Sql(scripts = "/populate_users.sql")
+    void createItem() throws Exception {
         var dtoReq = ItemDtoReq.builder().name("Дрель").description("Простая дрель").available(true).build();
 
         assertThat(
-                rest.post(baseUrl, dtoReq, ItemDtoResp.class, requestorId),
+                itemRest.post(baseUrl, dtoReq, ItemDtoResp.class, requestorId),
                 equalTo(ItemDtoResp.builder()
                         .id(1)
                         .name(dtoReq.getName())
@@ -48,17 +55,70 @@ public class ItemTest {
     }
 
     @Test
-    @Sql(scripts = "/populate_users.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    void update() throws Exception {
+    @Sql({"/schema.sql", "/populate_users.sql", "/populate_requests.sql", "/populate_items.sql", "/populate_bookings.sql"})
+    void create_Fairy_Comment() throws Exception {
+        requestorId = 1;
+        var itemId = 2;
+        var dtoReq = CommentDtoReq.builder().text("Хорошая дрель").build();
+        var createdCommentId = 1;
+
+        assertThat(
+                commentRest.post(baseUrl + itemId + "/comment", dtoReq, CommentDtoResp.class, requestorId).getId(),
+                equalTo(createdCommentId)
+        );
+    }
+
+    @Test
+    @Sql({"/schema.sql", "/populate_users.sql", "/populate_requests.sql", "/populate_items.sql", "/populate_bookings.sql"})
+    void create_Comment_Wrong_User() throws Exception {
+        requestorId = 100;
+        var itemId = 2;
+        var dtoReq = CommentDtoReq.builder().text("Хорошая дрель").build();
+        var createdCommentId = 1;
+
+        AssertionError exception = Assertions.assertThrows(
+                AssertionError.class,
+                () -> commentRest.post(baseUrl + itemId + "/comment", dtoReq, CommentDtoResp.class, requestorId));
+    }
+
+    @Test
+    @Sql({"/schema.sql", "/populate_users.sql", "/populate_requests.sql", "/populate_items.sql", "/populate_bookings.sql"})
+    void create_Comment_Wrong_Item() throws Exception {
+        requestorId = 1;
+        var itemId = 100;
+        var dtoReq = CommentDtoReq.builder().text("Хорошая дрель").build();
+        var createdCommentId = 1;
+
+        AssertionError exception = Assertions.assertThrows(
+                AssertionError.class,
+                () -> commentRest.post(baseUrl + itemId + "/comment", dtoReq, CommentDtoResp.class, requestorId));
+    }
+
+    @Test
+    @Sql({"/schema.sql", "/populate_users.sql", "/populate_requests.sql", "/populate_items.sql", "/populate_bookings.sql"})
+    void create_Unfair_Comment() throws Exception {
+        requestorId = 2;
+        var itemId = 1;
+        var dtoReq = CommentDtoReq.builder().text("Хорошая дрель").build();
+        var createdCommentId = 1;
+
+        AssertionError exception = Assertions.assertThrows(
+                AssertionError.class,
+                () -> commentRest.post(baseUrl + itemId + "/comment", dtoReq, CommentDtoResp.class, requestorId));
+    }
+
+    @Test
+    @Sql(scripts = "/populate_users.sql")
+    void updateItem() throws Exception {
         var dtoReq = ItemDtoReq.builder().name("Дрель").description("Простая дрель").available(true).build();
-        var dtoResp = rest.post(baseUrl, dtoReq, ItemDtoResp.class, requestorId);
+        var dtoResp = itemRest.post(baseUrl, dtoReq, ItemDtoResp.class, requestorId);
 
         dtoReq.setName("Дрель+");
         dtoReq.setDescription("Аккумуляторная дрель");
         dtoReq.setAvailable(false);
 
         assertThat(
-                rest.patch(baseUrl + dtoResp.getId(), dtoReq, ItemDtoResp.class, requestorId),
+                itemRest.patch(baseUrl + dtoResp.getId(), dtoReq, ItemDtoResp.class, requestorId),
                 equalTo(ItemDtoResp.builder()
                         .id(dtoResp.getId())
                         .name(dtoReq.getName())
@@ -68,29 +128,29 @@ public class ItemTest {
     }
 
     @Test
-    @Sql(scripts = "/populate_users.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = "/populate_users.sql")
     void findById() throws Exception {
         var dtoReq = ItemDtoReq.builder().name("Дрель").description("Простая дрель").available(true).build();
-        var dtoResp = rest.post(baseUrl, dtoReq, ItemDtoResp.class, requestorId);
+        var dtoResp = itemRest.post(baseUrl, dtoReq, ItemDtoResp.class, requestorId);
         dtoResp.setComments(Collections.emptyList());
 
         assertThat(
-                rest.get(baseUrl + dtoResp.getId(), ItemDtoResp.class, requestorId),
+                itemRest.get(baseUrl + dtoResp.getId(), ItemDtoResp.class, requestorId),
                 equalTo(dtoResp)
         );
     }
 
     @Test
-    @Sql(scripts = "/populate_users.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = "/populate_users.sql")
     void findByOwner() throws Exception {
         var dtoReq = ItemDtoReq.builder().name("Дрель").description("Простая дрель").available(true).build();
-        rest.post(baseUrl, dtoReq, ItemDtoResp.class, requestorId);
+        itemRest.post(baseUrl, dtoReq, ItemDtoResp.class, requestorId);
 
         requestorId = 2;
 
         List<ItemDtoResp> dtoRespList = RestMockGeneric.getObjectMapper()
                 .readValue(
-                        rest.get(baseUrl, requestorId),
+                        itemRest.get(baseUrl, requestorId),
                         new TypeReference<>() {
                         });
 
@@ -101,17 +161,17 @@ public class ItemTest {
     }
 
     @Test
-    @Sql(scripts = "/populate_users.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = "/populate_users.sql")
     void findByText() throws Exception {
         var dtoReq = ItemDtoReq.builder().name("Дрель").description("Простая дрель").available(true).build();
-        rest.post(baseUrl, dtoReq, ItemDtoResp.class, requestorId);
+        itemRest.post(baseUrl, dtoReq, ItemDtoResp.class, requestorId);
 
         dtoReq.setDescription("Сложная дрель");
-        var dtoResp = rest.post(baseUrl, dtoReq, ItemDtoResp.class, requestorId);
+        var dtoResp = itemRest.post(baseUrl, dtoReq, ItemDtoResp.class, requestorId);
 
         List<ItemDtoResp> dtoRespList = RestMockGeneric.getObjectMapper()
                 .readValue(
-                        rest.get(baseUrl + "search?text=Сложная", requestorId),
+                        itemRest.get(baseUrl + "search?text=Сложная", requestorId),
                         new TypeReference<>() {
                         });
 
