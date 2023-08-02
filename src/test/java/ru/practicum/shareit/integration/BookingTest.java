@@ -71,12 +71,12 @@ public class BookingTest {
     @Sql({"/schema.sql", "/populate_users.sql", "/populate_requests.sql", "/populate_items.sql", "/populate_bookings.sql"})
     void update() throws Exception {
         var itemToBoBookedId = 2;
-        var OwnerOfItem = 2;
+        var ownerOfItem = 2;
         var dtoResp = rest.get(baseUrl + itemToBoBookedId, BookingDtoResp.class, requestorId);
         dtoResp.setStatus(BookingStatus.APPROVED.name());
 
         assertThat(
-                rest.patch(baseUrl + dtoResp.getId() + "?approved=true", BookingDtoResp.class, OwnerOfItem),
+                rest.patch(baseUrl + dtoResp.getId() + "?approved=true", BookingDtoResp.class, ownerOfItem),
                 equalTo(dtoResp)
         );
     }
@@ -133,12 +133,10 @@ public class BookingTest {
         assertThat(
                 getDtoRespList("?state=ALL", bookerOfItem),
                 equalTo(List.of
-                        (
-                                rest.get(baseUrl + 2, BookingDtoResp.class, requestorId),
+                        (rest.get(baseUrl + 2, BookingDtoResp.class, requestorId),
                                 rest.get(baseUrl + 4, BookingDtoResp.class, requestorId),
                                 rest.get(baseUrl + 6, BookingDtoResp.class, requestorId),
-                                rest.get(baseUrl + 7, BookingDtoResp.class, requestorId)
-                        )
+                                rest.get(baseUrl + 7, BookingDtoResp.class, requestorId))
                 )
         );
 
@@ -184,12 +182,10 @@ public class BookingTest {
         assertThat(
                 getDtoRespList("owner?state=ALL", ownerOfItem),
                 equalTo(List.of
-                        (
-                                rest.get(baseUrl + 2, BookingDtoResp.class, requestorId),
+                        (rest.get(baseUrl + 2, BookingDtoResp.class, requestorId),
                                 rest.get(baseUrl + 4, BookingDtoResp.class, requestorId),
                                 rest.get(baseUrl + 6, BookingDtoResp.class, requestorId),
-                                rest.get(baseUrl + 7, BookingDtoResp.class, requestorId)
-                        )
+                                rest.get(baseUrl + 7, BookingDtoResp.class, requestorId))
                 )
         );
     }
