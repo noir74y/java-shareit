@@ -132,11 +132,11 @@ public class BookingTest {
 
         assertThat(
                 getDtoRespList("?state=ALL", bookerOfItem),
-                equalTo(List.of
-                        (rest.get(baseUrl + 2, BookingDtoResp.class, requestorId),
+                equalTo(List.of(rest.get(baseUrl + 2, BookingDtoResp.class, requestorId),
                                 rest.get(baseUrl + 4, BookingDtoResp.class, requestorId),
                                 rest.get(baseUrl + 6, BookingDtoResp.class, requestorId),
-                                rest.get(baseUrl + 7, BookingDtoResp.class, requestorId))
+                                rest.get(baseUrl + 7, BookingDtoResp.class, requestorId)
+                        )
                 )
         );
 
@@ -181,11 +181,11 @@ public class BookingTest {
 
         assertThat(
                 getDtoRespList("owner?state=ALL", ownerOfItem),
-                equalTo(List.of
-                        (rest.get(baseUrl + 2, BookingDtoResp.class, requestorId),
-                                rest.get(baseUrl + 4, BookingDtoResp.class, requestorId),
-                                rest.get(baseUrl + 6, BookingDtoResp.class, requestorId),
-                                rest.get(baseUrl + 7, BookingDtoResp.class, requestorId))
+                equalTo(List.of(
+                        rest.get(baseUrl + 2, BookingDtoResp.class, requestorId),
+                        rest.get(baseUrl + 4, BookingDtoResp.class, requestorId),
+                        rest.get(baseUrl + 6, BookingDtoResp.class, requestorId),
+                        rest.get(baseUrl + 7, BookingDtoResp.class, requestorId))
                 )
         );
     }
