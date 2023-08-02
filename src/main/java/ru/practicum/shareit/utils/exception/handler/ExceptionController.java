@@ -24,8 +24,6 @@ public class ExceptionController {
         else if (exception instanceof CustomValidationException)
             appException = (CustomValidationException) exception;
         else if (exception instanceof MethodArgumentNotValidException)
-//            appException = new GenericValidationException(exception);
-//        else if (exception instanceof MissingRequestHeaderException)
             appException = new HeaderMissingException(exception);
         else if (exception instanceof ConstraintViolationException) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessage(exception.getMessage(), "Unknown state: UNSUPPORTED_STATUS"));
