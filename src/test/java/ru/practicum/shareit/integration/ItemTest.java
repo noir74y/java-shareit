@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
 import ru.practicum.shareit.item.model.CommentDtoReq;
@@ -15,7 +14,6 @@ import ru.practicum.shareit.item.model.CommentDtoResp;
 import ru.practicum.shareit.item.model.ItemDtoReq;
 import ru.practicum.shareit.item.model.ItemDtoResp;
 import ru.practicum.shareit.rest.RestMockGeneric;
-import ru.practicum.shareit.utils.exception.ForbiddenException;
 
 import java.util.Collections;
 import java.util.List;

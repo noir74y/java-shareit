@@ -9,7 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-import ru.practicum.shareit.booking.model.*;
+import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.model.BookingEntity;
+import ru.practicum.shareit.booking.model.BookingMapper;
+import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.booking.service.BookingServiceImpl;
 import ru.practicum.shareit.item.model.ItemEntity;
@@ -23,8 +26,6 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
@@ -32,6 +33,8 @@ import static org.mockito.Mockito.when;
 @Import({BookingMapper.class, ModelMapper.class})
 public class BookingServiceTest {
     int requestorId;
+    LocalDateTime tomorrow;
+    LocalDateTime theDayAfterTomorrow;
     @Autowired
     private BookingServiceImpl service;
     @MockBean
@@ -46,8 +49,6 @@ public class BookingServiceTest {
     private BookingEntity entity;
     private UserEntity booker;
     private ItemEntity item;
-    LocalDateTime tomorrow;
-    LocalDateTime theDayAfterTomorrow;
 
     @BeforeEach
     void setUp() {

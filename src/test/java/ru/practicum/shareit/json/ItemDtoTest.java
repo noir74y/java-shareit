@@ -18,7 +18,6 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @JsonTest
 public class ItemDtoTest {
@@ -33,7 +32,7 @@ public class ItemDtoTest {
 
     @Test
     void testDtoReq() throws IOException {
-        dtoReqObject =  ItemDtoReq.builder()
+        dtoReqObject = ItemDtoReq.builder()
                 .name("Дрель")
                 .description("Простая дрель")
                 .available(true)
@@ -48,11 +47,11 @@ public class ItemDtoTest {
 
     @Test
     void testDtoReq_EmptyName_NoDescription_NoAvailable() throws IOException {
-        dtoReqObject =  ItemDtoReq.builder().name("").build();
+        dtoReqObject = ItemDtoReq.builder().name("").build();
 
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
         Set<ConstraintViolation<ItemDtoReq>> violations = validator.validate(dtoReqObject, OnCreate.class);
-        assertEquals(violations.size(),3);
+        assertEquals(violations.size(), 3);
     }
 }

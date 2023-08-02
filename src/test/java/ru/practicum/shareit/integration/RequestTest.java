@@ -9,12 +9,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
-import ru.practicum.shareit.item.model.ItemDtoReq;
-import ru.practicum.shareit.item.model.ItemDtoResp;
 import ru.practicum.shareit.request.model.RequestDtoReq;
 import ru.practicum.shareit.request.model.RequestDtoResp;
 import ru.practicum.shareit.rest.RestMockGeneric;
-import ru.practicum.shareit.utils.exception.NotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -22,6 +19,7 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)

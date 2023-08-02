@@ -7,10 +7,6 @@ import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.json.JsonContent;
 import ru.practicum.shareit.booking.model.BookingDtoReq;
-import ru.practicum.shareit.booking.model.BookingDtoResp;
-import ru.practicum.shareit.item.model.ItemDtoReq;
-import ru.practicum.shareit.item.model.ItemDtoResp;
-import ru.practicum.shareit.utils.validation.OnCreate;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -20,9 +16,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @JsonTest
@@ -34,7 +28,7 @@ public class BookingDtoTest {
 
     @BeforeEach
     void setUp() {
-        dtoReqObject =  BookingDtoReq.builder()
+        dtoReqObject = BookingDtoReq.builder()
                 .itemId(1)
                 .startDate(LocalDateTime.now().plusDays(1))
                 .endDate(LocalDateTime.now().plusDays(2)).build();

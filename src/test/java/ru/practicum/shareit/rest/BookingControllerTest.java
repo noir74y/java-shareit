@@ -31,13 +31,13 @@ public class BookingControllerTest {
     @Autowired
     RestMockGeneric<BookingDtoReq, BookingDtoResp> restMock;
     int requestorId;
+    LocalDateTime tomorrow;
+    LocalDateTime theDayAfterTomorrow;
     @MockBean
     private BookingService service;
     private BookingDtoReq dtoReq;
     private Booking model;
     private BookingDtoResp dtoResp;
-    LocalDateTime tomorrow;
-    LocalDateTime theDayAfterTomorrow;
 
     @BeforeEach
     void setUp() {

@@ -10,7 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
 import ru.practicum.shareit.booking.model.*;
-import ru.practicum.shareit.item.model.ItemDtoResp;
 import ru.practicum.shareit.rest.RestMockGeneric;
 
 import java.time.LocalDateTime;
