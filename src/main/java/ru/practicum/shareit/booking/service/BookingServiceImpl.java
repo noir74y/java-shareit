@@ -10,7 +10,6 @@ import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.utils.exception.CustomValidationException;
 import ru.practicum.shareit.utils.exception.NotFoundException;
-import ru.practicum.shareit.utils.exception.WrongUserException;
 
 import java.time.LocalDateTime;
 import java.util.LinkedList;
@@ -78,7 +77,7 @@ public class BookingServiceImpl implements BookingService {
     @Transactional(readOnly = true)
     public List<Booking> findByBookerAndState(Integer requestorId, String state, Integer offset, Integer pageSize) {
         List<BookingEntity> entities = new LinkedList<>();
-        var userEntity = userRepository.findById(requestorId).orElseThrow(() -> new WrongUserException(requestorId));
+        var userEntity = userRepository.findById(requestorId).orElseThrow(() -> new NotFoundException("no such user", String.valueOf(requestorId)));
         switch (BookingState.valueOf(state)) {
             case FUTURE:
                 entities = bookingRepository.findAllByBookerIdAndStartDateIsAfterOrderByStartDateDesc(requestorId, LocalDateTime.now());
@@ -105,7 +104,7 @@ public class BookingServiceImpl implements BookingService {
     @Transactional(readOnly = true)
     public List<Booking> findByOwnerAndState(Integer requestorId, String state, Integer offset, Integer pageSize) {
         List<BookingEntity> entities = new LinkedList<>();
-        var userEntity = userRepository.findById(requestorId).orElseThrow(() -> new WrongUserException(requestorId));
+        var userEntity = userRepository.findById(requestorId).orElseThrow(() -> new NotFoundException("no such user", String.valueOf(requestorId)));
         switch (BookingState.valueOf(state)) {
             case FUTURE:
                 entities = bookingRepository.findAllByItemOwnerIdAndStartDateIsAfterOrderByStartDateDesc(requestorId, LocalDateTime.now());
