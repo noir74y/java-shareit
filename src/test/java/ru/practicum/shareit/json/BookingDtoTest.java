@@ -42,8 +42,7 @@ public class BookingDtoTest {
         Validator validator = factory.getValidator();
         Set<ConstraintViolation<BookingDtoReq>> violations = validator.validate(dtoReqObject);
 
-        assertEquals(new ArrayList<>(violations).get(0).getMessage(),
-                "не должно равняться null");
+        assertEquals(new ArrayList<>(violations).get(0).getPropertyPath().toString(), "itemId");
     }
 
     @Test
@@ -54,8 +53,8 @@ public class BookingDtoTest {
         Validator validator = factory.getValidator();
         Set<ConstraintViolation<BookingDtoReq>> violations = validator.validate(dtoReqObject);
 
-        assertEquals(new ArrayList<>(violations).get(0).getMessage(),
-                "должно содержать сегодняшнее число или дату, которая еще не наступила");
+        assertEquals(new ArrayList<>(violations).get(0).getPropertyPath().toString(), "startDate");
+
     }
 
     @Test
@@ -66,7 +65,7 @@ public class BookingDtoTest {
         Validator validator = factory.getValidator();
         Set<ConstraintViolation<BookingDtoReq>> violations = validator.validate(dtoReqObject);
 
-        assertEquals(new ArrayList<>(violations).get(0).getMessage(),
-                "должно содержать дату, которая еще не наступила");
+        assertEquals(new ArrayList<>(violations).get(0).getPropertyPath().toString(), "endDate");
+
     }
 }
