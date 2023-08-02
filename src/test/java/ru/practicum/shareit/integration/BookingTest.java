@@ -1,6 +1,7 @@
 package ru.practicum.shareit.integration;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
 import ru.practicum.shareit.booking.model.*;
+import ru.practicum.shareit.item.model.ItemDtoResp;
 import ru.practicum.shareit.rest.RestMockGeneric;
 
 import java.time.LocalDateTime;
@@ -52,6 +54,18 @@ public class BookingTest {
                         .booker(BookingDtoRespBooker.builder().id(requestorId).build())
                         .item(BookingDtoRespItem.builder().id(itemToBoBookedId).name("Дрель").build()).build())
         );
+    }
+
+    @Test
+    @Sql({"/schema.sql", "/populate_users.sql", "/populate_requests.sql", "/populate_items.sql"})
+    void create_WrongUser() throws Exception {
+        requestorId = 100;
+        var itemToBoBookedId = 2;
+        var dtoReq = BookingDtoReq.builder().itemId(itemToBoBookedId).startDate(tomorrow).endDate(theDayAfterTomorrow).build();
+
+        AssertionError exception = Assertions.assertThrows(
+                AssertionError.class,
+                () -> rest.post(baseUrl, dtoReq, BookingDtoResp.class, requestorId));
     }
 
     @Test
@@ -128,6 +142,10 @@ public class BookingTest {
                         )
                 )
         );
+
+        AssertionError exception = Assertions.assertThrows(
+                AssertionError.class,
+                () -> getDtoRespList("?state=INCORRECT_STATE", bookerOfItem));
     }
 
     @Test
