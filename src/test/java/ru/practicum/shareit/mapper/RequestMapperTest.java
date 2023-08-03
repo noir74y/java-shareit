@@ -19,27 +19,27 @@ import static org.hamcrest.Matchers.equalTo;
 
 @SpringJUnitConfig({RequestMapper.class, ModelMapper.class})
 public class RequestMapperTest {
-    private UserEntity userEntity = UserEntity.builder()
+    private final UserEntity userEntity = UserEntity.builder()
             .id(1)
             .name("user")
             .email("user@user.com")
             .build();
-    private ItemDtoResp itemDtoResp = ItemDtoResp.builder()
+    private final ItemDtoResp itemDtoResp = ItemDtoResp.builder()
             .id(1)
             .name("Дрель")
             .description("Простая дрель")
             .available(true)
             .build();
-    private RequestDtoReq dtoReq = RequestDtoReq.builder()
+    private final RequestDtoReq dtoReq = RequestDtoReq.builder()
             .description("хочу дрель")
             .build();
-    private RequestEntity entity = RequestEntity.builder()
+    private final RequestEntity entity = RequestEntity.builder()
             .id(1)
             .description(dtoReq.getDescription())
             .requestorId(userEntity.getId())
             .created(LocalDateTime.now())
             .build();
-    private RequestDtoResp dtoResp = RequestDtoResp.builder()
+    private final RequestDtoResp dtoResp = RequestDtoResp.builder()
             .id(1)
             .description(dtoReq.getDescription())
             .created(entity.getCreated())

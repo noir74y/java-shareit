@@ -15,33 +15,33 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 @SpringJUnitConfig({CommentMapper.class, ModelMapper.class})
 public class CommentMapperTest {
-    private final static UserEntity userEntity = UserEntity.builder()
+    private final UserEntity userEntity = UserEntity.builder()
             .id(1)
             .name("user")
             .email("user@user.com")
             .build();
-    private final static ItemEntity itemEntity = ItemEntity.builder()
+    private final ItemEntity itemEntity = ItemEntity.builder()
             .id(1)
             .name("Дрель")
             .description("Простая дрель")
             .available(true)
             .owner(userEntity)
             .build();
-    private final static CommentDtoReq dtoReq = CommentDtoReq.builder()
-            .text("хорошая дрель")
-            .build();
-    private final static CommentEntity entity = CommentEntity.builder()
+    private final CommentEntity entity = CommentEntity.builder()
             .id(1)
             .text(dtoReq.getText())
             .item(itemEntity)
             .author(userEntity)
             .created(LocalDateTime.now())
             .build();
-    private final static CommentDtoResp dtoResp = CommentDtoResp.builder()
+    private final CommentDtoResp dtoResp = CommentDtoResp.builder()
             .id(1)
             .text(dtoReq.getText())
             .authorName(userEntity.getName())
             .created(entity.getCreated())
+            .build();
+    private final CommentDtoReq dtoReq = CommentDtoReq.builder()
+            .text("хорошая дрель")
             .build();
     @Autowired
     private CommentMapper commentMapper;
