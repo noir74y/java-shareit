@@ -75,7 +75,9 @@ public class RequestServiceImpl implements RequestService {
                 .stream()
                 .collect(Collectors.groupingBy(ItemEntity::getRequestId));
 
-        return requestEntities.stream().map(requestMapper::entity2dtoResp).peek(dtoResp -> Optional.ofNullable(dtoResp)
+        return requestEntities.stream()
+                .map(requestMapper::entity2dtoResp)
+                .peek(dtoResp -> Optional.ofNullable(dtoResp)
                         .ifPresent(obj -> obj.setItems(itemMapper.bulkEntity2dtoResp(itemEntitiesByRequestId.get(obj.getId())))))
                 .collect(Collectors.toCollection(LinkedList::new));
     }
