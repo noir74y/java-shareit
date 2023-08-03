@@ -16,9 +16,9 @@ import static org.hamcrest.Matchers.equalTo;
 @Import({UserMapper.class, ModelMapper.class})
 public class UserMapperTest {
     private static final UserDtoReq dtoReq = UserDtoReq.builder().name("user").email("user@user.com").build();
-    private static final UserDtoResp dtoResp = UserDtoResp.builder().name("user").email("user@user.com").build();
-    private static final User model = User.builder().name("user").email("user@user.com").build();
-    private static final UserEntity entity = UserEntity.builder().name("user").email("user@user.com").build();
+    private static final UserDtoResp dtoResp = UserDtoResp.builder().name(dtoReq.getName()).email(dtoReq.getEmail()).build();
+    private static final User model = User.builder().name(dtoReq.getName()).email(dtoReq.getEmail()).build();
+    private static final UserEntity entity = UserEntity.builder().name(dtoReq.getName()).email(dtoReq.getEmail()).build();
     @Autowired
     protected UserMapper userMapper;
 
