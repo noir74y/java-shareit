@@ -22,15 +22,37 @@ import static org.hamcrest.Matchers.equalTo;
 @JsonTest
 @Import({BookingMapper.class, ModelMapper.class, UserMapper.class})
 public class BookingMapperTest {
-    private static final UserDtoReq userDtoReq = UserDtoReq.builder().name("user").email("user@user.com").build();
-    private static final UserEntity userEntity = UserEntity.builder().name(userDtoReq.getName()).email(userDtoReq.getEmail()).build();
-    private static final ItemDtoReq itemDtoReq = ItemDtoReq.builder().name("Дрель").description("Простая дрель").available(true).build();
-    private static final ItemEntity itemEntity = ItemEntity.builder().name(itemDtoReq.getName()).description(itemDtoReq.getDescription()).available(itemDtoReq.getAvailable()).owner(userEntity).build();
-
-    private static final BookingDtoReq dtoReq = BookingDtoReq.builder().itemId(1).startDate(LocalDateTime.now()).endDate(LocalDateTime.now().plusDays(1)).build();
-    private static final BookingDtoResp dtoResp = BookingDtoResp.builder().startDate(dtoReq.getStartDate()).endDate(dtoReq.getEndDate()).build();
-    private static final Booking model = Booking.builder().itemId(1).startDate(dtoReq.getStartDate()).endDate(dtoReq.getEndDate()).build();
-    private static final BookingEntity entity = BookingEntity.builder().startDate(dtoReq.getStartDate()).endDate(dtoReq.getEndDate()).build();
+    private final UserEntity userEntity = UserEntity.builder()
+            .name("user")
+            .email("user@user.com")
+            .build();
+    private final ItemEntity itemEntity = ItemEntity.builder()
+            .name("Дрель")
+            .description("Простая дрель")
+            .available(true)
+            .owner(userEntity)
+            .build();
+    private final BookingDtoReq dtoReq = BookingDtoReq.builder()
+            .itemId(1)
+            .startDate(LocalDateTime.now())
+            .endDate(LocalDateTime.now().plusDays(1))
+            .build();
+    private final BookingDtoResp dtoResp = BookingDtoResp.builder()
+            .id(1)
+            .startDate(dtoReq.getStartDate())
+            .endDate(dtoReq.getEndDate())
+            .booker(BookingDtoRespBooker.builder().build())
+            .item(BookingDtoRespItem.builder().build())
+            .build();
+    private final Booking model = Booking.builder()
+            .id(1).itemId(1)
+            .startDate(dtoReq.getStartDate())
+            .endDate(dtoReq.getEndDate())
+            .build();
+    private final BookingEntity entity = BookingEntity.builder()
+            .startDate(dtoReq.getStartDate())
+            .endDate(dtoReq.getEndDate())
+            .build();
 
     @Autowired
     protected BookingMapper bookingMapper;

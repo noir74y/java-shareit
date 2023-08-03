@@ -18,12 +18,31 @@ import static org.hamcrest.Matchers.equalTo;
 @JsonTest
 @Import({ItemMapper.class, ModelMapper.class, UserMapper.class})
 public class ItemMapperTest {
-    private static final UserDtoReq userDtoReq = UserDtoReq.builder().name("user").email("user@user.com").build();
-    private static final UserEntity userEntity = UserEntity.builder().name(userDtoReq.getName()).email(userDtoReq.getEmail()).build();
-    private static final ItemDtoReq dtoReq = ItemDtoReq.builder().name("Дрель").description("Простая дрель").available(true).build();
-    private static final ItemDtoResp dtoResp = ItemDtoResp.builder().name(dtoReq.getName()).description(dtoReq.getDescription()).available(dtoReq.getAvailable()).build();
-    private static final Item model = Item.builder().name(dtoReq.getName()).description(dtoReq.getDescription()).available(dtoReq.getAvailable()).build();
-    private static final ItemEntity entity = ItemEntity.builder().name(dtoReq.getName()).description(dtoReq.getDescription()).available(dtoReq.getAvailable()).owner(userEntity).build();
+    private final UserEntity userEntity = UserEntity.builder()
+            .name("user")
+            .email("user@user.com")
+            .build();
+    private final ItemDtoReq dtoReq = ItemDtoReq.builder()
+            .name("Дрель")
+            .description("Простая дрель")
+            .available(true)
+            .build();
+    private final ItemDtoResp dtoResp = ItemDtoResp.builder()
+            .name(dtoReq.getName())
+            .description(dtoReq.getDescription())
+            .available(dtoReq.getAvailable())
+            .build();
+    private final Item model = Item.builder()
+            .name(dtoReq.getName())
+            .description(dtoReq.getDescription())
+            .available(dtoReq.getAvailable())
+            .build();
+    private final ItemEntity entity = ItemEntity.builder()
+            .name(dtoReq.getName())
+            .description(dtoReq.getDescription())
+            .available(dtoReq.getAvailable())
+            .owner(userEntity)
+            .build();
 
     @Autowired
     protected ItemMapper itemMapper;
