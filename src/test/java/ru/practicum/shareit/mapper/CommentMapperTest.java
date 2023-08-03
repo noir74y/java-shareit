@@ -27,6 +27,10 @@ public class CommentMapperTest {
             .available(true)
             .owner(userEntity)
             .build();
+    private final CommentDtoReq dtoReq = CommentDtoReq.builder()
+            .text("хорошая дрель")
+            .build();
+
     private final CommentEntity entity = CommentEntity.builder()
             .id(1)
             .text(dtoReq.getText())
@@ -40,9 +44,7 @@ public class CommentMapperTest {
             .authorName(userEntity.getName())
             .created(entity.getCreated())
             .build();
-    private final CommentDtoReq dtoReq = CommentDtoReq.builder()
-            .text("хорошая дрель")
-            .build();
+
     @Autowired
     private CommentMapper commentMapper;
 
