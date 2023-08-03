@@ -3,8 +3,7 @@ package ru.practicum.shareit.mapper;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.json.JsonTest;
-import org.springframework.context.annotation.Import;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import ru.practicum.shareit.user.model.*;
 
 import java.util.List;
@@ -12,8 +11,7 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-@JsonTest
-@Import({UserMapper.class, ModelMapper.class})
+@SpringJUnitConfig({UserMapper.class, ModelMapper.class})
 public class UserMapperTest {
     private final UserDtoReq dtoReq = UserDtoReq.builder()
             .name("user")

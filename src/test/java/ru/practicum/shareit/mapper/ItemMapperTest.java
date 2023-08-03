@@ -1,13 +1,10 @@
 package ru.practicum.shareit.mapper;
 
-import org.checkerframework.checker.nullness.qual.AssertNonNullIfNonNull;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.json.JsonTest;
-import org.springframework.context.annotation.Import;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import ru.practicum.shareit.item.model.*;
-import ru.practicum.shareit.user.model.UserDtoReq;
 import ru.practicum.shareit.user.model.UserEntity;
 import ru.practicum.shareit.user.model.UserMapper;
 
@@ -17,8 +14,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-@JsonTest
-@Import({ItemMapper.class, ModelMapper.class, UserMapper.class})
+@SpringJUnitConfig({ItemMapper.class, ModelMapper.class, UserMapper.class})
 public class ItemMapperTest {
     private final UserEntity userEntity = UserEntity.builder()
             .name("user")
@@ -72,7 +68,7 @@ public class ItemMapperTest {
         assertThat(itemMapper.bulkEntity2dtoResp(List.of(entity)),
                 equalTo(List.of(dtoResp)));
 
-       assertNull(itemMapper.model2entity(null, userEntity));
+        assertNull(itemMapper.model2entity(null, userEntity));
 
         assertNull(itemMapper.entity2model(null));
     }

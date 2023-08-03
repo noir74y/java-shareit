@@ -1,11 +1,9 @@
 package ru.practicum.shareit.mapper;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.json.JsonTest;
-import org.springframework.context.annotation.Import;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import ru.practicum.shareit.booking.model.*;
 import ru.practicum.shareit.item.model.ItemEntity;
 import ru.practicum.shareit.user.model.UserEntity;
@@ -17,17 +15,13 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-@JsonTest
-@Import({BookingMapper.class, ModelMapper.class, UserMapper.class})
+@SpringJUnitConfig({BookingMapper.class, ModelMapper.class, UserMapper.class})
 public class BookingMapperTest {
-    @Autowired
-    private BookingMapper bookingMapper;
     private final static UserEntity userEntity = UserEntity.builder()
             .id(1)
             .name("user")
             .email("user@user.com")
             .build();
-
     private final static ItemEntity itemEntity = ItemEntity.builder()
             .id(1)
             .name("Дрель")
@@ -35,16 +29,10 @@ public class BookingMapperTest {
             .available(true)
             .owner(userEntity)
             .build();
-
     private final static BookingDtoRespItem bookingDtoRespItem = BookingDtoRespItem.builder()
             .id(itemEntity.getId())
             .name(itemEntity.getName())
             .build();
-
-    private final static BookingDtoRespBooker bookingDtoRespBooker = BookingDtoRespBooker.builder()
-            .id(userEntity.getId())
-            .build();
-
     private final static Booking model = Booking.builder()
             .id(1)
             .itemId(itemEntity.getId())
@@ -53,21 +41,11 @@ public class BookingMapperTest {
             .itemName(itemEntity.getName())
             .bookerId(userEntity.getId())
             .build();
-
     private final static BookingDtoReq dtoReq = BookingDtoReq.builder()
             .itemId(itemEntity.getId())
             .startDate(model.getStartDate())
             .endDate(model.getEndDate())
             .build();
-
-    private final static BookingDtoResp dtoResp = BookingDtoResp.builder()
-            .id(model.getId())
-            .startDate(dtoReq.getStartDate())
-            .endDate(dtoReq.getEndDate())
-            .booker(bookingDtoRespBooker)
-            .item(bookingDtoRespItem)
-            .build();
-
     private final static BookingEntity entity = BookingEntity.builder()
             .id(model.getId())
             .startDate(model.getStartDate())
@@ -75,6 +53,18 @@ public class BookingMapperTest {
             .booker(userEntity)
             .item(itemEntity)
             .build();
+    private final static BookingDtoRespBooker bookingDtoRespBooker = BookingDtoRespBooker.builder()
+            .id(userEntity.getId())
+            .build();
+    private final static BookingDtoResp dtoResp = BookingDtoResp.builder()
+            .id(model.getId())
+            .startDate(dtoReq.getStartDate())
+            .endDate(dtoReq.getEndDate())
+            .booker(bookingDtoRespBooker)
+            .item(bookingDtoRespItem)
+            .build();
+    @Autowired
+    private BookingMapper bookingMapper;
 
     @Test
     public void bookingMapperTest() {
