@@ -32,7 +32,7 @@ public class UserMapperTest {
             .email(dtoReq.getEmail())
             .build();
     @Autowired
-    protected UserMapper userMapper;
+    private UserMapper userMapper;
 
     @Test
     public void userMapperTest() {

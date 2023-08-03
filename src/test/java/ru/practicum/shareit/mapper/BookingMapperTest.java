@@ -21,7 +21,7 @@ import static org.hamcrest.Matchers.equalTo;
 @Import({BookingMapper.class, ModelMapper.class, UserMapper.class})
 public class BookingMapperTest {
     @Autowired
-    protected BookingMapper bookingMapper;
+    private BookingMapper bookingMapper;
     private final static UserEntity userEntity = UserEntity.builder()
             .id(1)
             .name("user")
