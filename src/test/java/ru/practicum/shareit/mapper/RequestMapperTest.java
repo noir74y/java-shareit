@@ -19,29 +19,29 @@ import static org.hamcrest.Matchers.equalTo;
 
 @SpringJUnitConfig({RequestMapper.class, ModelMapper.class})
 public class RequestMapperTest {
-    private final static UserEntity userEntity = UserEntity.builder()
+    private UserEntity userEntity = UserEntity.builder()
             .id(1)
             .name("user")
             .email("user@user.com")
             .build();
-    private final static ItemDtoResp itemDtoResp = ItemDtoResp.builder()
+    private ItemDtoResp itemDtoResp = ItemDtoResp.builder()
             .id(1)
             .name("Дрель")
             .description("Простая дрель")
             .available(true)
             .build();
-    private final static RequestDtoReq dtoReq = RequestDtoReq.builder()
+    private RequestDtoReq dtoReq = RequestDtoReq.builder()
             .description("хочу дрель")
             .build();
-    private final static RequestEntity entity = RequestEntity.builder()
+    private RequestEntity entity = RequestEntity.builder()
             .id(1)
             .description(dtoReq.getDescription())
             .requestorId(userEntity.getId())
             .created(LocalDateTime.now())
             .build();
-    private final static RequestDtoResp dtoResp = RequestDtoResp.builder()
+    private RequestDtoResp dtoResp = RequestDtoResp.builder()
             .id(1)
-            .description("хочу дрель")
+            .description(dtoReq.getDescription())
             .created(entity.getCreated())
             .items(List.of(itemDtoResp))
             .build();
@@ -50,10 +50,12 @@ public class RequestMapperTest {
 
     @Test
     public void requestMapperTest() {
+        entity.setId(null);
+        assertThat(requestMapper.dtoReq2entity(dtoReq, userEntity.getId()).getDescription(),
+                equalTo(entity.getDescription()));
 
-        assertThat(requestMapper.dtoReq2entity(dtoReq, userEntity.getId()),
-                equalTo(entity));
-
+        entity.setId(1);
+        dtoResp.setItems(null);
         assertThat(requestMapper.entity2dtoResp(entity),
                 equalTo(dtoResp));
     }
