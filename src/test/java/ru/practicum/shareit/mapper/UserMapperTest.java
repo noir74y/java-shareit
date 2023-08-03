@@ -15,31 +15,31 @@ import static org.hamcrest.Matchers.equalTo;
 @JsonTest
 @Import({UserMapper.class, ModelMapper.class})
 public class UserMapperTest {
-    private static final UserDtoReq userDtoReq = UserDtoReq.builder().name("user").email("user@user.com").build();
-    private static final UserDtoResp userDtoResp = UserDtoResp.builder().name("user").email("user@user.com").build();
-    private static final User userModel = User.builder().name("user").email("user@user.com").build();
-    private static final UserEntity userEntity = UserEntity.builder().name("user").email("user@user.com").build();
+    private static final UserDtoReq dtoReq = UserDtoReq.builder().name("user").email("user@user.com").build();
+    private static final UserDtoResp dtoResp = UserDtoResp.builder().name("user").email("user@user.com").build();
+    private static final User model = User.builder().name("user").email("user@user.com").build();
+    private static final UserEntity entity = UserEntity.builder().name("user").email("user@user.com").build();
     @Autowired
     protected UserMapper userMapper;
 
     @Test
     public void userMapperTest() {
-        assertThat(userMapper.dtoReq2model(userDtoReq),
-                equalTo(userModel));
+        assertThat(userMapper.dtoReq2model(dtoReq),
+                equalTo(model));
 
-        assertThat(userMapper.model2dtoResp(userModel),
-                equalTo(userDtoResp));
+        assertThat(userMapper.model2dtoResp(model),
+                equalTo(dtoResp));
 
-        assertThat(userMapper.model2entity(userModel),
-                equalTo(userEntity));
+        assertThat(userMapper.model2entity(model),
+                equalTo(entity));
 
-        assertThat(userMapper.entity2model(userEntity),
-                equalTo(userModel));
+        assertThat(userMapper.entity2model(entity),
+                equalTo(model));
 
-        assertThat(userMapper.bulkModel2dtoResp(List.of(userModel)),
-                equalTo(List.of(userDtoResp)));
+        assertThat(userMapper.bulkModel2dtoResp(List.of(model)),
+                equalTo(List.of(dtoResp)));
 
-        assertThat(userMapper.bulkEntity2model(List.of(userEntity)),
-                equalTo(List.of(userModel)));
+        assertThat(userMapper.bulkEntity2model(List.of(entity)),
+                equalTo(List.of(model)));
     }
 }
