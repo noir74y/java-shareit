@@ -1,5 +1,6 @@
 package ru.practicum.shareit.mapper;
 
+import org.checkerframework.checker.nullness.qual.AssertNonNullIfNonNull;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @JsonTest
 @Import({ItemMapper.class, ModelMapper.class, UserMapper.class})
@@ -45,7 +47,7 @@ public class ItemMapperTest {
             .build();
 
     @Autowired
-    protected ItemMapper itemMapper;
+    private ItemMapper itemMapper;
 
     @Test
     public void itemMapperTest() {
@@ -69,5 +71,9 @@ public class ItemMapperTest {
 
         assertThat(itemMapper.bulkEntity2dtoResp(List.of(entity)),
                 equalTo(List.of(dtoResp)));
+
+       assertNull(itemMapper.model2entity(null, userEntity));
+
+        assertNull(itemMapper.entity2model(null));
     }
 }
