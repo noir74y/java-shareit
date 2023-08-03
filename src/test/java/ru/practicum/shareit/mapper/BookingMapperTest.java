@@ -1,15 +1,13 @@
 package ru.practicum.shareit.mapper;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.context.annotation.Import;
 import ru.practicum.shareit.booking.model.*;
-import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.model.ItemDtoReq;
 import ru.practicum.shareit.item.model.ItemEntity;
-import ru.practicum.shareit.user.model.UserDtoReq;
 import ru.practicum.shareit.user.model.UserEntity;
 import ru.practicum.shareit.user.model.UserMapper;
 
@@ -22,55 +20,84 @@ import static org.hamcrest.Matchers.equalTo;
 @JsonTest
 @Import({BookingMapper.class, ModelMapper.class, UserMapper.class})
 public class BookingMapperTest {
-    private final UserEntity userEntity = UserEntity.builder()
+    @Autowired
+    protected BookingMapper bookingMapper;
+    private final static UserEntity userEntity = UserEntity.builder()
+            .id(1)
             .name("user")
             .email("user@user.com")
             .build();
-    private final ItemEntity itemEntity = ItemEntity.builder()
+
+    private final static ItemEntity itemEntity = ItemEntity.builder()
+            .id(1)
             .name("Дрель")
             .description("Простая дрель")
             .available(true)
             .owner(userEntity)
             .build();
-    private final BookingDtoReq dtoReq = BookingDtoReq.builder()
-            .itemId(1)
-            .startDate(LocalDateTime.now())
-            .endDate(LocalDateTime.now().plusDays(1))
-            .build();
-    private final BookingDtoResp dtoResp = BookingDtoResp.builder()
-            .id(1)
-            .startDate(dtoReq.getStartDate())
-            .endDate(dtoReq.getEndDate())
-            .booker(BookingDtoRespBooker.builder().build())
-            .item(BookingDtoRespItem.builder().build())
-            .build();
-    private final Booking model = Booking.builder()
-            .id(1).itemId(1)
-            .startDate(dtoReq.getStartDate())
-            .endDate(dtoReq.getEndDate())
-            .build();
-    private final BookingEntity entity = BookingEntity.builder()
-            .startDate(dtoReq.getStartDate())
-            .endDate(dtoReq.getEndDate())
+
+    private final static BookingDtoRespItem bookingDtoRespItem = BookingDtoRespItem.builder()
+            .id(itemEntity.getId())
+            .name(itemEntity.getName())
             .build();
 
-    @Autowired
-    protected BookingMapper bookingMapper;
+    private final static BookingDtoRespBooker bookingDtoRespBooker = BookingDtoRespBooker.builder()
+            .id(userEntity.getId())
+            .build();
+
+    private final static Booking model = Booking.builder()
+            .id(1)
+            .itemId(itemEntity.getId())
+            .startDate(LocalDateTime.now())
+            .endDate(LocalDateTime.now().plusDays(1))
+            .itemName(itemEntity.getName())
+            .bookerId(userEntity.getId())
+            .build();
+
+    private final static BookingDtoReq dtoReq = BookingDtoReq.builder()
+            .itemId(itemEntity.getId())
+            .startDate(model.getStartDate())
+            .endDate(model.getEndDate())
+            .build();
+
+    private final static BookingDtoResp dtoResp = BookingDtoResp.builder()
+            .id(model.getId())
+            .startDate(dtoReq.getStartDate())
+            .endDate(dtoReq.getEndDate())
+            .booker(bookingDtoRespBooker)
+            .item(bookingDtoRespItem)
+            .build();
+
+    private final static BookingEntity entity = BookingEntity.builder()
+            .id(model.getId())
+            .startDate(model.getStartDate())
+            .endDate(model.getEndDate())
+            .booker(userEntity)
+            .item(itemEntity)
+            .build();
 
     @Test
     public void bookingMapperTest() {
+        model.setItemName(null);
+        model.setBookerId(null);
         assertThat(bookingMapper.dtoReq2model(dtoReq),
                 equalTo(model));
 
+        dtoResp.setBooker(BookingDtoRespBooker.builder().id(null).build());
+        dtoResp.setItem(BookingDtoRespItem.builder().id(itemEntity.getId()).build());
         assertThat(bookingMapper.model2dtoResp(model),
                 equalTo(dtoResp));
 
         assertThat(bookingMapper.model2entity(model, userEntity, itemEntity),
                 equalTo(entity));
 
+        model.setItemName(itemEntity.getName());
+        model.setBookerId(userEntity.getId());
         assertThat(bookingMapper.entity2model(entity),
                 equalTo(model));
 
+        dtoResp.setBooker(BookingDtoRespBooker.builder().id(userEntity.getId()).build());
+        dtoResp.setItem(BookingDtoRespItem.builder().id(itemEntity.getId()).name(itemEntity.getName()).build());
         assertThat(bookingMapper.bulkModel2dtoResp(List.of(model)),
                 equalTo(List.of(dtoResp)));
 
