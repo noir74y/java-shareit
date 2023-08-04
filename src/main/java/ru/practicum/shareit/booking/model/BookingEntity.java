@@ -1,5 +1,7 @@
 package ru.practicum.shareit.booking.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import ru.practicum.shareit.item.model.ItemEntity;
@@ -9,7 +11,9 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Data
+@Builder
 @RequiredArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "bookings")
 public class BookingEntity {

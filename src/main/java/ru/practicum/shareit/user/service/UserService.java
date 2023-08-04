@@ -2,7 +2,7 @@ package ru.practicum.shareit.user.service;
 
 import ru.practicum.shareit.user.model.User;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface UserService {
     User create(User user) throws Throwable;
@@ -13,6 +13,6 @@ public interface UserService {
 
     User findById(int userId) throws Throwable;
 
-    ArrayList<User> findAll();
+    List<User> findAll();
 
 }

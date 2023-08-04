@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.item.model.ItemEntity;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface ItemRepository extends JpaRepository<ItemEntity, Integer> {
@@ -16,4 +17,16 @@ public interface ItemRepository extends JpaRepository<ItemEntity, Integer> {
     List<ItemEntity> search(String text);
 
     List<ItemEntity> findAllByOwnerIdOrderById(Integer userId);
+
+    List<ItemEntity> findAllByRequestId(Integer requestId);
+
+    @Query(
+            value = "SELECT r.id as requestId, i.id as itemId, i.name, i.description, i.available " +
+                    "FROM requests r " +
+                    "JOIN items i ON i.request_id = r.id " +
+                    "WHERE r.requestor_id = ?1", nativeQuery = true)
+    List<ItemForRequestView> findAllByRequesterId(Integer requestorId);
+
+    @Query("SELECT ie FROM ItemEntity ie WHERE requestId IN ?1")
+    List<ItemEntity> findAllByRequestIdIn(Set<Integer> requestIdSet);
 }

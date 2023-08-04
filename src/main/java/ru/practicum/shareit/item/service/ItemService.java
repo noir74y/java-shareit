@@ -1,17 +1,21 @@
 package ru.practicum.shareit.item.service;
 
+import ru.practicum.shareit.item.model.CommentDtoReq;
+import ru.practicum.shareit.item.model.CommentEntity;
 import ru.practicum.shareit.item.model.Item;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface ItemService {
-    Item create(int requesterId, Item item) throws Throwable;
+    Item create(int requestorId, Item item) throws Throwable;
 
-    Item update(int requesterId, Item item, int itemId);
+    Item update(int requestorId, Item item, int itemId);
 
-    Item findById(int requesterId, int itemId);
+    Item findById(int requestorId, int itemId);
 
-    ArrayList<Item> findByOwner(int requesterId);
+    List<Item> findByOwner(int requestorId);
 
-    ArrayList<Item> findByText(int requesterId, String text);
+    List<Item> findByText(int requestorId, String text);
+
+    CommentEntity create(Integer requestorId, Integer itemId, CommentDtoReq dtoReq) throws Throwable;
 }

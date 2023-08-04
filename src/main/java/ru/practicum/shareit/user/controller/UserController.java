@@ -11,7 +11,7 @@ import ru.practicum.shareit.user.service.UserService;
 import ru.practicum.shareit.utils.validation.OnCreate;
 import ru.practicum.shareit.utils.validation.OnUpdate;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -49,7 +49,7 @@ public class UserController {
     }
 
     @GetMapping
-    public ArrayList<UserDtoResp> findAll() {
+    public List<UserDtoResp> findAll() {
         log.info("GET /users/");
         return userMapper.bulkModel2dtoResp(userService.findAll());
     }

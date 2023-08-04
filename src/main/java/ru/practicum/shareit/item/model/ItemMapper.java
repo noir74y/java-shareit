@@ -26,10 +26,6 @@ public class ItemMapper {
         return Optional.ofNullable(model).map(obj -> modelMapper.map(obj, ItemDtoResp.class)).orElse(null);
     }
 
-    public ItemEntity model2entity(Item model) {
-        return Optional.ofNullable(model).map(obj -> modelMapper.map(obj, ItemEntity.class)).orElse(null);
-    }
-
     public ItemEntity model2entity(Item model, UserEntity userEntity) {
         ItemEntity entity;
         try {
@@ -58,5 +54,9 @@ public class ItemMapper {
 
     public ArrayList<Item> bulkEntity2model(Collection<ItemEntity> entities) {
         return entities.stream().map(this::entity2model).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public ArrayList<ItemDtoResp> bulkEntity2dtoResp(Collection<ItemEntity> entities) {
+        return entities == null ? new ArrayList<>() : bulkModel2dtoResp(bulkEntity2model(entities));
     }
 }

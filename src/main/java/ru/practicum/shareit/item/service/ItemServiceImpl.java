@@ -16,13 +16,14 @@ import ru.practicum.shareit.utils.exception.NotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Primary
-public class ItemServiceDbImpl implements ItemService, CommentService {
+public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final ItemMapper itemMapper;
     private final UserService userService;
@@ -33,22 +34,22 @@ public class ItemServiceDbImpl implements ItemService, CommentService {
 
     @Override
     @Transactional
-    public Item create(int requesterId, Item item) throws Throwable {
-        var userEntity = userRepository.findById(requesterId)
-                .orElseThrow(() -> new NotFoundException("no such user", String.valueOf(requesterId)));
+    public Item create(int requestorId, Item item) throws Throwable {
+        var userEntity = userRepository.findById(requestorId)
+                .orElseThrow(() -> new NotFoundException("no such user", String.valueOf(requestorId)));
         return itemMapper.entity2model(itemRepository.save(itemMapper.model2entity(item, userEntity)));
     }
 
     @Override
     @Transactional
-    public CommentEntity create(Integer requesterId, Integer itemId, CommentDtoReq dtoReq) throws Throwable {
-        var userEntity = userRepository.findById(requesterId)
-                .orElseThrow(() -> new NotFoundException("no such user", String.valueOf(requesterId)));
+    public CommentEntity create(Integer requestorId, Integer itemId, CommentDtoReq dtoReq) throws Throwable {
+        var userEntity = userRepository.findById(requestorId)
+                .orElseThrow(() -> new NotFoundException("no such user", String.valueOf(requestorId)));
 
         var itemEntity = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("no such item", String.valueOf(itemId)));
 
-        if (!commentRepository.isCommentFairy(requesterId, itemId, LocalDateTime.now()))
+        if (!commentRepository.isCommentFairy(requestorId, itemId, LocalDateTime.now()))
             throw new CustomValidationException("Comment won't be fairy", "sorry");
 
         return commentRepository.save(commentMapper.dtoReq2entity(dtoReq, userEntity, itemEntity));
@@ -56,11 +57,11 @@ public class ItemServiceDbImpl implements ItemService, CommentService {
 
     @Override
     @Transactional
-    public Item update(int requesterId, Item item, int itemId) {
-        var itemEntity = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("no item with such id", String.valueOf(itemId)));
+    public Item update(int requestorId, Item item, int itemId) {
+        var itemEntity = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("no such item", String.valueOf(itemId)));
 
-        if (!itemEntity.getOwner().getId().equals(requesterId))
-            throw new ForbiddenException("это item другого юзера", itemEntity.getOwner().getId() + " != " + requesterId);
+        if (!itemEntity.getOwner().getId().equals(requestorId))
+            throw new ForbiddenException("это item другого юзера", itemEntity.getOwner().getId() + " != " + requestorId);
 
         Optional.ofNullable(item.getName()).ifPresent(itemEntity::setName);
         Optional.ofNullable(item.getDescription()).ifPresent(itemEntity::setDescription);
@@ -71,37 +72,37 @@ public class ItemServiceDbImpl implements ItemService, CommentService {
 
     @Override
     @Transactional(readOnly = true)
-    public Item findById(int requesterId, int itemId) {
+    public Item findById(int requestorId, int itemId) {
         return setLastNextBookingsAndCommentsAndMapToItem(itemRepository
                 .findById(itemId)
-                .orElseThrow(() -> new NotFoundException("no item with such id", String.valueOf(itemId))), requesterId);
+                .orElseThrow(() -> new NotFoundException("no item with such id", String.valueOf(itemId))), requestorId);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public ArrayList<Item> findByOwner(int requesterId) {
-        return itemRepository.findAllByOwnerIdOrderById(requesterId).stream()
-                .map(itemEntity -> setLastNextBookingsAndCommentsAndMapToItem(itemEntity, requesterId))
+    public List<Item> findByOwner(int requestorId) {
+        return itemRepository.findAllByOwnerIdOrderById(requestorId).stream()
+                .map(itemEntity -> setLastNextBookingsAndCommentsAndMapToItem(itemEntity, requestorId))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public ArrayList<Item> findByText(int requesterId, String text) {
+    public List<Item> findByText(int requestorId, String text) {
         return !text.isBlank() ? itemMapper.bulkEntity2model(itemRepository.search(text)) : new ArrayList<>();
     }
 
-    private Item setLastNextBookingsAndCommentsAndMapToItem(ItemEntity itemEntity, Integer requesterId) {
+    private Item setLastNextBookingsAndCommentsAndMapToItem(ItemEntity itemEntity, Integer requestorId) {
         var item = itemMapper.entity2model(itemEntity);
 
-        item.setLastBooking(Optional.ofNullable(bookingRepository.getLastBooking(requesterId, item.getId()))
+        item.setLastBooking(Optional.ofNullable(bookingRepository.getLastBooking(requestorId, item.getId()))
                 .map(bookingEntity -> ItemBooking.builder()
                         .id(bookingEntity.getId())
                         .bookerId(bookingEntity.getBooker().getId())
                         .build())
                 .orElse(null));
 
-        item.setNextBooking(Optional.ofNullable(bookingRepository.getNextBooking(requesterId, item.getId()))
+        item.setNextBooking(Optional.ofNullable(bookingRepository.getNextBooking(requestorId, item.getId()))
                 .map(bookingEntity -> ItemBooking.builder()
                         .id(bookingEntity.getId())
                         .bookerId(bookingEntity.getBooker().getId())

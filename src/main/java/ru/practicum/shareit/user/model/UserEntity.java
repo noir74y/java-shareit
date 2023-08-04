@@ -17,20 +17,7 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     private String name;
-
     @Column(unique = true)
     private String email;
-
-    // code below is for InMemory only
-    private static Integer userId = 0;
-
-    private static Integer getNewId() {
-        return ++userId;
-    }
-
-    public void setNewId() {
-        this.id = UserEntity.getNewId();
-    }
 }

@@ -2,6 +2,7 @@ package ru.practicum.shareit.booking.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -11,9 +12,10 @@ import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-import static ru.practicum.shareit.utils.AppConstants.DATE_TIME_FORMAT;
+import static ru.practicum.shareit.utils.AppConfiguration.DATE_TIME_FORMAT;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookingDtoReq {

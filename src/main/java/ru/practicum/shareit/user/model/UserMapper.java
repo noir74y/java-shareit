@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -30,11 +31,11 @@ public class UserMapper {
         return Optional.ofNullable(entity).map(obj -> modelMapper.map(obj, User.class)).orElse(null);
     }
 
-    public ArrayList<UserDtoResp> bulkModel2dtoResp(Collection<User> models) {
+    public List<UserDtoResp> bulkModel2dtoResp(Collection<User> models) {
         return models.stream().map(this::model2dtoResp).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public ArrayList<User> bulkEntity2model(Collection<UserEntity> entities) {
+    public List<User> bulkEntity2model(Collection<UserEntity> entities) {
         return entities.stream().map(this::entity2model).collect(Collectors.toCollection(ArrayList::new));
     }
 }
