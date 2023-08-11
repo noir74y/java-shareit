@@ -10,4 +10,5 @@ public class AppConfiguration {
     public static LocalDateTimeSerializer LOCAL_DATETIME_SERIALIZER = new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT));
     public static final String OFFSET_DEFAULT = "0";
     public static final String PAGE_SIZE_MAX = "999";
+
 }
