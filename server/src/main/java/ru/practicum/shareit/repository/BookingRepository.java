@@ -36,7 +36,7 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Integer>
     @Query(value = "select b.* from bookings b " +
             "join items i on i.id = b.item_id and i.owner_id = ?1 " +
             "where b.item_id = ?2 " +
-            "and b.start_date < CURRENT_TIMESTAMP(6) " +
+            "and b.start_date < CURRENT_TIMESTAMP " +
             "and b.status = 'APPROVED' " +
             "order by b.start_date desc " +
             "limit 1", nativeQuery = true)
@@ -45,7 +45,7 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Integer>
     @Query(value = "select b.* from bookings b " +
             "join items i on i.id = b.item_id and i.owner_id = ?1 " +
             "where b.item_id = ?2 " +
-            "and b.start_date > CURRENT_TIMESTAMP(6) " +
+            "and b.start_date > CURRENT_TIMESTAMP " +
             "and b.status = 'APPROVED' " +
             "order by b.start_date asc " +
             "limit 1", nativeQuery = true)
