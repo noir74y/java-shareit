@@ -17,10 +17,7 @@ import java.time.LocalDateTime;
 public class BookingDtoResp {
     private Integer id;
 
-    @DateTimeFormat(pattern = AppConfiguration.DATE_TIME_FORMAT)
     private LocalDateTime startDate;
-
-    @DateTimeFormat(pattern = AppConfiguration.DATE_TIME_FORMAT)
     private LocalDateTime endDate;
 
     private String status;

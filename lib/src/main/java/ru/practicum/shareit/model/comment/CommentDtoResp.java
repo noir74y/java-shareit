@@ -17,6 +17,5 @@ public class CommentDtoResp {
     private Integer id;
     private String text;
     private String authorName;
-    @DateTimeFormat(pattern = AppConfiguration.DATE_TIME_FORMAT)
     private LocalDateTime created;
 }
