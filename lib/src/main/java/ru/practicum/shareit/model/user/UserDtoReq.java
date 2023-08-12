@@ -16,11 +16,11 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDtoReq {
-    @Size(max = 255)
+    @Size(groups = {OnCreate.class, OnUpdate.class}, max = 255)
     @NotBlank(groups = {OnCreate.class}, message = "name is empty")
     private String name;
 
-    @Size(max = 255)
+    @Size(groups = {OnCreate.class, OnUpdate.class}, max = 255)
     @NotBlank(groups = {OnCreate.class}, message = "email is empty")
     @Email(groups = {OnCreate.class, OnUpdate.class})
     private String email;

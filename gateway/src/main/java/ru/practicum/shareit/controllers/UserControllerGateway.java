@@ -19,15 +19,13 @@ public class UserControllerGateway {
     private final UserClient userClient;
 
     @PostMapping
-    public ResponseEntity<Object> create(@Validated(OnCreate.class)
-                                         @RequestBody UserDtoReq dtoReq) {
+    public ResponseEntity<Object> create(@Validated(OnCreate.class) @RequestBody UserDtoReq dtoReq) {
         log.info("POST /users/ {}", dtoReq);
         return userClient.create(dtoReq);
     }
 
     @PatchMapping("/{userId}")
-    public ResponseEntity<Object> update(@Validated(OnUpdate.class)
-                                         @RequestBody UserDtoReq dtoReq,
+    public ResponseEntity<Object> update(@Validated(OnUpdate.class) @RequestBody UserDtoReq dtoReq,
                                          @PathVariable Integer userId) {
         log.info("PATCH /users/" + userId + " {}", dtoReq);
         return userClient.update(dtoReq, userId);

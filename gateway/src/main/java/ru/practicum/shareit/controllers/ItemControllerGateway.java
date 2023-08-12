@@ -11,6 +11,7 @@ import ru.practicum.shareit.clients.ItemClient;
 import ru.practicum.shareit.model.comment.CommentDtoReq;
 import ru.practicum.shareit.model.item.ItemDtoReq;
 import ru.practicum.shareit.utils.validation.OnCreate;
+import ru.practicum.shareit.utils.validation.OnUpdate;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -45,7 +46,7 @@ public class ItemControllerGateway {
     @PatchMapping("/{itemId}")
     public ResponseEntity<Object> update(@RequestHeader(HEADER_USER_ID) @NotNull Integer requestorId,
                                          @RequestBody ItemDtoReq dtoReq,
-                                         @PathVariable Integer itemId) {
+                                         @Validated(OnUpdate.class) @PathVariable Integer itemId) {
         log.info("requestorId={}, PATCH /items/{}, {}", requestorId, itemId, dtoReq);
         return itemClient.update(requestorId, itemId, dtoReq);
     }

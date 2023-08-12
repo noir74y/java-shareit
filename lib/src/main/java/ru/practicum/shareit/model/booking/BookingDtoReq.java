@@ -23,14 +23,11 @@ public class BookingDtoReq {
     @NotNull
     private Integer itemId;
 
-    @NotNull
     @DateTimeFormat(pattern = AppConfiguration.DATE_TIME_FORMAT)
     @FutureOrPresent
     private LocalDateTime startDate;
 
-    @NotNull
     @DateTimeFormat(pattern = AppConfiguration.DATE_TIME_FORMAT)
-    @Future
     private LocalDateTime endDate;
 
     @JsonProperty("start")
