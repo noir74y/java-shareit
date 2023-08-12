@@ -64,7 +64,7 @@ public class ItemControllerGateway {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<Object> findByText(@RequestHeader(HEADER_USER_ID) @NotNull Integer requestorId,
+    public ResponseEntity<Object> findByText(@RequestHeader(HEADER_USER_ID) Integer requestorId,
                                              @RequestParam(value = "text") String text) {
         log.info("requestorId={}, GET /search?text={}", requestorId, text);
         return !text.isBlank() ? itemClient.findByText(requestorId, text) : new ResponseEntity<Object>(Collections.emptyList(), HttpStatus.OK);
