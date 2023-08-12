@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Data
 @Builder
@@ -14,6 +15,6 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class RequestDtoReq {
     @NotBlank
-    @NotNull
+    @Size(max=255)
     private String description;
 }
