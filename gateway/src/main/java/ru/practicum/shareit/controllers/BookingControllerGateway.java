@@ -65,10 +65,4 @@ public class BookingControllerGateway {
         log.info("requestorId, GET /bookings/owner?state={} requestorId={}", requestorId, state);
         return bookingClient.findByOwnerAndState(requestorId, state, offset, pageSize);
     }
-
-//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-//    @ExceptionHandler(ConstraintViolationException.class)
-//    public ErrorMessage handleException(Exception exception) {
-//        return new ErrorMessage(exception.getMessage(), "Unknown state: UNSUPPORTED_STATUS");
-//    }
 }
