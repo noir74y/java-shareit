@@ -1,5 +1,6 @@
 package ru.practicum.shareit.utils.error;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -9,11 +10,13 @@ import ru.practicum.shareit.utils.error.exception.*;
 import javax.validation.ConstraintViolationException;
 
 @RestControllerAdvice
+@Slf4j
 public class ExceptionController {
-
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorMessage> exceptionController(Exception exception) {
         ShareItException shareItException;
+
+        log.error("{}", exception.getMessage());
 
         if (exception instanceof NotFoundException)
             shareItException = (NotFoundException) exception;
@@ -22,7 +25,9 @@ public class ExceptionController {
         else if (exception instanceof CustomValidationException)
             shareItException = (CustomValidationException) exception;
         else if (exception instanceof ConstraintViolationException) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessage(exception.getMessage(), "Unknown state: UNSUPPORTED_STATUS"));
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorMessage(exception.getMessage(), "Unknown state: UNSUPPORTED_STATUS"));
         } else
             shareItException = new OtherException(exception);
 

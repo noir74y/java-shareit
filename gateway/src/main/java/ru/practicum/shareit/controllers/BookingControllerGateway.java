@@ -2,7 +2,6 @@ package ru.practicum.shareit.controllers;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
@@ -11,10 +10,8 @@ import ru.practicum.shareit.clients.BookingClient;
 import ru.practicum.shareit.model.booking.BookingDtoReq;
 import ru.practicum.shareit.model.booking.BookingState;
 import ru.practicum.shareit.utils.AppConfiguration;
-import ru.practicum.shareit.utils.error.ErrorMessage;
 import ru.practicum.shareit.utils.validation.ValueOfEnumConstraint;
 
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 

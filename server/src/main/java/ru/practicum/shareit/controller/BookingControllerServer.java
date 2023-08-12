@@ -2,15 +2,12 @@ package ru.practicum.shareit.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.mapper.BookingMapper;
 import ru.practicum.shareit.model.booking.BookingDtoReq;
 import ru.practicum.shareit.model.booking.BookingDtoResp;
-import ru.practicum.shareit.model.booking.BookingState;
 import ru.practicum.shareit.service.BookingService;
 import ru.practicum.shareit.utils.AppConfiguration;
-import ru.practicum.shareit.utils.validation.ValueOfEnumConstraint;
 
 import java.util.List;
 
