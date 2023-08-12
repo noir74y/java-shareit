@@ -18,7 +18,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/bookings")
 @RequiredArgsConstructor
-@Validated
 public class BookingControllerServer {
     private final BookingService bookingService;
     private final BookingMapper bookingMapper;
@@ -47,7 +46,7 @@ public class BookingControllerServer {
 
     @GetMapping
     public List<BookingDtoResp> findByBookerAndState(@RequestHeader(AppConfiguration.HEADER_USER_ID) Integer requestorId,
-                                                     @RequestParam(required = false, defaultValue = "ALL") @ValueOfEnumConstraint(enumClass = BookingState.class) String state,
+                                                     @RequestParam(required = false, defaultValue = "ALL") String state,
                                                      @RequestParam(defaultValue = AppConfiguration.OFFSET_DEFAULT, name = "from") Integer offset,
                                                      @RequestParam(defaultValue = AppConfiguration.PAGE_SIZE_MAX, name = "size") Integer pageSize) {
         log.info("requestorId={}, GET /bookings/?state={}", requestorId, state);
@@ -56,7 +55,7 @@ public class BookingControllerServer {
 
     @GetMapping("/owner")
     public List<BookingDtoResp> findByOwnerAndState(@RequestHeader(AppConfiguration.HEADER_USER_ID) Integer requestorId,
-                                                    @RequestParam(required = false, defaultValue = "ALL") @ValueOfEnumConstraint(enumClass = BookingState.class) String state,
+                                                    @RequestParam(required = false, defaultValue = "ALL") String state,
                                                     @RequestParam(defaultValue = AppConfiguration.OFFSET_DEFAULT, name = "from") Integer offset,
                                                     @RequestParam(defaultValue = AppConfiguration.PAGE_SIZE_MAX, name = "size") Integer pageSize) {
         log.info("requestorId, GET /bookings/owner?state={} requestorId={}", requestorId, state);
