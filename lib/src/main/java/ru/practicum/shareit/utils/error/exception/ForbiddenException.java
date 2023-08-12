@@ -1,4 +1,4 @@
-package ru.practicum.shareit.util.exception;
+package ru.practicum.shareit.utils.error.exception;
 
 import org.springframework.http.HttpStatus;
 

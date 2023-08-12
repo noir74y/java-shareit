@@ -22,7 +22,7 @@ public class CommentEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Size(max=255)
+    @Size(max = 255)
     private String text;
 
     @ManyToOne(fetch = FetchType.LAZY)

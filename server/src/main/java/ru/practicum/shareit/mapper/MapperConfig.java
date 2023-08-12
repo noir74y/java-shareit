@@ -1,4 +1,4 @@
-package ru.practicum.shareit.util.mapper;
+package ru.practicum.shareit.mapper;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;

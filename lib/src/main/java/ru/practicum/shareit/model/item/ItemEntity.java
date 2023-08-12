@@ -20,11 +20,11 @@ public class ItemEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Size(max=255)
+    @Size(max = 255)
     @Column(nullable = false)
     private String name;
 
-    @Size(max=255)
+    @Size(max = 255)
     @Column(nullable = false)
     private String description;
 

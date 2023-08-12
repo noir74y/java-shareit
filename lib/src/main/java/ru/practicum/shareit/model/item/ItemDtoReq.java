@@ -15,10 +15,10 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ItemDtoReq {
-    @Size(max=255)
+    @Size(max = 255)
     @NotBlank(groups = {OnCreate.class}, message = "name is empty")
     private String name;
-    @Size(max=255)
+    @Size(max = 255)
     @NotNull(groups = {OnCreate.class}, message = "description is absent")
     private String description;
     @NotNull(groups = {OnCreate.class}, message = "available is absent")

@@ -5,11 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.mapper.UserMapper;
 import ru.practicum.shareit.model.user.User;
 import ru.practicum.shareit.repository.UserRepository;
 import ru.practicum.shareit.service.UserService;
-import ru.practicum.shareit.util.exception.NotFoundException;
-import ru.practicum.shareit.util.mapper.UserMapper;
+import ru.practicum.shareit.utils.error.exception.NotFoundException;
 
 import java.util.List;
 import java.util.Optional;

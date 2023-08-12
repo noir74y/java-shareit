@@ -3,10 +3,10 @@ package ru.practicum.shareit.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.mapper.RequestMapper;
 import ru.practicum.shareit.model.request.RequestDtoReq;
 import ru.practicum.shareit.model.request.RequestDtoResp;
 import ru.practicum.shareit.service.RequestService;
-import ru.practicum.shareit.util.mapper.RequestMapper;
 import ru.practicum.shareit.utils.AppConfiguration;
 
 import java.util.List;

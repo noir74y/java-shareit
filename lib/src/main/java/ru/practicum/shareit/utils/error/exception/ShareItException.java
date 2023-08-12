@@ -1,8 +1,8 @@
-package ru.practicum.shareit.util.exception;
+package ru.practicum.shareit.utils.error.exception;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
-import ru.practicum.shareit.utils.exception.ErrorMessage;
+import ru.practicum.shareit.utils.error.ErrorMessage;
 
 
 public class ShareItException extends RuntimeException {

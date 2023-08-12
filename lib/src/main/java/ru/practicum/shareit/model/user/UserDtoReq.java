@@ -9,7 +9,6 @@ import ru.practicum.shareit.utils.validation.OnUpdate;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Data
@@ -17,11 +16,11 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDtoReq {
-    @Size(max=255)
+    @Size(max = 255)
     @NotBlank(groups = {OnCreate.class}, message = "name is empty")
     private String name;
 
-    @Size(max=255)
+    @Size(max = 255)
     @NotBlank(groups = {OnCreate.class}, message = "email is empty")
     @Email(groups = {OnCreate.class, OnUpdate.class})
     private String email;

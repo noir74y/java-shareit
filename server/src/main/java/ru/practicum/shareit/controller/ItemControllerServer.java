@@ -3,15 +3,14 @@ package ru.practicum.shareit.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.mapper.CommentMapper;
+import ru.practicum.shareit.mapper.ItemMapper;
 import ru.practicum.shareit.model.comment.CommentDtoReq;
 import ru.practicum.shareit.model.comment.CommentDtoResp;
 import ru.practicum.shareit.model.item.ItemDtoReq;
 import ru.practicum.shareit.model.item.ItemDtoResp;
 import ru.practicum.shareit.service.ItemService;
-import ru.practicum.shareit.util.mapper.CommentMapper;
-import ru.practicum.shareit.util.mapper.ItemMapper;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 import static ru.practicum.shareit.utils.AppConfiguration.HEADER_USER_ID;

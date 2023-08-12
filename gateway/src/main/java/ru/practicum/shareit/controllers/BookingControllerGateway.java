@@ -10,13 +10,12 @@ import ru.practicum.shareit.clients.BookingClient;
 import ru.practicum.shareit.model.booking.BookingDtoReq;
 import ru.practicum.shareit.model.booking.BookingState;
 import ru.practicum.shareit.utils.AppConfiguration;
-import ru.practicum.shareit.utils.exception.ErrorMessage;
+import ru.practicum.shareit.utils.error.ErrorMessage;
 import ru.practicum.shareit.utils.validation.ValueOfEnumConstraint;
 
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 
 @Slf4j
 @RestController
