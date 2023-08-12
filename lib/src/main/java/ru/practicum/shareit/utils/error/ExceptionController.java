@@ -24,11 +24,11 @@ public class ExceptionController {
             shareItException = (ForbiddenException) exception;
         else if (exception instanceof CustomValidationException)
             shareItException = (CustomValidationException) exception;
-        else if (exception instanceof ConstraintViolationException) {
+        else if (exception instanceof ConstraintViolationException)
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(new ErrorMessage(exception.getMessage(), "Unknown state: UNSUPPORTED_STATUS"));
-        } else
+        else
             shareItException = new OtherException(exception);
 
         return ResponseEntity.status(shareItException.getHttpErrorStatus()).body(shareItException.prepareErrorMessage());
