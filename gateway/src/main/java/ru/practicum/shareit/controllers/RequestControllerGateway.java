@@ -25,7 +25,7 @@ public class RequestControllerGateway {
 
     @PostMapping
     public ResponseEntity<Object> create(@RequestHeader(HEADER_USER_ID) @NotNull Integer requestorId,
-                                         @Valid @RequestBody RequestDtoReq dtoReq) throws Throwable {
+                                         @Valid @RequestBody RequestDtoReq dtoReq) {
         log.info("requestorId={}, POST /requests/ {}", requestorId, dtoReq);
         return requestClient.create(requestorId, dtoReq);
     }

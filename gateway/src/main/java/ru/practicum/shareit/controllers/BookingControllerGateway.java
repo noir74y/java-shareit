@@ -28,7 +28,7 @@ public class BookingControllerGateway {
 
     @PostMapping
     public ResponseEntity<Object> create(@RequestHeader(AppConfiguration.HEADER_USER_ID) @NotNull Integer requestorId,
-                                         @Valid @RequestBody BookingDtoReq dtoReq) throws Throwable {
+                                         @Valid @RequestBody BookingDtoReq dtoReq) {
         log.info("requestorId={}, POST /bookings {}", requestorId, dtoReq);
         return bookingClient.create(requestorId, dtoReq);
     }
@@ -36,14 +36,14 @@ public class BookingControllerGateway {
     @PatchMapping("/{bookingId}")
     public ResponseEntity<Object> update(@RequestHeader(AppConfiguration.HEADER_USER_ID) @NotNull Integer requestorId,
                                          @PathVariable Integer bookingId,
-                                         @RequestParam Boolean approved) throws Throwable {
+                                         @RequestParam Boolean approved) {
         log.info("requestorId={}, PATCH /bookings/{}  approved={}", requestorId, bookingId, approved);
         return bookingClient.update(requestorId, bookingId, approved);
     }
 
     @GetMapping("/{bookingId}")
     public ResponseEntity<Object> findById(@RequestHeader(AppConfiguration.HEADER_USER_ID) @NotNull Integer requestorId,
-                                           @PathVariable Integer bookingId) throws Throwable {
+                                           @PathVariable Integer bookingId) {
         log.info("requestorId={}, GET /bookings/{}", requestorId, bookingId);
         return bookingClient.findById(requestorId, bookingId);
     }

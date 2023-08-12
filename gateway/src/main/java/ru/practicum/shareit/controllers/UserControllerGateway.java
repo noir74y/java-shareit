@@ -19,7 +19,7 @@ public class UserControllerGateway {
 
     @PostMapping
     public ResponseEntity<Object> create(@Validated(OnCreate.class)
-                                         @RequestBody UserDtoReq dtoReq) throws Throwable {
+                                         @RequestBody UserDtoReq dtoReq) {
         log.info("POST /users/ {}", dtoReq);
         return userClient.create(dtoReq);
     }
@@ -27,7 +27,7 @@ public class UserControllerGateway {
     @PatchMapping("/{userId}")
     public ResponseEntity<Object> update(@Validated(OnUpdate.class)
                                          @RequestBody UserDtoReq dtoReq,
-                                         @PathVariable Integer userId) throws Throwable {
+                                         @PathVariable Integer userId) {
         log.info("PATCH /users/" + userId + " {}", dtoReq);
         return userClient.update(dtoReq, userId);
     }
@@ -39,7 +39,7 @@ public class UserControllerGateway {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<Object> find(@PathVariable Integer userId) throws Throwable {
+    public ResponseEntity<Object> find(@PathVariable Integer userId) {
         log.info("GET /users/" + userId);
         return userClient.find(userId);
     }

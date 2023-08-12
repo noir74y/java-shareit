@@ -25,7 +25,7 @@ public class ItemControllerGateway {
     @PostMapping
     public ResponseEntity<Object> create(@RequestHeader(HEADER_USER_ID) @NotNull Integer requestorId,
                                          @Validated(OnCreate.class) @RequestBody ItemDtoReq dtoReq
-    ) throws Throwable {
+    ) {
         log.info("requestorId={}, POST /items/ {}", requestorId, dtoReq);
         return itemClient.create(requestorId, dtoReq);
     }
@@ -34,7 +34,7 @@ public class ItemControllerGateway {
     public ResponseEntity<Object> create(@RequestHeader(HEADER_USER_ID) @NotNull Integer requestorId,
                                          @Valid @PathVariable Integer itemId,
                                          @Valid @RequestBody CommentDtoReq dtoReq
-    ) throws Throwable {
+    ) {
         log.info("requestorId={}, POST /items/{}/comment {}", requestorId, itemId, dtoReq);
         return itemClient.create(requestorId, itemId, dtoReq);
     }
