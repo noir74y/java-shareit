@@ -2,6 +2,7 @@ package ru.practicum.shareit.controllers;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
@@ -13,6 +14,7 @@ import ru.practicum.shareit.utils.validation.OnCreate;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.Collections;
 
 import static ru.practicum.shareit.utils.AppConfiguration.HEADER_USER_ID;
 
@@ -65,6 +67,6 @@ public class ItemControllerGateway {
     public ResponseEntity<Object> findByText(@RequestHeader(HEADER_USER_ID) @NotNull Integer requestorId,
                                              @RequestParam(value = "text") String text) {
         log.info("requestorId={}, GET /search?text={}", requestorId, text);
-        return itemClient.findByText(requestorId, text);
+        return !text.isBlank() ? itemClient.findByText(requestorId, text) : new ResponseEntity<Object>(Collections.emptyList(), HttpStatus.OK);
     }
 }

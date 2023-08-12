@@ -96,7 +96,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional(readOnly = true)
     public List<Item> findByText(int requestorId, String text) {
-        return !text.isBlank() ? itemMapper.bulkEntity2model(itemRepository.search(text)) : new ArrayList<>();
+        return itemMapper.bulkEntity2model(itemRepository.search(text));
     }
 
     private Item setLastNextBookingsAndCommentsAndMapToItem(ItemEntity itemEntity, Integer requestorId) {
