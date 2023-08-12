@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.clients.BookingClient;
@@ -18,7 +19,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 
 @Slf4j
-@RestController
+@Controller
 @RequestMapping("/bookings")
 @RequiredArgsConstructor
 @Validated
@@ -65,9 +66,9 @@ public class BookingControllerGateway {
         return bookingClient.findByOwnerAndState(requestorId, state, offset, pageSize);
     }
 
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ErrorMessage handleException(Exception exception) {
-        return new ErrorMessage(exception.getMessage(), "Unknown state: UNSUPPORTED_STATUS");
-    }
+//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+//    @ExceptionHandler(ConstraintViolationException.class)
+//    public ErrorMessage handleException(Exception exception) {
+//        return new ErrorMessage(exception.getMessage(), "Unknown state: UNSUPPORTED_STATUS");
+//    }
 }
