@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import ru.practicum.shareit.utils.AppConfiguration;
+import ru.practicum.shareit.utils.validation.BookingDatesConstraint;
 
 import javax.validation.constraints.Future;
 import javax.validation.constraints.FutureOrPresent;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@BookingDatesConstraint
 public class BookingDtoReq {
     @NotNull
     private Integer itemId;

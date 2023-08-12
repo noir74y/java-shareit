@@ -31,8 +31,8 @@ public class BookingServiceImpl implements BookingService {
     @Override
     @Transactional
     public Booking create(Integer requestorId, Booking booking) throws Throwable {
-        if (!booking.getStartDate().isBefore(booking.getEndDate()))
-            throw new CustomValidationException("start is not before end", booking.getStartDate() + " " + booking.getEndDate());
+//        if (!booking.getStartDate().isBefore(booking.getEndDate()))
+//            throw new CustomValidationException("start is not before end", booking.getStartDate() + " " + booking.getEndDate());
 
         var userEntity = userRepository.findById(requestorId)
                 .orElseThrow(() -> new NotFoundException("no such user", String.valueOf(requestorId)));
