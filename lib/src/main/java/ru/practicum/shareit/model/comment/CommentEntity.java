@@ -1,9 +1,8 @@
 package ru.practicum.shareit.model.comment;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import ru.practicum.shareit.model.item.ItemEntity;
 import ru.practicum.shareit.model.user.UserEntity;
 
@@ -11,10 +10,9 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
-@Data
-@Builder
-@RequiredArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "comments")
 public class CommentEntity {
